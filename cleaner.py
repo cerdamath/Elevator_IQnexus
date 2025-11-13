@@ -21,9 +21,9 @@ def extract_blocks(filename):
     return blocks
 
 def format_c_array(block, name):
-    # Remove all newlines and carriage returns for flat string
-    safe_block = block.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '').replace('\r', '')
-    return f'char {name}[] = "{safe_block}";'
+    safe_block = block.replace('\\', '\\\\').replace('"', '\\"').replace('\n', '\\n')
+    return f'char {name}[] = "{safe_block}";\n'
+
 
 def main(input_file, output_header):
     blocks = extract_blocks(input_file)
