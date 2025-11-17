@@ -76,7 +76,7 @@ char block37[] = "[H STATUS - Menu >\n Calls=1 Input=2[H STATUS - Menu >\n Calls
 
 char block38[] = "[HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns";
 
-char block39[] = "[HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns";
+char block39[] = "[HA-01 IDL ST ][][\n lwo LWX lns GHJH[HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns";
 
 char block40[] = "[HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns    [HA-01 IDL ST ][][\n lwo LWX lns";
 
@@ -4863,4 +4863,4 @@ char* blocks[] = {
     block1619,
     block1620
 };
-#define NUM_BLOCKS (sizeof(blocks)/sizeof(blocks[0]))
+const int block_count = sizeof(blocks)/sizeof(blocks[0]);
