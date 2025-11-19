@@ -9,10 +9,18 @@
 #include <sys/select.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <ctype.h>
 
 #define FRAME_LENGTH 35
 #define BUFFER_SIZE 1024
 #define LCD_WIDTH 16
+#define MAX_LABEL_LEN  9   // Accommodates "System" + null and typical label
+#define MAX_VALUE_LEN  4   // Allows for 3-digit values plus null
+
+typedef struct {
+    char label[MAX_LABEL_LEN];
+    char value[MAX_VALUE_LEN];
+} menu_field_t;
 
 typedef enum
 {
@@ -41,8 +49,13 @@ typedef struct
     char mcss[3];           // "ST" + '\0'
     char door[3];           // "][" + '\0'
     char rear_door[3];      // "[]" + '\0'
+    char var1[5];            // "dcb" + '\0'
+    char var2[5];            // "dcb" + '\0'
+    char var3[5];            // "dcb" + '\0'
+    char var4[5];            // "dcb" + '\0'
     int frame_error_count;
 } elevator_obj_t;
+
 
 // Global variables
 int serial_fd;
@@ -50,7 +63,7 @@ char buffer[BUFFER_SIZE];
 int buffer_pos;
 int frame_errors;
 elevator_obj_t elevator = {0};
-
+menu_field_t fields[2];
 // Function prototypes
 // At top of metro.c or in metro.h
 int init(int argc, char* argv[]);
@@ -60,15 +73,14 @@ void sm_menu(void);
 
 int setup_serial(const char* port_path, speed_t baud_rate);
 void clear_screen();
-void print_lcd_screen(const char* top_screen, const char* bottom_screen, int error_count);
+void print_lcd_screen(int error_count);
 int validate_frame(const char* frame);
-void extract_frame_parts(const char* frame, char* top_screen, char* bottom_screen);
-void tcbc_menu_parse();
+void extract_frame_parts(const char* frame);
 void principal_menu_parse();
-void system_menu_parse();
-void status_menu_parse();
+void menu_parse();
 void input_menu_parse();
 void print_menu_position();
+void dispatch_menu();
 
 // Helpers to check substrings and input menu
 bool contains(const char *haystack, const char *needle) {
@@ -80,27 +92,27 @@ bool is_input_menu(const char *top_screen) {
 }
 
 // Main logic
-void dispatch_menu(const char *top_screen) {
-    if (is_input_menu(top_screen)) {
+void dispatch_menu() {
+    if (is_input_menu(elevator.top_screen)) {
         elevator.position = MENU_INPUT;
-        input_menu_parse(top_screen);
+        input_menu_parse();
         return;
     }
 
-    if (contains(top_screen, "Menu")) {
-        if (contains(top_screen, "SYSTEM")) {
+    if (contains(elevator.top_screen, "Menu")) {
+        if (contains(elevator.top_screen, "SYSTEM")) {
             elevator.position = MENU_SYSTEM;
-            system_menu_parse(top_screen);
+            menu_parse();
             return;
         }
-        if (contains(top_screen, "STATUS")) {
+        if (contains(elevator.top_screen, "STATUS")) {
             elevator.position = MENU_STATUS;
-            status_menu_parse(top_screen);
+            menu_parse();
             return;
         }
-        if (contains(top_screen, "TCBC")) {
+        if (contains(elevator.top_screen, "TCBC")) {
             elevator.position = MENU_TCBC;
-            tcbc_menu_parse(top_screen);
+            menu_parse();
             return;
         }
         // If "Menu" is in top_screen but none of above, fallback:
@@ -110,7 +122,7 @@ void dispatch_menu(const char *top_screen) {
 
     // If no keywords above, principal menu by default
     elevator.position = MENU_PRINCIPAL;
-    principal_menu_parse(top_screen);
+    principal_menu_parse();
 }
 
 void print_frame( char *buffer, int buffer_len )
@@ -248,15 +260,13 @@ void read_screen()
                     // Validate frame
                     if (validate_frame(frame)) {
                         // Extract parts for LCD display
-                        extract_frame_parts(frame, elevator.top_screen, elevator.bottom_screen);
+                        extract_frame_parts(frame);
                         
                         // Print to screen
                         clear_screen();
                         print_menu_position();
-                        print_lcd_screen(elevator.top_screen, elevator.bottom_screen, frame_errors);
-                        dispatch_menu(elevator.top_screen);
-                        
-                        
+                        print_lcd_screen(frame_errors);
+                        dispatch_menu();
                         
                         // Shift buffer to remove processed data
                         int shift_amount = frame_start + FRAME_LENGTH;
@@ -346,49 +356,28 @@ int setup_serial(const char* port_path, speed_t baud_rate) {
 void clear_screen() {
     printf("\033[2J\033[H");  // VT100 escape codes to clear screen and move cursor to home
 }
-
-void print_lcd_screen(const char* top_screen, const char* bottom_screen, int error_count) {
+void print_lcd_screen(int error_count) {
     // Print top border
     printf("+");
-    for (int i = 0; i < LCD_WIDTH; i++) {
-        printf("-");
-    }
+    for (int i = 0; i < LCD_WIDTH; i++) printf("-");
     printf("+\n");
-    
-    // Print top line content
-    if (top_screen != NULL) {
-        printf("%-*s", LCD_WIDTH, top_screen);
-    } else {
-        for (int i = 0; i < LCD_WIDTH; i++) {
-            printf(" ");
-        }
-    }
-    printf("\n");
-    
+
+    // Print top line content (always print top_screen)
+    printf("%-*s\n", LCD_WIDTH, elevator.top_screen);
+
     // Print middle border
     printf("+");
-    for (int i = 0; i < LCD_WIDTH; i++) {
-        printf("-");
-    }
+    for (int i = 0; i < LCD_WIDTH; i++) printf("-");
     printf("+\n");
-    
-    // Print bottom line content
-    if (bottom_screen != NULL) {
-        printf("%-*s", LCD_WIDTH, bottom_screen);
-    } else {
-        for (int i = 0; i < LCD_WIDTH; i++) {
-            printf(" ");
-        }
-    }
-    printf("\n");
-    
+
+    // Print bottom line content (always print bottom_screen)
+    printf("%-*s\n", LCD_WIDTH, elevator.bottom_screen);
+
     // Print bottom border
     printf("+");
-    for (int i = 0; i < LCD_WIDTH; i++) {
-        printf("-");
-    }
+    for (int i = 0; i < LCD_WIDTH; i++) printf("-");
     printf("+\n");
-    
+
     // Print error count
     printf("Frame errors = %d\n", error_count);
 }
@@ -435,15 +424,15 @@ int validate_frame(const char* frame) {
     return 1;
 }
 
-void extract_frame_parts(const char* frame, char* top_screen, char* bottom_screen) {
+void extract_frame_parts(const char* frame) {
     // Extract the part after the newline and before "[H"
     const char* data_start = frame + 1;  // Skip the newline
     const char* marker_pos = strstr(data_start, "[H");
     
     if (marker_pos == NULL) {
         // If no "[H" found, return empty strings
-        top_screen[0] = '\0';
-        bottom_screen[0] = '\0';
+        elevator.top_screen[0] = '\0';
+        elevator.bottom_screen[0] = '\0';
         return;
     }
     
@@ -455,23 +444,26 @@ void extract_frame_parts(const char* frame, char* top_screen, char* bottom_scree
     
     // Copy first half to bottom line
     if (half_length > 0) {
-        strncpy(bottom_screen, data_start, half_length);
-        bottom_screen[half_length] = '\0';
+        strncpy(elevator.bottom_screen, data_start, half_length);
+        elevator.bottom_screen[half_length] = '\0';
     } else {
-        bottom_screen[0] = '\0';
+        elevator.bottom_screen[0] = '\0';
     }
     
     // Copy second half to top line
     if (half_length > 0) {
-        strncpy(top_screen, data_start + half_length + 2, half_length);
-        top_screen[half_length] = '\0';
+        strncpy(elevator.top_screen, data_start + half_length + 2, half_length);
+        elevator.top_screen[half_length] = '\0';
     } else {
-        top_screen[0] = '\0';
+        elevator.top_screen[0] = '\0';
     }
 
 }
+void principal_menu_parse () {
 
-    void input_menu_parse() {
+}
+void input_menu_parse() {
+    // Top Screen Parsing
     memcpy(elevator.car_id,     elevator.top_screen + 0, 1);  elevator.car_id[1] = '\0';
     memcpy(elevator.direction,  elevator.top_screen + 1, 1);  elevator.direction[1] = '\0';
     memcpy(elevator.level,      elevator.top_screen + 2, 2);  elevator.level[2] = '\0';
@@ -479,6 +471,11 @@ void extract_frame_parts(const char* frame, char* top_screen, char* bottom_scree
     memcpy(elevator.mcss,       elevator.top_screen + 9, 2);  elevator.mcss[2] = '\0';
     memcpy(elevator.door,       elevator.top_screen + 12, 2); elevator.door[2] = '\0';
     memcpy(elevator.rear_door,  elevator.top_screen + 14, 2); elevator.rear_door[2] = '\0';
+    // Bottom Screen Parsing
+    memcpy(elevator.var1,     elevator.bottom_screen + 0, 4);  elevator.var1[4] = '\0';
+    memcpy(elevator.var2,  elevator.bottom_screen + 4, 4);  elevator.var2[4] = '\0';
+    memcpy(elevator.var3,      elevator.bottom_screen + 8, 4);  elevator.var3[4] = '\0';
+    memcpy(elevator.var4,       elevator.bottom_screen + 12, 4);  elevator.var4[4] = '\0';
 
     printf("\n+----------------+\n");
     printf(" Elevator Status \n");
@@ -490,27 +487,49 @@ void extract_frame_parts(const char* frame, char* top_screen, char* bottom_scree
     printf(" OCSS      : %-3s \n", elevator.ocss);
     printf(" MCSS      : %-3s \n", elevator.mcss);
     printf(" Door      : %-3s \n", elevator.door);
-    printf(" Rear Door : %-3s \n", elevator.rear_door);
+    printf(" Var 1 : %-3s \n", elevator.var1);
+    printf(" Var 2 : %-3s \n", elevator.var2);
+    printf(" Var 3 : %-3s \n", elevator.var3);
+    printf(" Var 4 : %-3s \n", elevator.var4);
     printf("+----------------+\n");
+}
 
+
+void menu_parse() {
+    int i = 0, j = 0, f = 0;
+    int len = strlen(elevator.bottom_screen);
+    // Parse up to two fields (safe for your format)
+    while (i < len && f < 2) {
+        // Skip leading spaces
+        while (i < len && elevator.bottom_screen[i] == ' ') {
+            i++;
+        }
+        // Parse label
+        j = 0;
+        while (i < len && elevator.bottom_screen[i] != '=' && j < MAX_LABEL_LEN - 1) {
+            fields[f].label[j++] = elevator.bottom_screen[i++];
+        }
+        fields[f].label[j] = '\0';
+        // Skip '='
+        if (i < len && elevator.bottom_screen[i] == '=') {
+            i++;
+        }
+        // Parse value (up to whitespace, end, or full value space)
+        j = 0;
+        while (i < len && !isspace(elevator.bottom_screen[i]) && j < MAX_VALUE_LEN - 1) {
+            fields[f].value[j++] = elevator.bottom_screen[i++];
+        }
+        fields[f].value[j] = '\0';
+        // Skip whitespace before next field
+        while (i < len && elevator.bottom_screen[i] == ' ') {
+            i++;
+        }
+        f++;
     }
-
-
-void system_menu_parse () {
-
+    printf("To enter %s, press %s\n", fields[0].label, fields[0].value);
+    printf("To enter %s, press %s\n", fields[1].label, fields[1].value);
 }
 
-void status_menu_parse() {
-    
-}
-
-void tcbc_menu_parse () {
-    
-}
-
-void principal_menu_parse () {
-
-}
 
 void sm_menu()
 {
