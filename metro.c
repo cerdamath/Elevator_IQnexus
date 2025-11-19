@@ -8,6 +8,7 @@
 #include <time.h>
 #include <sys/select.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #define FRAME_LENGTH 35
 #define BUFFER_SIZE 1024
@@ -25,7 +26,6 @@ typedef enum {
     MENU_SYSTEM,
     MENU_STATUS,
     MENU_INPUT
-    // ... add other menu types as needed
 } sm_menu_e;
 
 typedef struct
@@ -49,7 +49,7 @@ int serial_fd;
 char buffer[BUFFER_SIZE];
 int buffer_pos;
 int frame_errors;
- elevator_obj_t elevator = {0};
+elevator_obj_t elevator = {0};
 
 // Function prototypes
 // At top of metro.c or in metro.h
@@ -63,7 +63,55 @@ void clear_screen();
 void print_lcd_screen(const char* top_screen, const char* bottom_screen, int error_count);
 int validate_frame(const char* frame);
 void extract_frame_parts(const char* frame, char* top_screen, char* bottom_screen);
+void tcbc_menu_parse();
+void principal_menu_parse();
+void system_menu_parse();
+void status_menu_parse();
+void input_menu_parse();
+void print_menu_position();
 
+// Helpers to check substrings and input menu
+bool contains(const char *haystack, const char *needle) {
+    return strstr(haystack, needle) != NULL;
+}
+bool is_input_menu(const char *top_screen) {
+    char ch = top_screen[0];
+    return (ch == 'A' || ch == 'B' || ch == 'C');
+}
+
+// Main logic
+void dispatch_menu(const char *top_screen) {
+    if (is_input_menu(top_screen)) {
+        elevator.position = MENU_INPUT;
+        input_menu_parse(top_screen);
+        return;
+    }
+
+    if (contains(top_screen, "Menu")) {
+        if (contains(top_screen, "SYSTEM")) {
+            elevator.position = MENU_SYSTEM;
+            system_menu_parse(top_screen);
+            return;
+        }
+        if (contains(top_screen, "STATUS")) {
+            elevator.position = MENU_STATUS;
+            status_menu_parse(top_screen);
+            return;
+        }
+        if (contains(top_screen, "TCBC")) {
+            elevator.position = MENU_TCBC;
+            tcbc_menu_parse(top_screen);
+            return;
+        }
+        // If "Menu" is in top_screen but none of above, fallback:
+        printf("Unknown Menu Screen (Menu keyword, not SYSTEM/STATUS/TCBC)\n");
+        return;
+    }
+
+    // If no keywords above, principal menu by default
+    elevator.position = MENU_PRINCIPAL;
+    principal_menu_parse(top_screen);
+}
 
 void print_frame( char *buffer, int buffer_len )
 {
@@ -85,7 +133,7 @@ int main(int argc, char* argv[])
     }
     
     else {
-
+        elevator.position = MENU_PRINCIPAL;
         read_screen();
         sm_menu();
         close(serial_fd);
@@ -204,8 +252,11 @@ void read_screen()
                         
                         // Print to screen
                         clear_screen();
+                        print_menu_position();
                         print_lcd_screen(elevator.top_screen, elevator.bottom_screen, frame_errors);
-                        parse_screen();
+                        dispatch_menu(elevator.top_screen);
+                        
+                        
                         
                         // Shift buffer to remove processed data
                         int shift_amount = frame_start + FRAME_LENGTH;
@@ -340,7 +391,30 @@ void print_lcd_screen(const char* top_screen, const char* bottom_screen, int err
     
     // Print error count
     printf("Frame errors = %d\n", error_count);
-    
+}
+
+
+void print_menu_position() {
+  printf("+----------------+\n");
+  switch (elevator.position) {
+    case MENU_PRINCIPAL:
+        printf("  MENU_PRINCIPAL \n");    
+        break;
+    case MENU_TCBC:
+        printf("    MENU_TCBC    \n");   
+        break;
+    case MENU_SYSTEM:
+        printf("   MENU_SYSTEM   \n");   
+        break;
+    case MENU_STATUS:
+        printf("   MENU_STATUS   \n");     
+        break;
+    case MENU_INPUT:
+        printf("    MENU_INPUT   \n");     
+        break;
+    default:
+    }
+    printf("+----------------+\n");
 }
 
 int validate_frame(const char* frame) {
@@ -394,22 +468,10 @@ void extract_frame_parts(const char* frame, char* top_screen, char* bottom_scree
     } else {
         top_screen[0] = '\0';
     }
-    
-    // Remove any trailing newlines or spaces
-    // int i;
-    // for (i = strlen(top_screen) - 1; i >= 0 && (top_screen[i] == '\n' || top_screen[i] == ' '); i--) {
-    //     top_screen[i] = '\0';
-    // }
-    
-    // for (i = strlen(bottom_screen) - 1; i >= 0 && (bottom_screen[i] == '\n' || bottom_screen[i] == ' '); i--) {
-    //     bottom_screen[i] = '\0';
-    // }
-
-
 
 }
 
-    void parse_screen(void) {
+    void input_menu_parse() {
     memcpy(elevator.car_id,     elevator.top_screen + 0, 1);  elevator.car_id[1] = '\0';
     memcpy(elevator.direction,  elevator.top_screen + 1, 1);  elevator.direction[1] = '\0';
     memcpy(elevator.level,      elevator.top_screen + 2, 2);  elevator.level[2] = '\0';
@@ -418,7 +480,6 @@ void extract_frame_parts(const char* frame, char* top_screen, char* bottom_scree
     memcpy(elevator.door,       elevator.top_screen + 12, 2); elevator.door[2] = '\0';
     memcpy(elevator.rear_door,  elevator.top_screen + 14, 2); elevator.rear_door[2] = '\0';
 
-    
     printf("\n+----------------+\n");
     printf(" Elevator Status \n");
     printf("+----------------+\n");
@@ -430,24 +491,26 @@ void extract_frame_parts(const char* frame, char* top_screen, char* bottom_scree
     printf(" MCSS      : %-3s \n", elevator.mcss);
     printf(" Door      : %-3s \n", elevator.door);
     printf(" Rear Door : %-3s \n", elevator.rear_door);
-
     printf("+----------------+\n");
+
     }
 
 
+void system_menu_parse () {
 
+}
 
-// void s_menu_handler () {
-
-// }
-
-// void tcbc_menu_handler () {
+void status_menu_parse() {
     
-// }
+}
 
-// void principal_menu_handler () {
+void tcbc_menu_parse () {
     
-// }
+}
+
+void principal_menu_parse () {
+
+}
 
 void sm_menu()
 {
