@@ -13,15 +13,43 @@
 #define BUFFER_SIZE 1024
 #define LCD_WIDTH 16
 
+typedef enum
+{
+    test_pass = 0,
+    test_fail = 1
+} test_status_e;
+
+typedef enum {
+    MENU_PRINCIPAL,
+    MENU_TCBC,
+    MENU_SYSTEM,
+    MENU_STATUS,
+    MENU_INPUT
+    // ... add other menu types as needed
+} sm_menu_e;
+
+typedef struct
+{
+    void (*callback)();
+    sm_menu_e position;
+    char top_screen[LCD_WIDTH + 1];
+    char bottom_screen[LCD_WIDTH + 1];
+    char car_id[2];         // "A" + '\0'
+    char direction[2];      // "-" + '\0'
+    char level[3];          // "01" + '\0'
+    char ocss[4];           // "IDL" + '\0'
+    char mcss[3];           // "ST" + '\0'
+    char door[3];           // "][" + '\0'
+    char rear_door[3];      // "[]" + '\0'
+    int frame_error_count;
+} elevator_obj_t;
 
 // Global variables
-char frame[FRAME_LENGTH + 1];
-char top_line[LCD_WIDTH + 1];
-char bottom_line[LCD_WIDTH + 1];
 int serial_fd;
 char buffer[BUFFER_SIZE];
 int buffer_pos;
 int frame_errors;
+ elevator_obj_t elevator = {0};
 
 // Function prototypes
 // At top of metro.c or in metro.h
@@ -32,9 +60,9 @@ void sm_menu(void);
 
 int setup_serial(const char* port_path, speed_t baud_rate);
 void clear_screen();
-void print_lcd_screen(const char* top_line, const char* bottom_line, int error_count);
+void print_lcd_screen(const char* top_screen, const char* bottom_screen, int error_count);
 int validate_frame(const char* frame);
-void extract_frame_parts(const char* frame, char* top_line, char* bottom_line);
+void extract_frame_parts(const char* frame, char* top_screen, char* bottom_screen);
 
 
 void print_frame( char *buffer, int buffer_len )
@@ -59,7 +87,6 @@ int main(int argc, char* argv[])
     else {
 
         read_screen();
-        parse_screen();
         sm_menu();
         close(serial_fd);
         return 0; 
@@ -103,7 +130,7 @@ int init(int argc, char* argv[])
 
 void read_screen()
 {
-    while (1) {
+     while (1) {
         // Wait for data to be available
         fd_set readfds;
         struct timeval timeout;
@@ -126,13 +153,11 @@ void read_screen()
             continue;
         }
         
-    
         if (FD_ISSET(serial_fd, &readfds)) {
             // Read data from serial port
             char byte;
             int bytes_read = read(serial_fd, &byte, 1);
             
-    
             if (bytes_read < 0) {
                 perror("read error");
                 break;
@@ -143,7 +168,6 @@ void read_screen()
                 continue;
             }
             
-    
             // Add byte to buffer
             buffer[buffer_pos] = byte;
             buffer_pos++;
@@ -166,23 +190,21 @@ void read_screen()
             
             // If we found a newline, look for the end of the frame
             if (frame_start != -1) {
-    
                 // Check if we have enough data for a complete frame
                 if (frame_start + FRAME_LENGTH <= buffer_pos) {
                     // Extract potential frame
+                    char frame[FRAME_LENGTH + 1];
                     memcpy(frame, buffer + frame_start, FRAME_LENGTH);
                     frame[FRAME_LENGTH] = '\0';
                     
-                    print_frame(frame,FRAME_LENGTH);
-    
                     // Validate frame
                     if (validate_frame(frame)) {
                         // Extract parts for LCD display
-                        extract_frame_parts(frame, top_line, bottom_line);
+                        extract_frame_parts(frame, elevator.top_screen, elevator.bottom_screen);
                         
                         // Print to screen
                         clear_screen();
-                        print_lcd_screen(top_line, bottom_line, frame_errors);
+                        print_lcd_screen(elevator.top_screen, elevator.bottom_screen, frame_errors);
                         parse_screen();
                         
                         // Shift buffer to remove processed data
@@ -190,8 +212,6 @@ void read_screen()
                         memmove(buffer, buffer + shift_amount, buffer_pos - shift_amount);
                         buffer_pos -= shift_amount;
                     } else {
-                        printf("rejected\n");
-    
                         // Frame validation failed
                         frame_errors++;
                         
@@ -266,6 +286,8 @@ int setup_serial(const char* port_path, speed_t baud_rate) {
         close(fd);
         return -1;
     }
+
+    //usleep(1000*1000);
     
     return fd;
 }
@@ -274,7 +296,7 @@ void clear_screen() {
     printf("\033[2J\033[H");  // VT100 escape codes to clear screen and move cursor to home
 }
 
-void print_lcd_screen(const char* top_line, const char* bottom_line, int error_count) {
+void print_lcd_screen(const char* top_screen, const char* bottom_screen, int error_count) {
     // Print top border
     printf("+");
     for (int i = 0; i < LCD_WIDTH; i++) {
@@ -283,8 +305,8 @@ void print_lcd_screen(const char* top_line, const char* bottom_line, int error_c
     printf("+\n");
     
     // Print top line content
-    if (top_line != NULL) {
-        printf("%-*s", LCD_WIDTH, top_line);
+    if (top_screen != NULL) {
+        printf("%-*s", LCD_WIDTH, top_screen);
     } else {
         for (int i = 0; i < LCD_WIDTH; i++) {
             printf(" ");
@@ -300,8 +322,8 @@ void print_lcd_screen(const char* top_line, const char* bottom_line, int error_c
     printf("+\n");
     
     // Print bottom line content
-    if (bottom_line != NULL) {
-        printf("%-*s", LCD_WIDTH, bottom_line);
+    if (bottom_screen != NULL) {
+        printf("%-*s", LCD_WIDTH, bottom_screen);
     } else {
         for (int i = 0; i < LCD_WIDTH; i++) {
             printf(" ");
@@ -339,15 +361,15 @@ int validate_frame(const char* frame) {
     return 1;
 }
 
-void extract_frame_parts(const char* frame, char* top_line, char* bottom_line) {
+void extract_frame_parts(const char* frame, char* top_screen, char* bottom_screen) {
     // Extract the part after the newline and before "[H"
     const char* data_start = frame + 1;  // Skip the newline
     const char* marker_pos = strstr(data_start, "[H");
     
     if (marker_pos == NULL) {
         // If no "[H" found, return empty strings
-        top_line[0] = '\0';
-        bottom_line[0] = '\0';
+        top_screen[0] = '\0';
+        bottom_screen[0] = '\0';
         return;
     }
     
@@ -359,76 +381,60 @@ void extract_frame_parts(const char* frame, char* top_line, char* bottom_line) {
     
     // Copy first half to bottom line
     if (half_length > 0) {
-        strncpy(bottom_line, data_start, half_length);
-        bottom_line[half_length] = '\0';
+        strncpy(bottom_screen, data_start, half_length);
+        bottom_screen[half_length] = '\0';
     } else {
-        bottom_line[0] = '\0';
+        bottom_screen[0] = '\0';
     }
     
     // Copy second half to top line
     if (half_length > 0) {
-        strncpy(top_line, data_start + half_length + 2, half_length);
-        top_line[half_length] = '\0';
+        strncpy(top_screen, data_start + half_length + 2, half_length);
+        top_screen[half_length] = '\0';
     } else {
-        top_line[0] = '\0';
+        top_screen[0] = '\0';
     }
     
     // Remove any trailing newlines or spaces
     // int i;
-    // for (i = strlen(top_line) - 1; i >= 0 && (top_line[i] == '\n' || top_line[i] == ' '); i--) {
-    //     top_line[i] = '\0';
+    // for (i = strlen(top_screen) - 1; i >= 0 && (top_screen[i] == '\n' || top_screen[i] == ' '); i--) {
+    //     top_screen[i] = '\0';
     // }
     
-    // for (i = strlen(bottom_line) - 1; i >= 0 && (bottom_line[i] == '\n' || bottom_line[i] == ' '); i--) {
-    //     bottom_line[i] = '\0';
+    // for (i = strlen(bottom_screen) - 1; i >= 0 && (bottom_screen[i] == '\n' || bottom_screen[i] == ' '); i--) {
+    //     bottom_screen[i] = '\0';
     // }
 
 
 
 }
 
+    void parse_screen(void) {
+    memcpy(elevator.car_id,     elevator.top_screen + 0, 1);  elevator.car_id[1] = '\0';
+    memcpy(elevator.direction,  elevator.top_screen + 1, 1);  elevator.direction[1] = '\0';
+    memcpy(elevator.level,      elevator.top_screen + 2, 2);  elevator.level[2] = '\0';
+    memcpy(elevator.ocss,       elevator.top_screen + 5, 3);  elevator.ocss[3] = '\0';
+    memcpy(elevator.mcss,       elevator.top_screen + 9, 2);  elevator.mcss[2] = '\0';
+    memcpy(elevator.door,       elevator.top_screen + 12, 2); elevator.door[2] = '\0';
+    memcpy(elevator.rear_door,  elevator.top_screen + 14, 2); elevator.rear_door[2] = '\0';
+
+    
+    printf("\n+----------------+\n");
+    printf(" Elevator Status \n");
+    printf("+----------------+\n");
+
+    printf(" Car ID    : %-3s \n", elevator.car_id);
+    printf(" Direction : %-3s \n", elevator.direction);
+    printf(" Level     : %-3s \n", elevator.level);
+    printf(" OCSS      : %-3s \n", elevator.ocss);
+    printf(" MCSS      : %-3s \n", elevator.mcss);
+    printf(" Door      : %-3s \n", elevator.door);
+    printf(" Rear Door : %-3s \n", elevator.rear_door);
+
+    printf("+----------------+\n");
+    }
 
 
-void parse_screen() {
-
-    // Field variables
-    char car_id[2]      = {0};
-    char direction[2]   = {0};
-    char level[3]       = {0};
-    char ocss[4]        = {0};
-    char mcss[3]        = {0};
-    char front_door[3]  = {0};
-    char rear_door[3]   = {0};
-
-    // Parsing by table mapping
-    car_id[0]        = top_line[0];
-    direction[0]     = top_line[1];
-    memcpy(level,      top_line + 2, 2);
-    memcpy(ocss,       top_line + 5, 3);
-    memcpy(mcss,       top_line + 9, 2);
-    memcpy(front_door, top_line + 12, 2);
-    memcpy(rear_door,  top_line + 14, 2);
-
-    // Null-terminate all multi-char variables
-    level[2]      = '\0';
-    ocss[3]       = '\0';
-    mcss[2]       = '\0';
-    front_door[2] = '\0';
-    rear_door[2]  = '\0';
-
-    // Print elevator status in v100 format
-    printf("Elevator status\n");
-    printf("-----------------------------\n");
-    printf("Car ID       : %s\n", car_id);
-    printf("Direction    : %s\n", direction);
-    printf("Level        : %s\n", level);
-    printf("OCSS         : %s\n", ocss);
-    printf("MCSS         : %s\n", mcss);
-    printf("Front Door   : %s\n", front_door);
-    printf("Rear Door    : %s\n", rear_door);
-    printf("-----------------------------\n");
-
-}
 
 
 // void s_menu_handler () {
