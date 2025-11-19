@@ -14,9 +14,9 @@
 #define FRAME_LENGTH 35
 #define BUFFER_SIZE 1024
 #define LCD_WIDTH 16
-#define MAX_LABEL_LEN  9   // Accommodates "System" + null and typical label
-#define MAX_VALUE_LEN  4   // Allows for 3-digit values plus null
-
+#define MAX_LABEL_LEN 9  
+#define MAX_VALUE_LEN 6   
+#define MAX_FIELDS 2
 typedef struct {
     char label[MAX_LABEL_LEN];
     char value[MAX_VALUE_LEN];
@@ -459,9 +459,67 @@ void extract_frame_parts(const char* frame) {
     }
 
 }
-void principal_menu_parse () {
 
+void parse_menu_fields(const char* src, char separator, menu_field_t* dest, int max_fields) {
+    int i = 0, f = 0, len = strlen(src);
+
+    while (i < len && f < max_fields) {
+        memset(dest[f].label, 0, MAX_LABEL_LEN);
+        memset(dest[f].value, 0, MAX_VALUE_LEN);
+
+        // Skip leading spaces
+        while (i < len && isspace(src[i])) {
+            i++;
+        }
+
+        // Parse label (option number/string before separator)
+        int k = 0;
+        while (i < len && src[i] != separator && k < MAX_LABEL_LEN - 1) {
+            dest[f].label[k++] = src[i++];
+        }
+        dest[f].label[k] = '\0';
+
+        // Skip separator
+        if (i < len && src[i] == separator) {
+            i++;
+        }
+
+        // Parse value (menu name, etc.)
+        k = 0;
+        while (i < len && !isspace(src[i]) && k < MAX_VALUE_LEN - 1) {
+            dest[f].value[k++] = src[i++];
+        }
+        dest[f].value[k] = '\0';
+
+        // Skip whitespace before the next field
+        while (i < len && isspace(src[i])) {
+            i++;
+        }
+
+        f++;
+    }
 }
+
+void menu_parse(void) {
+    int field_count = MAX_FIELDS;
+    parse_menu_fields(elevator.bottom_screen, '=', fields, field_count);
+    for (int j = 0; j < field_count; j++) {
+        printf("To enter %s, press %s\n", fields[j].label, fields[j].value);
+    }
+}
+
+void principal_menu_parse(void) {
+    int field_count = MAX_FIELDS;
+    parse_menu_fields(elevator.top_screen, ':', fields, field_count);
+    for (int j = 0; j < field_count; j++) {
+        printf("To enter %s press %s\n", fields[j].value, fields[j].label);
+    }
+    parse_menu_fields(elevator.bottom_screen, ':', fields, field_count);
+    for (int j = 0; j < field_count; j++) {
+        printf("To enter %s press %s\n", fields[j].value, fields[j].label);
+    }
+}
+
 void input_menu_parse() {
     // Top Screen Parsing
     memcpy(elevator.car_id,     elevator.top_screen + 0, 1);  elevator.car_id[1] = '\0';
@@ -493,43 +551,6 @@ void input_menu_parse() {
     printf(" Var 4 : %-3s \n", elevator.var4);
     printf("+----------------+\n");
 }
-
-
-void menu_parse() {
-    int i = 0, j = 0, f = 0;
-    int len = strlen(elevator.bottom_screen);
-    // Parse up to two fields (safe for your format)
-    while (i < len && f < 2) {
-        // Skip leading spaces
-        while (i < len && elevator.bottom_screen[i] == ' ') {
-            i++;
-        }
-        // Parse label
-        j = 0;
-        while (i < len && elevator.bottom_screen[i] != '=' && j < MAX_LABEL_LEN - 1) {
-            fields[f].label[j++] = elevator.bottom_screen[i++];
-        }
-        fields[f].label[j] = '\0';
-        // Skip '='
-        if (i < len && elevator.bottom_screen[i] == '=') {
-            i++;
-        }
-        // Parse value (up to whitespace, end, or full value space)
-        j = 0;
-        while (i < len && !isspace(elevator.bottom_screen[i]) && j < MAX_VALUE_LEN - 1) {
-            fields[f].value[j++] = elevator.bottom_screen[i++];
-        }
-        fields[f].value[j] = '\0';
-        // Skip whitespace before next field
-        while (i < len && elevator.bottom_screen[i] == ' ') {
-            i++;
-        }
-        f++;
-    }
-    printf("To enter %s, press %s\n", fields[0].label, fields[0].value);
-    printf("To enter %s, press %s\n", fields[1].label, fields[1].value);
-}
-
 
 void sm_menu()
 {
