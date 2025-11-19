@@ -416,14 +416,17 @@ void parse_screen() {
     front_door[2] = '\0';
     rear_door[2]  = '\0';
 
-    // Print results
-    printf("Car ID      : %s\n", car_id);
-    printf("Direction   : %s\n", direction);
-    printf("Level       : %s\n", level);
-    printf("OCSS        : %s\n", ocss);
-    printf("MCSS        : %s\n", mcss);
-    printf("Front Door  : %s\n", front_door);
-    printf("Rear Door   : %s\n", rear_door);
+    // Print elevator status in v100 format
+    printf("Elevator status\n");
+    printf("-----------------------------\n");
+    printf("Car ID       : %s\n", car_id);
+    printf("Direction    : %s\n", direction);
+    printf("Level        : %s\n", level);
+    printf("OCSS         : %s\n", ocss);
+    printf("MCSS         : %s\n", mcss);
+    printf("Front Door   : %s\n", front_door);
+    printf("Rear Door    : %s\n", rear_door);
+    printf("-----------------------------\n");
 
 }
 
