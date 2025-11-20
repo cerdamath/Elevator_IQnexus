@@ -57,6 +57,16 @@ typedef struct
     int frame_error_count;
 } elevator_obj_t;
 
+// Structure to encapsulate all global state
+typedef struct {
+    int serial_fd;
+    char buffer[BUFFER_SIZE];
+    int buffer_pos;
+    int frame_errors;
+    elevator_obj_t elevator;
+    menu_field_t fields[2];
+} metro_state_t;
+
 typedef struct {
     const char* key;
     const char* value;
@@ -186,20 +196,17 @@ typedef struct {
 // };
 
 
-// Global variables
-int serial_fd;
-char buffer[BUFFER_SIZE];
-int buffer_pos;
-int frame_errors;
-elevator_obj_t elevator = {0};
-menu_field_t fields[2];
+// Global state encapsulation
+static metro_state_t g_state = {0};
 
 // Function prototypes
 // At top of metro.c or in metro.h
 int init(int argc, char* argv[]);
-void read_screen();
-void parse_screen();
-void sm_menu();
+void serial_read(void);
+void find_frame_boundaries(int* frame_start);
+void process_frame(int frame_start);
+void buffer_shift(int shift_amount);
+void sm_menu(void);
 
 int setup_serial(const char* port_path, speed_t baud_rate);
 void clear_screen();
@@ -223,25 +230,25 @@ bool is_input_menu(const char *top_screen) {
 
 // Main logic
 void dispatch_menu() {
-    if (is_input_menu(elevator.top_screen)) {
-        elevator.position = MENU_INPUT;
+    if (is_input_menu(g_state.elevator.top_screen)) {
+        g_state.elevator.position = MENU_INPUT;
         input_menu_parse();
         return;
     }
 
-    if (contains(elevator.top_screen, "Menu")) {
-        if (contains(elevator.top_screen, "SYSTEM")) {
-            elevator.position = MENU_SYSTEM;
+    if (contains(g_state.elevator.top_screen, "Menu")) {
+        if (contains(g_state.elevator.top_screen, "SYSTEM")) {
+            g_state.elevator.position = MENU_SYSTEM;
             menu_parse();
             return;
         }
-        if (contains(elevator.top_screen, "STATUS")) {
-            elevator.position = MENU_STATUS;
+        if (contains(g_state.elevator.top_screen, "STATUS")) {
+            g_state.elevator.position = MENU_STATUS;
             menu_parse();
             return;
         }
-        if (contains(elevator.top_screen, "TCBC")) {
-            elevator.position = MENU_TCBC;
+        if (contains(g_state.elevator.top_screen, "TCBC")) {
+            g_state.elevator.position = MENU_TCBC;
             menu_parse();
             return;
         }
@@ -249,11 +256,11 @@ void dispatch_menu() {
         printf("Unknown Menu Screen (Menu keyword, not SYSTEM/STATUS/TCBC)\n");
         return;
     }
-    if (contains(elevator.top_screen, "TCBC"))
+    if (contains(g_state.elevator.top_screen, "TCBC"))
     {
         // If no keywords above, principal menu by default
-        elevator.position = MENU_PRINCIPAL;
-        principal_menu_parse();        
+        g_state.elevator.position = MENU_PRINCIPAL;
+        principal_menu_parse();
     }
 }
 
@@ -268,26 +275,42 @@ void print_frame( char *buffer, int buffer_len )
 }
 
 
-int main(int argc, char* argv[]) 
+int main(int argc, char* argv[])
 {
-    int status = init(argc, argv);   
+    int status = init(argc, argv);
     
     if (status != 0) {
-        return 1;               
+        return 1;
     }
     
     else {
-        elevator.position = NA;
-        read_screen();
-        printf("I am here");
-        sm_menu();
-        close(serial_fd);
-        return 0; 
+        g_state.elevator.position = NA;
+        while (1) {
+            // Read serial data into buffer
+            serial_read();
+            
+            // Find and process complete frames
+            int frame_start = -1;
+            find_frame_boundaries(&frame_start);
+            if (frame_start != -1) {
+                process_frame(frame_start);
+                
+                // Update display and menu state
+                clear_screen();
+                print_menu_position();
+                print_lcd_screen(g_state.frame_errors);
+                dispatch_menu();
+                sm_menu();
+                
+            }
+        }
+        close(g_state.serial_fd);
+        return 0;
     }
 }
 
 
-int init(int argc, char* argv[]) 
+int init(int argc, char* argv[])
 {
     if (argc != 2) {
         fprintf(stderr, "Usage: %s <serial_port>\n", argv[0]);
@@ -301,137 +324,138 @@ int init(int argc, char* argv[])
     printf("Baud: %u Port:%s", baud_rate, port_path);
 
     // Setup serial port
-    serial_fd = setup_serial(port_path, baud_rate);
-    if (serial_fd < 0) {
+    g_state.serial_fd = setup_serial(port_path, baud_rate);
+    if (g_state.serial_fd < 0) {
         fprintf(stderr, "Failed to open serial port %s\n", port_path);
         return 1;
     }
 
     // Initialize buffer and variables
     // buffer[BUFFER_SIZE];
-    buffer_pos = 0;
-    frame_errors = 0;
+    g_state.buffer_pos = 0;
+    g_state.frame_errors = 0;
     
     // Clear screen and start display
     clear_screen();
     
     printf("Reading from %s at %ld baud\n", port_path, (long)baud_rate);
     printf("Press Ctrl+C to exit\n");
-    return 0;   
+    return 0;
 }
 
 
-void read_screen()
-{
-     while (1) {
-        // Wait for data to be available
-        fd_set readfds;
-        struct timeval timeout;
+void serial_read(void) {
+    // Wait for data to be available
+    fd_set readfds;
+    struct timeval timeout;
+    
+    FD_ZERO(&readfds);
+    FD_SET(g_state.serial_fd, &readfds);
+    
+    timeout.tv_sec = 1;
+    timeout.tv_usec = 0;
+    
+    int activity = select(g_state.serial_fd + 1, &readfds, NULL, NULL, &timeout);
+    
+    if (activity < 0) {
+        perror("select error");
+        return;
+    }
+    
+    if (activity == 0) {
+        // Timeout, continue loop
+        return;
+    }
+    
+    if (FD_ISSET(g_state.serial_fd, &readfds)) {
+        // Read data from serial port
+        char byte;
+        int bytes_read = read(g_state.serial_fd, &byte, 1);
         
-        FD_ZERO(&readfds);
-        FD_SET(serial_fd, &readfds);
-        
-        timeout.tv_sec = 1;
-        timeout.tv_usec = 0;
-        
-        int activity = select(serial_fd + 1, &readfds, NULL, NULL, &timeout);
-        
-        if (activity < 0) {
-            perror("select error");
-            break;
+        if (bytes_read < 0) {
+            perror("read error");
+            return;
         }
         
-        if (activity == 0) {
-            // Timeout, continue loop
-            continue;
+        if (bytes_read == 0) {
+            // No data available
+            return;
         }
         
-        if (FD_ISSET(serial_fd, &readfds)) {
-            // Read data from serial port
-            char byte;
-            int bytes_read = read(serial_fd, &byte, 1);
-            
-            if (bytes_read < 0) {
-                perror("read error");
-                break;
-            }
-            
-            if (bytes_read == 0) {
-                // No data available
-                continue;
-            }
-            
-            // Add byte to buffer
-            buffer[buffer_pos] = byte;
-            buffer_pos++;
-            
-            // If buffer is full, reset it
-            if (buffer_pos >= BUFFER_SIZE) {
-                buffer_pos = 0;
-            }
-            
-            // Look for frame boundaries
-            int frame_start = -1;
-            
-            // Find first newline character
-            for (int i = 0; i < buffer_pos; i++) {
-                if (buffer[i] == '\n') {
-                    frame_start = i;
-                    break;
-                }
-            }
-            
-            // If we found a newline, look for the end of the frame
-            if (frame_start != -1) {
-                // Check if we have enough data for a complete frame
-                if (frame_start + FRAME_LENGTH <= buffer_pos) {
-                    // Extract potential frame
-                    char frame[FRAME_LENGTH + 1];
-                    memcpy(frame, buffer + frame_start, FRAME_LENGTH);
-                    frame[FRAME_LENGTH] = '\0';
-                    
-                    // Validate frame
-                    if (validate_frame(frame)) {
-                        // Extract parts for LCD display
-                        extract_frame_parts(frame);
-                        
-                        // Print to screen
-                        clear_screen();
-                        print_menu_position();
-                        print_lcd_screen(frame_errors);
-                        dispatch_menu();
-                        sm_menu();
-                        
-                        // Shift buffer to remove processed data
-                        int shift_amount = frame_start + FRAME_LENGTH;
-                        memmove(buffer, buffer + shift_amount, buffer_pos - shift_amount);
-                        buffer_pos -= shift_amount;
-                    } else {
-                        // Frame validation failed
-                        frame_errors++;
-                        
-                        // Find next potential frame start
-                        int next_newline = -1;
-                        for (int i = frame_start + 1; i < buffer_pos; i++) {
-                            if (buffer[i] == '\n') {
-                                next_newline = i;
-                                break;
-                            }
-                        }
-                        
-                        // If we found a next newline, shift buffer to that position
-                        if (next_newline != -1) {
-                            memmove(buffer, buffer + next_newline, buffer_pos - next_newline);
-                            buffer_pos -= next_newline;
-                        } else {
-                            // No next newline found, clear buffer
-                            buffer_pos = 0;
-                        }
-                    }
-                }
-            }
+        // Add byte to buffer
+        g_state.buffer[g_state.buffer_pos] = byte;
+        g_state.buffer_pos++;
+        
+        // If buffer is full, reset it
+        if (g_state.buffer_pos >= BUFFER_SIZE) {
+            g_state.buffer_pos = 0;
         }
     }
+}
+
+void find_frame_boundaries(int* frame_start) {
+    *frame_start = -1;
+    
+    // Find first newline character
+    for (int i = 0; i < g_state.buffer_pos; i++) {
+        if (g_state.buffer[i] == '\n') {
+            *frame_start = i;
+            break;
+        }
+    }
+    
+    // If we found a newline, check if we have enough data for a complete frame
+    if (*frame_start != -1) {
+        if (*frame_start + FRAME_LENGTH <= g_state.buffer_pos) {
+            // Complete frame found
+            return;
+        }
+    }
+    
+    // Incomplete frame or no frame start found
+    *frame_start = -1;
+}
+
+void process_frame(int frame_start) {
+    // Extract potential frame
+    char frame[FRAME_LENGTH + 1];
+    memcpy(frame, g_state.buffer + frame_start, FRAME_LENGTH);
+    frame[FRAME_LENGTH] = '\0';
+    
+    // Validate frame
+    if (validate_frame(frame)) {
+        // Extract parts for LCD display
+        extract_frame_parts(frame);
+        
+        // Shift buffer to remove processed data
+        int shift_amount = frame_start + FRAME_LENGTH;
+        buffer_shift(shift_amount);
+    } else {
+        // Frame validation failed
+        g_state.frame_errors++;
+        
+        // Find next potential frame start
+        int next_newline = -1;
+        for (int i = frame_start + 1; i < g_state.buffer_pos; i++) {
+            if (g_state.buffer[i] == '\n') {
+                next_newline = i;
+                break;
+            }
+        }
+        
+        // If we found a next newline, shift buffer to that position
+        if (next_newline != -1) {
+            buffer_shift(next_newline);
+        } else {
+            // No next newline found, clear buffer
+            g_state.buffer_pos = 0;
+        }
+    }
+}
+
+void buffer_shift(int shift_amount) {
+    memmove(g_state.buffer, g_state.buffer + shift_amount, g_state.buffer_pos - shift_amount);
+    g_state.buffer_pos -= shift_amount;
 }
 
 
@@ -497,7 +521,7 @@ void print_lcd_screen(int error_count) {
     printf("+\n");
 
     // Print top line content (always print top_screen)
-    printf("%-*s\n", LCD_WIDTH, elevator.top_screen);
+    printf("%-*s\n", LCD_WIDTH, g_state.elevator.top_screen);
 
     // Print middle border
     printf("+");
@@ -505,7 +529,7 @@ void print_lcd_screen(int error_count) {
     printf("+\n");
 
     // Print bottom line content (always print bottom_screen)
-    printf("%-*s\n", LCD_WIDTH, elevator.bottom_screen);
+    printf("%-*s\n", LCD_WIDTH, g_state.elevator.bottom_screen);
 
     // Print bottom border
     printf("+");
@@ -519,24 +543,24 @@ void print_lcd_screen(int error_count) {
 
 void print_menu_position() {
   printf("+----------------+\n");
-  switch (elevator.position) {
+  switch (g_state.elevator.position) {
     case NA:
-        printf("  Unknown Menu \n");    
+        printf("  Unknown Menu \n");
         break;
     case MENU_PRINCIPAL:
-        printf("  Principal Menu \n");    
+        printf("  Principal Menu \n");
         break;
     case MENU_TCBC:
-        printf("    TCBC Menu    \n");   
+        printf("    TCBC Menu    \n");
         break;
     case MENU_SYSTEM:
-        printf("   System Menu   \n");   
+        printf("   System Menu   \n");
         break;
     case MENU_STATUS:
-        printf("   Status Menu   \n");     
+        printf("   Status Menu   \n");
         break;
     case MENU_INPUT:
-        printf("    Input Menu   \n");     
+        printf("    Input Menu   \n");
         break;
     default:
     }
@@ -568,8 +592,8 @@ void extract_frame_parts(const char* frame) {
     
     if (marker_pos == NULL) {
         // If no "[H" found, return empty strings
-        elevator.top_screen[0] = '\0';
-        elevator.bottom_screen[0] = '\0';
+        g_state.elevator.top_screen[0] = '\0';
+        g_state.elevator.bottom_screen[0] = '\0';
         return;
     }
     
@@ -581,18 +605,18 @@ void extract_frame_parts(const char* frame) {
     
     // Copy first half to bottom line
     if (half_length > 0) {
-        strncpy(elevator.bottom_screen, data_start, half_length);
-        elevator.bottom_screen[half_length] = '\0';
+        strncpy(g_state.elevator.bottom_screen, data_start, half_length);
+        g_state.elevator.bottom_screen[half_length] = '\0';
     } else {
-        elevator.bottom_screen[0] = '\0';
+        g_state.elevator.bottom_screen[0] = '\0';
     }
     
     // Copy second half to top line
     if (half_length > 0) {
-        strncpy(elevator.top_screen, data_start + half_length + 2, half_length);
-        elevator.top_screen[half_length] = '\0';
+        strncpy(g_state.elevator.top_screen, data_start + half_length + 2, half_length);
+        g_state.elevator.top_screen[half_length] = '\0';
     } else {
-        elevator.top_screen[0] = '\0';
+        g_state.elevator.top_screen[0] = '\0';
     }
 
 }
@@ -636,23 +660,23 @@ int parse_menu_fields(const char* src, char separator, menu_field_t* dest, int m
 }
 
 void menu_parse(void) {
-    int field_count = parse_menu_fields(elevator.bottom_screen, '=', fields, MAX_FIELDS);
+    int field_count = parse_menu_fields(g_state.elevator.bottom_screen, '=', g_state.fields, MAX_FIELDS);
     for (int j = 0; j < field_count; j++) {
-        printf("To enter %s, press %s\n", fields[j].label, fields[j].value);
+        printf("To enter %s, press %s\n", g_state.fields[j].label, g_state.fields[j].value);
     }
 }
 
 void principal_menu_parse(void) {
     int field_count;
     // Top screen parsing
-    field_count = parse_menu_fields(elevator.top_screen, ':', fields, MAX_FIELDS);
+    field_count = parse_menu_fields(g_state.elevator.top_screen, ':', g_state.fields, MAX_FIELDS);
     for (int j = 0; j < field_count; j++) {
-        printf("To enter %s press %s\n", fields[j].value, fields[j].label);
+        printf("To enter %s press %s\n", g_state.fields[j].value, g_state.fields[j].label);
     }
     // Bottom screen parsing
-    field_count = parse_menu_fields(elevator.bottom_screen, ':', fields, MAX_FIELDS);
+    field_count = parse_menu_fields(g_state.elevator.bottom_screen, ':', g_state.fields, MAX_FIELDS);
     for (int j = 0; j < field_count; j++) {
-        printf("To enter %s press %s\n", fields[j].value, fields[j].label);
+        printf("To enter %s press %s\n", g_state.fields[j].value, g_state.fields[j].label);
     }
 }
 
@@ -660,34 +684,34 @@ void input_menu_parse() {
     // Top Screen Parsing
 
 
-    memcpy(elevator.car_id,     elevator.top_screen + 0, 1);  elevator.car_id[1] = '\0';
-    memcpy(elevator.direction,  elevator.top_screen + 1, 1);  elevator.direction[1] = '\0';
-    memcpy(elevator.level,      elevator.top_screen + 2, 2);  elevator.level[2] = '\0';
-    memcpy(elevator.ocss,       elevator.top_screen + 5, 3);  elevator.ocss[3] = '\0';
-    memcpy(elevator.mcss,       elevator.top_screen + 9, 2);  elevator.mcss[2] = '\0';
-    memcpy(elevator.door,       elevator.top_screen + 12, 2); elevator.door[2] = '\0';
-    memcpy(elevator.rear_door,  elevator.top_screen + 14, 2); elevator.rear_door[2] = '\0';
+    memcpy(g_state.elevator.car_id,     g_state.elevator.top_screen + 0, 1);  g_state.elevator.car_id[1] = '\0';
+    memcpy(g_state.elevator.direction,  g_state.elevator.top_screen + 1, 1);  g_state.elevator.direction[1] = '\0';
+    memcpy(g_state.elevator.level,      g_state.elevator.top_screen + 2, 2);  g_state.elevator.level[2] = '\0';
+    memcpy(g_state.elevator.ocss,       g_state.elevator.top_screen + 5, 3);  g_state.elevator.ocss[3] = '\0';
+    memcpy(g_state.elevator.mcss,       g_state.elevator.top_screen + 9, 2);  g_state.elevator.mcss[2] = '\0';
+    memcpy(g_state.elevator.door,       g_state.elevator.top_screen + 12, 2); g_state.elevator.door[2] = '\0';
+    memcpy(g_state.elevator.rear_door,  g_state.elevator.top_screen + 14, 2); g_state.elevator.rear_door[2] = '\0';
     // Bottom Screen Parsing
-    memcpy(elevator.var1,     elevator.bottom_screen + 0, 4);  elevator.var1[4] = '\0';
-    memcpy(elevator.var2,  elevator.bottom_screen + 4, 4);  elevator.var2[4] = '\0';
-    memcpy(elevator.var3,      elevator.bottom_screen + 8, 4);  elevator.var3[4] = '\0';
-    memcpy(elevator.var4,       elevator.bottom_screen + 12, 4);  elevator.var4[4] = '\0';
+    memcpy(g_state.elevator.var1,     g_state.elevator.bottom_screen + 0, 4);  g_state.elevator.var1[4] = '\0';
+    memcpy(g_state.elevator.var2,  g_state.elevator.bottom_screen + 4, 4);  g_state.elevator.var2[4] = '\0';
+    memcpy(g_state.elevator.var3,      g_state.elevator.bottom_screen + 8, 4);  g_state.elevator.var3[4] = '\0';
+    memcpy(g_state.elevator.var4,       g_state.elevator.bottom_screen + 12, 4);  g_state.elevator.var4[4] = '\0';
 
     printf("\n+----------------+\n");
     printf(" Elevator Status \n");
     printf("+----------------+\n");
 
-    printf(" Car ID    : %-3s \n", elevator.car_id);
-    printf(" Direction : %-3s \n", elevator.direction);
-    printf(" Level     : %-3s \n", elevator.level);
-    printf(" OCSS      : %-3s \n", elevator.ocss);
-    printf(" MCSS      : %-3s \n", elevator.mcss);
-    printf(" Front Door: %-3s \n", elevator.door);
-    printf(" Rear Door : %-3s \n", elevator.rear_door);
-    printf(" Var 1 : %-3s \n", elevator.var1);
-    printf(" Var 2 : %-3s \n", elevator.var2);
-    printf(" Var 3 : %-3s \n", elevator.var3);
-    printf(" Var 4 : %-3s \n", elevator.var4);
+    printf(" Car ID    : %-3s \n", g_state.elevator.car_id);
+    printf(" Direction : %-3s \n", g_state.elevator.direction);
+    printf(" Level     : %-3s \n", g_state.elevator.level);
+    printf(" OCSS      : %-3s \n", g_state.elevator.ocss);
+    printf(" MCSS      : %-3s \n", g_state.elevator.mcss);
+    printf(" Front Door: %-3s \n", g_state.elevator.door);
+    printf(" Rear Door : %-3s \n", g_state.elevator.rear_door);
+    printf(" Var 1 : %-3s \n", g_state.elevator.var1);
+    printf(" Var 2 : %-3s \n", g_state.elevator.var2);
+    printf(" Var 3 : %-3s \n", g_state.elevator.var3);
+    printf(" Var 4 : %-3s \n", g_state.elevator.var4);
     printf("+----------------+\n");
 }
 
@@ -703,7 +727,7 @@ static int send_command(const char *s) {
 }
 
 void sm_menu(void) {
-    sm_menu_e currentState = elevator.position;
+    sm_menu_e currentState = g_state.elevator.position;
     sm_menu_e previousState = currentState;
     sm_menu_e nextState     = currentState;
 
@@ -735,6 +759,7 @@ void sm_menu(void) {
 
     case MENU_SYSTEM:
         // go to STATUS with "1"
+
         nextState = MENU_STATUS;
         if (!send_command("1")) {
             nextState = previousState;
@@ -759,6 +784,6 @@ void sm_menu(void) {
         break;
     }
     // commit transition
-    elevator.position = nextState;
+    g_state.elevator.position = nextState;
 }
 
