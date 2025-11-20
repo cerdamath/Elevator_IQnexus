@@ -57,6 +57,134 @@ typedef struct
     int frame_error_count;
 } elevator_obj_t;
 
+typedef struct {
+    const char* key;
+    const char* value;
+} LookupEntry;
+
+// static const LookupEntry system_input_map[] = {
+//     {"ES", "Emergency Stop switch"},
+//     {"DW", "Door open contact"},
+//     {"DFC", "Door Fully Closed contact"},
+//     {"GDS", "Gate Door Switch"},
+//     {"EN-ABL1", "Set when EN-ABL1 and DRV-TYP1"},
+//     {"SE", "Start Enable"},
+//     {"1TH", "Thermal contact 1"},
+//     {"2TH", "Thermal contact 2"},
+//     {"2SE", "2nd Start Enable"},
+//     {"TCI", "Top of Car Inspection switch"},
+//     {"UIB", "Up Inspection Button"},
+//     {"DIB", "Down Inspection Button"},
+//     {"ERO", "Emergency Recall Operation switch"},
+//     {"TDO", "Top of Car Door Open Button"},
+//     {"TDC", "Top of Car Door Close Button"},
+//     {"^TDO", "Rear Top of Car Door Open Button"},
+//     {"^TDC", "Rear Top of Car Door Close Button"},
+//     {"TCB", "Top of Car Inspection Button"},
+//     {"DZ", "Door Zone"},
+//     {"1LV", "Door Zone switch 1LV"},
+//     {"2LV", "Door Zone switch 2LV"},
+//     {"1LS", "Limit Switch 1"},
+//     {"2LS", "Limit Switch 2"},
+//     {"ETS", "Emergency Terminal Slow Down contact"},
+//     {"BY", "BY-Relay (GECB-EN)"},
+//     {"BRK", "BR-Relay (BRK-TYP = 1)"},
+//     {"LWO", "Overload signal LWO"},
+//     {"LWX", "Load weighing bypass LWX"},
+//     {"LNS", "Load Non Stop"},
+//     {"L30", "30% load in car (LW-TYP = 2)"},
+//     {"L50", "50% load in car (LW-TYP = 2)"},
+//     {"DOL", "Door Open Limit switch"},
+//     {"DCL", "Door Close Limit switch"},
+//     {"DOB", "Door Open Button"},
+//     {"DCB", "Door Close Button"},
+//     {"EDP", "Electronic Door Protection"},
+//     {"LRD", "Light Ray Device"},
+//     {"DOS", "Door Open Signal"},
+//     {"GSM", "Gate Switch Monitor (EN-ABL=1, DRV-TYP=1)"},
+//     {"MDD", "Moving at front of Door Detection"},
+//     {"DHB", "Door Hold Button"},
+//     {"SDB", "Special Door Open Button"},
+//     {"SGS", "Secondary Safety Gate Shoe (IO1155)"},
+//     {"WDO", "Wheel Chair Door Open Button"},
+//     {"WDC", "Wheel Chair Door Close Button"},
+//     {"^DOL", "Rear Door Open Limit switch"},
+//     {"^DCL", "Rear Door Close Limit switch"},
+//     {"^DOB", "Rear Door Open Button"},
+//     {"^DCB", "Rear Door Close Button"},
+//     {"^EDP", "Rear Electronic Door Protection"},
+//     {"^LRD", "Rear Light Ray Device"},
+//     {"^DOS", "Rear Door Open Signal"},
+//     {"^GSM", "Rear Gate Switch Monitor"},
+//     {"^MDD", "Moving at rear of Door Detection"},
+//     {"^DHB", "Rear Door Hold Button"},
+//     {"^SDB", "Rear Special Door Open Button"},
+//     {"^SGS", "Secondary Rear Safety Gate Shoe"},
+//     {"^WDO", "Rear Wheel Chair Door Open Button"},
+//     {"^WDC", "Rear Wheel Chair Door Close Button"},
+//     {"CCT", "Car Call to Top"},
+//     {"CCB", "Car Call to Bottom"},
+//     {"CHC", "Cut off Hall Call"},
+//     {"DDO", "Disable Door Operation"},
+//     {"RTB", "Remote Tripping Button"},
+//     {"RRB", "Remote Resetting Button"},
+//     {"EFO", "Emergency Firemen Operation"},
+//     {"HTS", "Hall Temperature Sensor from SPB"},
+//     {"AEF", "Alternative EFO (AEFO)"},
+//     {"EFK", "Emergency Fireman Key"},
+//     {"ASL", "Alternative Service Landing"},
+//     {"ESK", "Emergency Service Key switch"},
+//     {"ESH", "Emergency Service Hold switch"},
+//     {"CFS", "Car Fireman Service switch"},
+//     {"CS", "Car fireman service Start switch"},
+//     {"XEF", "Override EFO"},
+//     {"EFB", "Emergency Firemen Key Bypass"},
+//     {"ADB", "Alternative Door Open Button"},
+//     {"EDB", "EFO Door Open Button"},
+//     {"1EF", "Taiwan Fireman Service Key switch 1"},
+//     {"2EF", "Taiwan Fireman Service Key switch 2"},
+//     {"DDS", "Disable Door Switch Relay"},
+//     {"DES", "Disable EEC Relay"},
+//     {"NU", "Emergency power operation signal"},
+//     {"NUD", "Emergency power operation signal"},
+//     {"NUG", "Emergency power operation signal"},
+//     {"NRF", "NURF"},
+//     {"EQ1", "Earthquake Contact Grade 1"},
+//     {"EQ2", "Earthquake Contact Grade 2"},
+//     {"EQS", "Earth Quake Switch"},
+//     {"EQW", "Earthquake Counterweight Switch"},
+//     {"EQR", "Earthquake Reset Switch"},
+//     {"ISS", "Independent Service Switch"},
+//     {"^ISS", "Rear Independent Service Switch"},
+//     {"ISP", "Independent Service Parking switch"},
+//     {"PDD", "Partition Door Device switch"},
+//     {"FAN", "Fan"},
+//     {"^FAN", "Rear Fan"},
+//     {"HFA", "Handicapped COP Fan"},
+//     {"CTL", "Car To Lobby"},
+//     {"CTC", "Car To Landing Park with doors Closed switch"},
+//     {"CTO", "Car To Landing Park with doors Open switch"},
+//     {"PKS", "Parking Switch"},
+//     {"PKG", "PKS Group switch"},
+//     {"CFB", "RSL Car FeedBack"},
+//     {"IST", "Intermittent Stop switch"},
+//     {"ROT", "Riot Operation"},
+//     {"ACC", "Anti Crime Car switch"},
+//     {"ACH", "Anti Crime Hall switch"},
+//     {"GSI", "Group Successive Starting In"},
+//     {"COC", "Car-call cut Off (Car)"},
+//     {"COH", "Car-call cut Off (Hall)"},
+//     {"HCO", "Hall-call Cut Off"},
+//     {"HCH", "Hall Call Cut off from Car"},
+//     {"GCO", "Hall call Cut Off (Group)"},
+//     {"CHC", "Cut Hall Call switch latch"},
+//     {"DFD", "Disable Front Door"},
+//     {"DRD", "Disable Rear Door"},
+//     {"GCB", "General Control Button"},
+//     {"^GCB", "Rear General Control Button"},
+//     {"CRC", "Card Reader Contact"}
+// };
+
 
 // Global variables
 int serial_fd;
@@ -151,6 +279,7 @@ int main(int argc, char* argv[])
     else {
         elevator.position = NA;
         read_screen();
+        printf("I am here");
         sm_menu();
         close(serial_fd);
         return 0; 
@@ -271,6 +400,7 @@ void read_screen()
                         print_menu_position();
                         print_lcd_screen(frame_errors);
                         dispatch_menu();
+                        sm_menu();
                         
                         // Shift buffer to remove processed data
                         int shift_amount = frame_start + FRAME_LENGTH;
@@ -528,6 +658,8 @@ void principal_menu_parse(void) {
 
 void input_menu_parse() {
     // Top Screen Parsing
+
+
     memcpy(elevator.car_id,     elevator.top_screen + 0, 1);  elevator.car_id[1] = '\0';
     memcpy(elevator.direction,  elevator.top_screen + 1, 1);  elevator.direction[1] = '\0';
     memcpy(elevator.level,      elevator.top_screen + 2, 2);  elevator.level[2] = '\0';
@@ -550,7 +682,8 @@ void input_menu_parse() {
     printf(" Level     : %-3s \n", elevator.level);
     printf(" OCSS      : %-3s \n", elevator.ocss);
     printf(" MCSS      : %-3s \n", elevator.mcss);
-    printf(" Door      : %-3s \n", elevator.door);
+    printf(" Front Door: %-3s \n", elevator.door);
+    printf(" Rear Door : %-3s \n", elevator.rear_door);
     printf(" Var 1 : %-3s \n", elevator.var1);
     printf(" Var 2 : %-3s \n", elevator.var2);
     printf(" Var 3 : %-3s \n", elevator.var3);
@@ -558,20 +691,74 @@ void input_menu_parse() {
     printf("+----------------+\n");
 }
 
-void sm_menu() {
-    // sm_menu_e curentState = elevator.position;
-    switch (elevator.position) {
-    case MENU_PRINCIPAL:
-        
-        break;
-    case MENU_TCBC:
-        break;
-    case MENU_SYSTEM:
-        break;
-    case MENU_STATUS:
-        break;
-    case MENU_INPUT:
-        break;
-    default:
-    }
+static void send(const char *s) {
+    printf("\n%s\n", s);   // just print 0/1/2 for now
 }
+
+// placeholder failure logic: every call succeeds for now
+static int send_command(const char *s) {
+    send(s);
+    // TODO: implement real failure detection
+    return 1; // 1 = success, 0 = fail
+}
+
+void sm_menu(void) {
+    sm_menu_e currentState = elevator.position;
+    sm_menu_e previousState = currentState;
+    sm_menu_e nextState     = currentState;
+
+    switch (currentState) {
+
+    case NA:
+        nextState = MENU_PRINCIPAL;
+        if (!send_command("0")) {
+            // failure: stay/rollback
+            nextState = previousState;
+        }
+        break;
+
+    case MENU_PRINCIPAL:
+        nextState = MENU_TCBC;
+        if (!send_command("1")) {
+            nextState = previousState;
+        }
+        break;
+
+    case MENU_TCBC:
+        // you said: "If I am in TCBC menu send 1"
+        // Assuming it goes to SYSTEM (add/change target if needed)
+        nextState = MENU_SYSTEM;
+        if (!send_command("1")) {
+            nextState = previousState;
+        }
+        break;
+
+    case MENU_SYSTEM:
+        // go to STATUS with "1"
+        nextState = MENU_STATUS;
+        if (!send_command("1")) {
+            nextState = previousState;
+        }
+        break;
+
+    case MENU_STATUS:
+        // go to INPUT with "2"
+        nextState = MENU_INPUT;
+        if (!send_command("2")) {
+            nextState = previousState;
+        }
+        break;
+
+    case MENU_INPUT:
+        // terminal state for now, or define your own transitions
+        nextState = currentState;
+        break;
+
+    default:
+        nextState = currentState;
+        break;
+    }
+    // commit transition
+    elevator.position = nextState;
+}
+
