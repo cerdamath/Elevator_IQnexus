@@ -1,0 +1,125 @@
+char block0[] = "[HAd01 NOR FR ][][\n cct ccb dos^mdd[HAd01 NOR FR ][][\n cct ccb chc ddo[HAd01 NOR FR ][][\n cct ccb chc ddo[HAd01 NOR FR ][][\n cct ccb chc ddo[HAd01 NOR FR ][][\n cct ccb chc ddo[HAd01 NOR FR ][][\n cct ccb chc ddo[HAd01 NOR FR ][][\n cct ccb chc ddo[HAd01 NOR FR ][][\n cct ccb chc ddo[HAd01 NOR FR ][][\n cct ccb ca ddo";
+
+char block1[] = "[HAd01 NOR FR ][][\n cct ccb chc ddo[HAd01 NOR FR ][][\n cct ccb chc ddo[HAd01 NOR FR ][][\n cct ccb chc ddo[HAd01 NOR FR ][][\n rtb rrb        [HAd01 NOR FR ][][\n rtb rrb        [HAd01 NOR FR ][][\n rtb rrb        [HAd01 NOR FR ][][\n rtb rrb        [HAd01 NOR FR ][][\n rtb rrb        [HAd01 NOR FR ][][\n rtb rrb        [HAd01 NOR FR ][][\n rtb rrb        [HAd01 NOR FR ][][\n rtb rrb";
+
+char block2[] = ">[HAd01 NOR FR ][][\n rtb rrb        [HAd01 NOR FR ][][\n rtb rrb        [HAd01 NOR FR ][][\n hts            [HAd00 NOR FR ][][\n hts            [HAd00 NOR FR ][][\n hts            [HAd00 NOR FR ][][\n hts            [HAd00 NOR FR ][][\n hts            [HAd00 NOR FR ][][\n hts            [HAd00 NOR FR ][][\n hts            [HAd00 NOR FR ][][\n hts            >";
+
+char block3[] = "[HAd00 NOR FR ][][\n hts            [HAd00 NOR SR ][][\n iss            [HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks";
+
+char block4[] = "[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ]Q[\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n iss^iss pdd pks[HAd00 NOR SR ][][\n coc coh hco gco[HAd00 NOR SR ][][\n coc coh hco gco[HAd00 NOR SR ][][\n coc coh hco gco[HAd00 NOR SR ][][\n coc coh hco gco[HAd00 NOR SR ][][\n coc coh hco gco";
+
+char block5[] = "[HAd00 NOR SR ][][\n coc coh hco gco[HAd00 NOR SR ][][\n coc coh hco gco[HAd00 NOR SB ][][\n coc coh hco gco[HAd00 NOR SR ][][\n coc coh hco gco[HAd00 NOR SR ][][\n coc coh hco gco[HAd00 NOR SR ][][\n dfd drd        [HAd00 NOR SR ][][\n dfd drd        [HAd00 NOR SR ][][\n dfd drd        [HAd00 NOR SR ][][\n dfd drd        [HAd00 NOR SR ][][\n dfd drd        [HAd00 NOR SR ][][\n dfd drd";
+
+char block6[] = "[HAd00 NOR SR ][][\n dfd drd        [HAd00 NOR SR ][][\n dfd drd        [HAd00 NOR SR ][][\n dfd drd        [HAd00 NOR SR ][][\n dfd drd       [HAd00 NOR SR ][][\n dfd drd        [HAd00 NOR SR ][][\n dfd drd        [HA-00 NOR ST ][][\n atu atd nsb rb [HA-00 NOR ST ][][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb";
+
+char block7[] = "[HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb";
+
+char block8[] = "[HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb";
+
+char block9[] = "[HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb";
+
+char block10[] = "[HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu add nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n atu atd nsb rb [HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST <>][\n  es  dw dfc";
+
+char block11[] = "[HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc";
+
+char block12[] = "[HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc";
+
+char block13[] = "[HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc";
+
+char block14[] = "[HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc";
+
+char block15[] = "[HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc";
+
+char block16[] = "[HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc";
+
+char block17[] = "[HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc";
+
+char block18[] = "[HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc";
+
+char block19[] = "[HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc";
+
+char block20[] = "[HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc    [HA-00 NOR ST []][\n  es  dw dfc";
+
+char block21[] = "[HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST <>][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc";
+
+char block22[] = "[HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc";
+
+char block23[] = "[HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc";
+
+char block24[] = "[HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc";
+
+char block25[] = "[HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc    [HA-00 NOR ST ><][\n  es  dw dfc";
+
+char block26[] = "[HA-00 NOR ST ][][\n  es  DW DFC    [HA-00 NOR ST ][][\n  es  DW DFC    [HA-00 NOR ST ][][\n  es  DW DFC    [HA-00 NOR ST ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC";
+
+char block27[] = "[HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC";
+
+char block28[] = "[HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC";
+
+char block29[] = "[HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC";
+
+char block30[] = "[HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC    [HAu00 NOR FR ][][\n  es  DW DFC";
+
+char block31[] = "[HAu01 NOR FR ][][\n  es  DW DFC    [HAu01 NOR FR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC";
+
+char block32[] = "[HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC";
+
+char block33[] = "[HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC";
+
+char block34[] = "[HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NO SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  es  DW DFC";
+
+char block35[] = "[HAu01 NOR SR ][][\n  es  DW DFC    [HAu01 NOR SR ][][\n  SE 1TH 2TH    [HAu01 NOR SR ][][\n  SE 1TH 2TH    [HAu01 NOR SR ][][\n  SE 1TH 2TH    [HAu01 NOR SR ][][\n  SE 1TH 2TH    [HAu01 NOR SR ][][\n  SE 1TH 2TH    [HAu01 NOR SR ][][\n  SE 1TH 2TH    [HAu01 NOR SR ][][\n  SE 1TH 2TH    [HAu01 NOR SR ][][\n  SE 1TH 2TH    [HAu01 NOR SR ][][\n  SE 1TH 2TH    [HAu01 NOR SR ][][\n  SE 1TH 2TH";
+
+char block36[] = "[HAu01 NOR SR ][][\n  SE 1TH 2TH    [HAu01 NOR SR ][][\n  SE 1TH 2TH    [HAu01 NOR SR ][][\n  SE 1TH 2TH    [HAu01 NOR SR ][][\n  SE 1TH 2TH    [HAu01 NOR SR ][][\n  SE 1TH 2TH    [HAu01 NOR SR ][][\n  SE 1TH 2TH    [HAu01 NOR SR ][][\n  SE 1TH 2TH    [HA-01 NOR ST ][][\n  SE 1TH 2TH    [HA-01 NOR ST ][][\n  SE 1TH 2TH    [HA-01 NOR ST ][][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH";
+
+char block37[] = "[HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH";
+
+char block38[] = "[HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH";
+
+char block39[] = "[HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    >[HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n  SE 1TH 2TH    [HA-01 NOR ST <>][\n tci uib dib ero[HA-01 NOR ST <>][\n tci uib dib ero[HA-01 NOR ST <>][\n tci uib dib ero[HA-01 NOR ST <>][\n tci uib dib ero[HA-01 NOR ST <>][\n tci uib dib ero[HA-01 NOR ST <>][\n tci uib dib ero";
+
+char block40[] = "[HA-01 NOR ST <>][\n tci uib dib ero[HA-01 NOR ST <>][\n tci uib dib ero[HA-01 NOR ST <>][\n tci uib dib ero[HA-01 NOR ST <>][\n tci uib dib ero[HA-01 NOR ST <>][\n tci uib dib ero[HA-01 NOR ST <>][\n tci uib dib ero[HA-01 NOR ST <>][\n tci uib dib ero[HA-01 NOR ST <>][\n tci uib dib ero[HA-01 NOR ST <>][\n tci uib dib ero[HA-01 NOR ST []][\n tci uib dib ero";
+
+char block41[] = "[HA-01 NOR ST []][\n tci uib dib ero>[HA-01 NOR ST []][\n tci uib dib ero[HA-01 NOR ST []][\n tci uib dib ero[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tdo tdc^tdo^tdc";
+
+char block42[] = "[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tdo tdc^tdo^tdc";
+
+char block43[] = "[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tdo tdc^tdo^tdc>[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tdo tdc^tdo^tdc[HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb";
+
+char block44[] = "[HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb";
+
+char block45[] = "[HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n tcb            >";
+
+char block46[] = "[HA-01 NOR ST []][\n tcb            [HA-01 NOR ST []][\n  DZ 1LV        [HA-01 NOR ST []][\n  DZ 1LV        [HA-01 NOR ST []][\n  DZ 1LV        [HA-01 NOR ST []][\n  DZ 1LV        [HA-01 NOR ST []][\n  DZ 1LV        [HA-01 NOR ST []][\n  DZ 1LV        [HA-01 NOR ST []][\n  DZ 1LV        [HA-01 NOR ST []][\n  DZ 1LV        [HA-01 NOR ST []][\n  DZ 1LV        [HA-01 NOR ST []][\n  DZ 1LV";
+
+char block47[] = "[HA-01 NOR ST []][\n  DZ 1LV        [HA-01 NOR ST []][\n  DZ 1LV        [HA-01 NOR ST ><][\n  DZ 1LV        [HA-01 NOR ST ><][\n  DZ 1LV        [HA-01 NOR ST ><][\n  DZ 1LV        [HA-01 NOR ST ><][\n  DZ 1LV        [HA-01 NOR ST ><][\n  DZ 1LV        [HA-01 NOR ST ><][\n  DZ 1LV        [HA-01 NOR ST ><][\n  DZ 1LV        [HA-01 NOR ST ><][\n  DZ 1LV        [HA-01 NOR ST ><][\n  DZ 1LV";
+
+char block48[] = "[HA-01 NOR ST ><][\n  DZ 1LV        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS";
+
+char block49[] = "[HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS";
+
+char block50[] = "[HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS";
+
+char block51[] = "[HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS        [HA-01 NOR ST ><][\n 1ls 2LS";
+
+char block52[] = "[HA-01 NOR ST ][][\n 1ls 2LS        [HA-01 NOR ST ][][\n 1ls 2LS        [HA-01 NOR ST ][][\n 1ls 2LS        [HA-01 NOR ST ][][\n 1ls 2LS        [HA-01 NOR ST ][][\n 1ls 2LS        [HA-01 NOR ST ][][\n 1ls 2LS        [HA-01 NOR ST ][][\n 1ls 2LS        [HA-01 NOR ST ][][\n 1ls 2LS        [HA-01 NOR ST ][][\n 1ls 2LS        [HA-01 NOR ST ][][\n 1ls 2LS        [HA-01 NOR ST ][][\n 1ls 2LS";
+
+char block53[] = "[HA-01 NOR ST ][][\n 1ls 2LS        [HA-01 NOR ST ][][\n 1ls 2LS        [HA-01 NOR ST ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS";
+
+char block54[] = "[HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS";
+
+char block55[] = "[HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS";
+
+char block56[] = "[HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2LS        [HAd01 NOR FR ][][\n 1ls 2ls        [HAd01 NOR FR ][][\n 1ls 2ls        [HAd01 NOR FR ][][\n 1ls 2ls        [HAd01 NOR FR ][][\n 1ls 2ls";
+
+char block57[] = "[HAd01 NOR FR ][][\n 1ls 2ls        [HAd01 NOR FR ][][\n 1ls 2ls        [HAd01 NOR FR ][][\n 1ls 2ls        [HAd01 NOR FR ][][\n 1ls 2ls        [HAd01 NOR FR ][][\n 1ls 2ls        [HAd00 NOR FR ][][\n 1ls 2ls        [HAd00 NOR FR ][][\n 1ls 2ls        [HAd00 NOR FR ][][\n 1ls 2ls        [HAd00 NOR FR ][][\n 1ls 2ls        [HAd00 NOR FR ][][\n 1ls 2ls";
+
+char block58[] = "[HAd00 NOR FR ][][\n 1ls 2ls        [HAd00 NOR FR ][][\n 1ls 2ls        [HAd00 NOR FR ][][\n 1ls 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls";
+
+char block59[] = "[HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls";
+
+char block60[] = "[HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls";
+
+char block61[] = "[HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls";
+
+char block62[] = "[HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls        [HAd00 NOR SR ][][\n 1LS 2ls";
