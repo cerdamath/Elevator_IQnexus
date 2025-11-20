@@ -16,7 +16,7 @@
 #define LCD_WIDTH 16
 #define MAX_LABEL_LEN 9  
 #define MAX_VALUE_LEN 6   
-#define MAX_FIELDS 2
+#define MAX_FIELDS 4
 typedef struct {
     char label[MAX_LABEL_LEN];
     char value[MAX_VALUE_LEN];
@@ -29,6 +29,7 @@ typedef enum
 } test_status_e;
 
 typedef enum {
+    NA,
     MENU_PRINCIPAL,
     MENU_TCBC,
     MENU_SYSTEM,
@@ -64,12 +65,13 @@ int buffer_pos;
 int frame_errors;
 elevator_obj_t elevator = {0};
 menu_field_t fields[2];
+
 // Function prototypes
 // At top of metro.c or in metro.h
 int init(int argc, char* argv[]);
-void read_screen(void);
+void read_screen();
 void parse_screen();
-void sm_menu(void);
+void sm_menu();
 
 int setup_serial(const char* port_path, speed_t baud_rate);
 void clear_screen();
@@ -119,10 +121,12 @@ void dispatch_menu() {
         printf("Unknown Menu Screen (Menu keyword, not SYSTEM/STATUS/TCBC)\n");
         return;
     }
-
-    // If no keywords above, principal menu by default
-    elevator.position = MENU_PRINCIPAL;
-    principal_menu_parse();
+    if (contains(elevator.top_screen, "TCBC"))
+    {
+        // If no keywords above, principal menu by default
+        elevator.position = MENU_PRINCIPAL;
+        principal_menu_parse();        
+    }
 }
 
 void print_frame( char *buffer, int buffer_len )
@@ -145,7 +149,7 @@ int main(int argc, char* argv[])
     }
     
     else {
-        elevator.position = MENU_PRINCIPAL;
+        elevator.position = NA;
         read_screen();
         sm_menu();
         close(serial_fd);
@@ -386,20 +390,23 @@ void print_lcd_screen(int error_count) {
 void print_menu_position() {
   printf("+----------------+\n");
   switch (elevator.position) {
+    case NA:
+        printf("  Unknown Menu \n");    
+        break;
     case MENU_PRINCIPAL:
-        printf("  MENU_PRINCIPAL \n");    
+        printf("  Principal Menu \n");    
         break;
     case MENU_TCBC:
-        printf("    MENU_TCBC    \n");   
+        printf("    TCBC Menu    \n");   
         break;
     case MENU_SYSTEM:
-        printf("   MENU_SYSTEM   \n");   
+        printf("   System Menu   \n");   
         break;
     case MENU_STATUS:
-        printf("   MENU_STATUS   \n");     
+        printf("   Status Menu   \n");     
         break;
     case MENU_INPUT:
-        printf("    MENU_INPUT   \n");     
+        printf("    Input Menu   \n");     
         break;
     default:
     }
@@ -459,8 +466,7 @@ void extract_frame_parts(const char* frame) {
     }
 
 }
-
-void parse_menu_fields(const char* src, char separator, menu_field_t* dest, int max_fields) {
+int parse_menu_fields(const char* src, char separator, menu_field_t* dest, int max_fields) {
     int i = 0, f = 0, len = strlen(src);
 
     while (i < len && f < max_fields) {
@@ -468,9 +474,7 @@ void parse_menu_fields(const char* src, char separator, menu_field_t* dest, int 
         memset(dest[f].value, 0, MAX_VALUE_LEN);
 
         // Skip leading spaces
-        while (i < len && isspace(src[i])) {
-            i++;
-        }
+        while (i < len && isspace(src[i])) i++;
 
         // Parse label (option number/string before separator)
         int k = 0;
@@ -480,9 +484,7 @@ void parse_menu_fields(const char* src, char separator, menu_field_t* dest, int 
         dest[f].label[k] = '\0';
 
         // Skip separator
-        if (i < len && src[i] == separator) {
-            i++;
-        }
+        if (i < len && src[i] == separator) i++;
 
         // Parse value (menu name, etc.)
         k = 0;
@@ -491,30 +493,34 @@ void parse_menu_fields(const char* src, char separator, menu_field_t* dest, int 
         }
         dest[f].value[k] = '\0';
 
+        // If both parts are empty, stop parsing (robustness)
+        if (dest[f].label[0] == '\0' && dest[f].value[0] == '\0') break;
+
         // Skip whitespace before the next field
-        while (i < len && isspace(src[i])) {
-            i++;
-        }
+        while (i < len && isspace(src[i])) i++;
 
         f++;
     }
+
+    return f; // Return the count of fields actually parsed
 }
 
 void menu_parse(void) {
-    int field_count = MAX_FIELDS;
-    parse_menu_fields(elevator.bottom_screen, '=', fields, field_count);
+    int field_count = parse_menu_fields(elevator.bottom_screen, '=', fields, MAX_FIELDS);
     for (int j = 0; j < field_count; j++) {
         printf("To enter %s, press %s\n", fields[j].label, fields[j].value);
     }
 }
 
 void principal_menu_parse(void) {
-    int field_count = MAX_FIELDS;
-    parse_menu_fields(elevator.top_screen, ':', fields, field_count);
+    int field_count;
+    // Top screen parsing
+    field_count = parse_menu_fields(elevator.top_screen, ':', fields, MAX_FIELDS);
     for (int j = 0; j < field_count; j++) {
         printf("To enter %s press %s\n", fields[j].value, fields[j].label);
     }
-    parse_menu_fields(elevator.bottom_screen, ':', fields, field_count);
+    // Bottom screen parsing
+    field_count = parse_menu_fields(elevator.bottom_screen, ':', fields, MAX_FIELDS);
     for (int j = 0; j < field_count; j++) {
         printf("To enter %s press %s\n", fields[j].value, fields[j].label);
     }
@@ -552,7 +558,20 @@ void input_menu_parse() {
     printf("+----------------+\n");
 }
 
-void sm_menu()
-{
-
+void sm_menu() {
+    // sm_menu_e curentState = elevator.position;
+    switch (elevator.position) {
+    case MENU_PRINCIPAL:
+        
+        break;
+    case MENU_TCBC:
+        break;
+    case MENU_SYSTEM:
+        break;
+    case MENU_STATUS:
+        break;
+    case MENU_INPUT:
+        break;
+    default:
+    }
 }
