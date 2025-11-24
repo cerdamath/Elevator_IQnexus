@@ -302,7 +302,7 @@ int main(int argc, char* argv[])
                 print_menu_position();
                 print_lcd_screen(g_state.frame_errors);
                 dispatch_menu();
-                //printf("You pressed: %s", keyboard_buffer);
+                printf("Last Keyboard Input: %s", keyboard_buffer);
                 //sm_menu();
 
             }
@@ -729,72 +729,3 @@ void input_menu_parse() {
     printf(" Var 4 : %-3s \n", g_state.elevator.var4);
     printf("+----------------+\n");
 }
-
-// // placeholder failure logic: every call succeeds for now
-// static bool send_command(const char *s) {
-//     ssize_t n = write(g_state.serial_fd, s, 1);
-//     if (n != 1) {
-//         perror("write error");
-//         return false;
-//     }
-//     tcdrain(g_state.serial_fd);      
-//     return true;
-// }
-//
-// void sm_menu(void) {
-//     static sm_menu_e currentState = NA;
-//     sm_menu_e nextState = currentState;
-
-//     switch (currentState) {
-//     case NA:
-//         nextState = MENU_PRINCIPAL;
-//         //send_command("0"); // Request NA->PRINCIPAL transition
-//         if (g_state.elevator.position == MENU_PRINCIPAL) {
-//             currentState = nextState;
-//         }
-//         break;
-
-//     case MENU_PRINCIPAL:
-//         nextState = MENU_TCBC;
-//         //send_command("1"); // Request PRINCIPAL->TCBC transition
-//         if (g_state.elevator.position == MENU_TCBC) {
-//             currentState = nextState;
-//         }
-//         break;
-
-//     case MENU_TCBC:
-//         nextState = MENU_SYSTEM;
-//         //send_command("1"); // Request TCBC->SYSTEM transition
-//         if (g_state.elevator.position == MENU_SYSTEM) {
-//             currentState = nextState;
-//         }
-//         break;
-
-//     case MENU_SYSTEM:
-//         nextState = MENU_STATUS;
-//         //send_command("1"); // Request SYSTEM->STATUS transition
-//         if (g_state.elevator.position == MENU_STATUS) {
-//             currentState = nextState;
-//         }
-//         break;
-
-//     case MENU_STATUS:
-//         nextState = MENU_INPUT;
-//         //send_command("2"); // Request STATUS->INPUT transition
-//         if (g_state.elevator.position == MENU_INPUT) {
-//             currentState = nextState;
-//         }
-//         break;
-
-//     case MENU_INPUT:
-//         // Terminal state: remain here
-//         // Or implement logic to reset to NA or other menu, as needed
-//         break;
-
-//     default:
-//         // Optional: handle unknown state
-//         currentState = NA;
-//         break;
-//     }
-// }
-
