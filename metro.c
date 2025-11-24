@@ -219,6 +219,8 @@ void input_menu_parse();
 void print_menu_position();
 void dispatch_menu();
 
+char keyboard_buffer [128];
+
 // Helpers to check substrings and input menu
 bool contains(const char *haystack, const char *needle) {
     return strstr(haystack, needle) != NULL;
@@ -288,7 +290,7 @@ int main(int argc, char* argv[])
         while (1) {
             // Read serial data into buffer
             serial_read();
-            
+
             // Find and process complete frames
             int frame_start = -1;
             find_frame_boundaries(&frame_start);
@@ -300,8 +302,9 @@ int main(int argc, char* argv[])
                 print_menu_position();
                 print_lcd_screen(g_state.frame_errors);
                 dispatch_menu();
-                sm_menu();
-                
+                //printf("You pressed: %s", keyboard_buffer);
+                //sm_menu();
+
             }
         }
         close(g_state.serial_fd);
@@ -348,14 +351,17 @@ void serial_read(void) {
     // Wait for data to be available
     fd_set readfds;
     struct timeval timeout;
-    
+
     FD_ZERO(&readfds);
     FD_SET(g_state.serial_fd, &readfds);
+    FD_SET(STDIN_FILENO, &readfds);
+
+    int max_fd = (g_state.serial_fd > STDIN_FILENO ? g_state.serial_fd : STDIN_FILENO) + 1;
     
     timeout.tv_sec = 1;
     timeout.tv_usec = 0;
     
-    int activity = select(g_state.serial_fd + 1, &readfds, NULL, NULL, &timeout);
+     int activity = select(max_fd, &readfds, NULL, NULL, &timeout); // Wait for input on any FDs in the set, up to 1s.
     
     if (activity < 0) {
         perror("select error");
@@ -365,6 +371,18 @@ void serial_read(void) {
     if (activity == 0) {
         // Timeout, continue loop
         return;
+    }
+
+     // If there's input from the keyboard/terminal:
+    if (FD_ISSET(STDIN_FILENO, &readfds)) {
+        if (fgets(keyboard_buffer, sizeof(keyboard_buffer), stdin)) {
+            ssize_t written = write(g_state.serial_fd, keyboard_buffer, strlen(keyboard_buffer));
+            if (written < 1) {
+                printf("Error writing from STDIN");
+                return;    
+            }
+            // Send the contents of the keyboard buffer to the serial port.
+        }
     }
     
     if (FD_ISSET(g_state.serial_fd, &readfds)) {
@@ -505,9 +523,6 @@ int setup_serial(const char* port_path, speed_t baud_rate) {
         close(fd);
         return -1;
     }
-
-    //usleep(1000*1000);
-    
     return fd;
 }
 
@@ -538,6 +553,7 @@ void print_lcd_screen(int error_count) {
 
     // Print error count
     printf("Frame errors = %d\n", error_count);
+
 }
 
 
@@ -683,7 +699,6 @@ void principal_menu_parse(void) {
 void input_menu_parse() {
     // Top Screen Parsing
 
-
     memcpy(g_state.elevator.car_id,     g_state.elevator.top_screen + 0, 1);  g_state.elevator.car_id[1] = '\0';
     memcpy(g_state.elevator.direction,  g_state.elevator.top_screen + 1, 1);  g_state.elevator.direction[1] = '\0';
     memcpy(g_state.elevator.level,      g_state.elevator.top_screen + 2, 2);  g_state.elevator.level[2] = '\0';
@@ -715,75 +730,71 @@ void input_menu_parse() {
     printf("+----------------+\n");
 }
 
-static void send(const char *s) {
-    printf("\n%s\n", s);   // just print 0/1/2 for now
-}
+// // placeholder failure logic: every call succeeds for now
+// static bool send_command(const char *s) {
+//     ssize_t n = write(g_state.serial_fd, s, 1);
+//     if (n != 1) {
+//         perror("write error");
+//         return false;
+//     }
+//     tcdrain(g_state.serial_fd);      
+//     return true;
+// }
+//
+// void sm_menu(void) {
+//     static sm_menu_e currentState = NA;
+//     sm_menu_e nextState = currentState;
 
-// placeholder failure logic: every call succeeds for now
-static int send_command(const char *s) {
-    send(s);
-    // TODO: implement real failure detection
-    return 1; // 1 = success, 0 = fail
-}
+//     switch (currentState) {
+//     case NA:
+//         nextState = MENU_PRINCIPAL;
+//         //send_command("0"); // Request NA->PRINCIPAL transition
+//         if (g_state.elevator.position == MENU_PRINCIPAL) {
+//             currentState = nextState;
+//         }
+//         break;
 
-void sm_menu(void) {
-    sm_menu_e currentState = g_state.elevator.position;
-    sm_menu_e previousState = currentState;
-    sm_menu_e nextState     = currentState;
+//     case MENU_PRINCIPAL:
+//         nextState = MENU_TCBC;
+//         //send_command("1"); // Request PRINCIPAL->TCBC transition
+//         if (g_state.elevator.position == MENU_TCBC) {
+//             currentState = nextState;
+//         }
+//         break;
 
-    switch (currentState) {
+//     case MENU_TCBC:
+//         nextState = MENU_SYSTEM;
+//         //send_command("1"); // Request TCBC->SYSTEM transition
+//         if (g_state.elevator.position == MENU_SYSTEM) {
+//             currentState = nextState;
+//         }
+//         break;
 
-    case NA:
-        nextState = MENU_PRINCIPAL;
-        if (!send_command("0")) {
-            // failure: stay/rollback
-            nextState = previousState;
-        }
-        break;
+//     case MENU_SYSTEM:
+//         nextState = MENU_STATUS;
+//         //send_command("1"); // Request SYSTEM->STATUS transition
+//         if (g_state.elevator.position == MENU_STATUS) {
+//             currentState = nextState;
+//         }
+//         break;
 
-    case MENU_PRINCIPAL:
-        nextState = MENU_TCBC;
-        if (!send_command("1")) {
-            nextState = previousState;
-        }
-        break;
+//     case MENU_STATUS:
+//         nextState = MENU_INPUT;
+//         //send_command("2"); // Request STATUS->INPUT transition
+//         if (g_state.elevator.position == MENU_INPUT) {
+//             currentState = nextState;
+//         }
+//         break;
 
-    case MENU_TCBC:
-        // you said: "If I am in TCBC menu send 1"
-        // Assuming it goes to SYSTEM (add/change target if needed)
-        nextState = MENU_SYSTEM;
-        if (!send_command("1")) {
-            nextState = previousState;
-        }
-        break;
+//     case MENU_INPUT:
+//         // Terminal state: remain here
+//         // Or implement logic to reset to NA or other menu, as needed
+//         break;
 
-    case MENU_SYSTEM:
-        // go to STATUS with "1"
-
-        nextState = MENU_STATUS;
-        if (!send_command("1")) {
-            nextState = previousState;
-        }
-        break;
-
-    case MENU_STATUS:
-        // go to INPUT with "2"
-        nextState = MENU_INPUT;
-        if (!send_command("2")) {
-            nextState = previousState;
-        }
-        break;
-
-    case MENU_INPUT:
-        // terminal state for now, or define your own transitions
-        nextState = currentState;
-        break;
-
-    default:
-        nextState = currentState;
-        break;
-    }
-    // commit transition
-    g_state.elevator.position = nextState;
-}
+//     default:
+//         // Optional: handle unknown state
+//         currentState = NA;
+//         break;
+//     }
+// }
 
