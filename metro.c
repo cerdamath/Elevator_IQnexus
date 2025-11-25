@@ -72,6 +72,60 @@ typedef struct {
     const char* value;
 } LookupEntry;
 
+static const LookupEntry ocss_lookup[] = {
+    {"SHO", "Shabat Operation"},
+    {"WCO", "Wild Car Operation"},
+    {"WCS", "Wheel Chair Service"},
+    {"ACP", "Anti Crime Protection"},
+    {"ANS", "Anti Nuisance Service"},
+    {"ARD", "Automatic Return Device"},
+    {"ATT", "ATTended service"},
+    {"CBP", "Car Button Protection"},
+    {"CHC", "Cut off Hall Call"},
+    {"COR", "Correction Run"},
+    {"CTL", "Car To Landing"},
+    {"DBF", "Drive / Break Fault"},
+    {"DCP", "Delayed Car Protection"},
+    {"DCS", "Door Check Sequence"},
+    {"DHB", "Door Hold Button mode"},
+    {"DLM", "Door Lock Monitoring"},
+    {"DTC", "Door Time protection Close"},
+    {"DTO", "Door Time protection Open"},
+    {"EFO", "Emergency Fireman's Operation"},
+    {"EFS", "Emergency Fireman's Service"},
+    {"EHS", "Emergency Hospital Service"},
+    {"EMT", "Emergency Medical Transport"},
+    {"EPC", "Emergency Power wait for Correction run"},
+    {"EPR", "Emergency Power Rescue run"},
+    {"EPW", "Emergency Power Wait for normal"},
+    {"EQR", "Earth Quake automatic Recovery"},
+    {"EQO", "Earth Quake Operation"},
+    {"ESB", "Emergency Stop Button resp. J-Relay fault"},
+    {"GCB", "General Control of Buttons"},
+    {"HAD", "Hoistway Access Detection"},
+    {"HBP", "Hall Button Protection"},
+    {"IDL", "IDLe"},
+    {"INI", "INItialize"},
+    {"INS", "INspection"},
+    {"ISC", "Independent ServICe"},
+    {"LNS", "Load Non Stop service"},
+    {"MIT", "Moderate Incoming Traffic"},
+    {"NAV", "Not Available"},
+    {"NOR", "NORmal"},
+    {"OLD", "OverLoad Device"},
+    {"PKS", "ParKing Switch"},
+    {"PRK", "PaRKing"},
+    {"REI", "Remote Elevator Inspection"},
+    {"ROT", "car RIOT operation"}
+};
+
+static const LookupEntry mcss_map[] = {
+    {"CR", "Correction Run"}, {"EF", "Emergency Fast Run"}, {"ES", "Emergency Stop"}, 
+    {"EW", "Emergency during Wait"}, {"FR", "Fast Run"}, {"ID", "Idle"}, 
+    {"IN", "Inspection Run"}, {"NR", "Not Ready"}, {"RL", "Relevel"}, 
+    {"RS", "Rescue Run"}, {"SR", "Slow Run"}, {"ST", "Stop"}
+};
+
 // static const LookupEntry system_input_map[] = {
 //     {"ES", "Emergency Stop switch"},
 //     {"DW", "Door open contact"},
@@ -299,8 +353,8 @@ int main(int argc, char* argv[])
                 
                 // Update display and menu state
                 clear_screen();
-                print_menu_position();
                 print_lcd_screen(g_state.frame_errors);
+                print_menu_position();
                 dispatch_menu();
                 printf("Last Keyboard Input: %s", keyboard_buffer);
                 //sm_menu();
@@ -334,7 +388,6 @@ int init(int argc, char* argv[])
     }
 
     // Initialize buffer and variables
-    // buffer[BUFFER_SIZE];
     g_state.buffer_pos = 0;
     g_state.frame_errors = 0;
     
@@ -558,29 +611,27 @@ void print_lcd_screen(int error_count) {
 
 
 void print_menu_position() {
-  printf("+----------------+\n");
   switch (g_state.elevator.position) {
     case NA:
-        printf("  Unknown Menu \n");
+        printf("Unknown Menu\n");
         break;
     case MENU_PRINCIPAL:
-        printf("  Principal Menu \n");
+        printf("Principal Menu\n");
         break;
     case MENU_TCBC:
-        printf("    TCBC Menu    \n");
+        printf("TCBC Menu\n");
         break;
     case MENU_SYSTEM:
-        printf("   System Menu   \n");
+        printf("System Menu\n");
         break;
     case MENU_STATUS:
-        printf("   Status Menu   \n");
+        printf("Status Menu\n");
         break;
     case MENU_INPUT:
-        printf("    Input Menu   \n");
+        printf("Input Menu\n");
         break;
     default:
     }
-    printf("+----------------+\n");
 }
 
 int validate_frame(const char* frame) {

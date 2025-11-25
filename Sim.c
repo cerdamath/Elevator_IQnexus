@@ -6,13 +6,12 @@
     #include <termios.h>
     #include <stdbool.h>
 
-    #define SVT_DATA "[H  local SVT     \n  disconnected  "
-    #define PRINCIPAL_DATA "[H1:TCBC  2:DRIVE \n5:SPBC  6:RMH   "
-    #define TCBC_DATA "[H  TCBC  - Menu  \nSystem=1 Tools=2"
-    #define SYSTEM_DATA "[H SYSTEM - Menu >\nStatus=1  Test=2"
-    #define STATUS_DATA "[H STATUS - Menu >\n Calls=1 Input=2"
-    #define INPUT_DATA "[HA-01 IDL ST ][][\n lwo LWX lns    "
-
+    #define SVT_DATA "local SVT       disconnected  "   
+    #define PRINCIPAL_DATA "[H1:TCBC 2:DRIVE\n\r   5:SPBC 6:RMH "
+    #define TCBC_DATA "[H  TCBC  - Menu  System=1 Tools=2"
+    #define SYSTEM_DATA "[H SYSTEM - Menu > Status=1  Test=2"
+    #define STATUS_DATA "[H STATUS - Menu > Calls=1 Input=2"
+    #define INPUT_DATA "[HA-01 IDL ST ][][ lwo LWX lns    "
     typedef enum {
         NA,
         MENU_PRINCIPAL,
@@ -22,18 +21,51 @@
         MENU_INPUT
     } sm_menu_e;
 
-    int set_interface_attribs(int fd, int speed) {
-        struct termios tty;
-        if (tcgetattr(fd, &tty) < 0) return -1;
-        cfsetospeed(&tty, (speed_t)speed);
-        cfsetispeed(&tty, (speed_t)speed);
-        tty.c_cflag |= (CLOCAL | CREAD);
-        tty.c_cflag &= ~CSIZE; tty.c_cflag |= CS8;
-        tty.c_cflag &= ~PARENB; tty.c_cflag &= ~CSTOPB;
-        tty.c_iflag = tty.c_oflag = tty.c_lflag = 0;
-        tty.c_cc[VMIN] = 0; tty.c_cc[VTIME] = 5; // read blocks for up to 0.5s
-        return tcsetattr(fd, TCSANOW, &tty) == 0 ? 0 : -1;
+int set_interface_attribs(int fd, int speed, int databits, int parity, int stopbits) {
+    struct termios tty;
+
+    if (tcgetattr(fd, &tty) < 0) return -1;
+
+    cfsetospeed(&tty, (speed_t)speed);
+    cfsetispeed(&tty, (speed_t)speed);
+
+    tty.c_cflag |= (CLOCAL | CREAD);
+
+    // Data bits
+    tty.c_cflag &= ~CSIZE;          // Clear data bits mask
+    switch(databits) {
+        case 5: tty.c_cflag |= CS5; break;
+        case 6: tty.c_cflag |= CS6; break;
+        case 7: tty.c_cflag |= CS7; break;
+        case 8: tty.c_cflag |= CS8; break; // Most common
+        default: tty.c_cflag |= CS8; break; // fallback
     }
+
+    // Parity
+    if (parity == 0) {               // No parity
+        tty.c_cflag &= ~PARENB;
+    } else if (parity == 1) {        // Odd parity
+        tty.c_cflag |= PARENB;
+        tty.c_cflag |= PARODD;
+    } else if (parity == 2) {        // Even parity
+        tty.c_cflag |= PARENB;
+        tty.c_cflag &= ~PARODD;
+    }
+
+    // Stop bits
+    if (stopbits == 1) {
+        tty.c_cflag &= ~CSTOPB;      // One stop bit
+    } else if (stopbits == 2) {
+        tty.c_cflag |= CSTOPB;       // Two stop bits
+    }
+
+    tty.c_iflag = tty.c_oflag = tty.c_lflag = 0;
+    tty.c_cc[VMIN] = 0;
+    tty.c_cc[VTIME] = 5;
+
+    return tcsetattr(fd, TCSANOW, &tty) == 0 ? 0 : -1;
+}
+
 
     // Read and collapse multiple bytes into at most one logical command per call.
     bool validateCommand(char expectedCommand, int fd) {
@@ -53,7 +85,12 @@
                 match = true;     // only the *first* matching command counts
             }
         }
-        printf("\n");
+            printf("Received %zd byte(s): ", n);
+          for (ssize_t       i = 0; i < n; ++i) {
+              printf("      %02X ", (unsigned char)buf[i]);
+          }     
+          printf("\n")      ;
+        printf("        \n");
 
         return match;
     }
@@ -72,7 +109,8 @@
             printf("Error opening %s %s\n", port_path, strerror(errno));
             return 1;
         }
-        set_interface_attribs(fd, B9600);
+        set_interface_attribs(fd, B9600, 8, 1, 1);
+
 
         sm_menu_e currentState = NA;
         char *currentData = SVT_DATA;
