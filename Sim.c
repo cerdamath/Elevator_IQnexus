@@ -6,12 +6,12 @@
     #include <termios.h>
     #include <stdbool.h>
 
-    #define SVT_DATA "local SVT       disconnected  "   
-    #define PRINCIPAL_DATA "[H1:TCBC 2:DRIVE\n\r   5:SPBC 6:RMH "
-    #define TCBC_DATA "[H  TCBC  - Menu  System=1 Tools=2"
-    #define SYSTEM_DATA "[H SYSTEM - Menu > Status=1  Test=2"
-    #define STATUS_DATA "[H STATUS - Menu > Calls=1 Input=2"
-    #define INPUT_DATA "[HA-01 IDL ST ][][ lwo LWX lns    "
+    #define SVT_DATA "[H  local SVT     \n  disconnected  "   
+    #define PRINCIPAL_DATA "[H1:TCBC  2:DRIVE \n5:SPBC  6:RMH   "
+    #define TCBC_DATA "[H  TCBC  - Menu  \nSystem=1 Tools=2"
+    #define SYSTEM_DATA "[H SYSTEM - Menu >\nStatus=1  Test=2"
+    #define STATUS_DATA "[H STATUS - Menu >\n Calls=1 Input=2"
+    #define INPUT_DATA "[HA-01 IDL ST ][][\n lwo LWX lns    "
     typedef enum {
         NA,
         MENU_PRINCIPAL,
@@ -109,7 +109,7 @@ int set_interface_attribs(int fd, int speed, int databits, int parity, int stopb
             printf("Error opening %s %s\n", port_path, strerror(errno));
             return 1;
         }
-        set_interface_attribs(fd, B9600, 8, 1, 1);
+        set_interface_attribs(fd, B9600, 8, 0, 1);
 
 
         sm_menu_e currentState = NA;
