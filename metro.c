@@ -262,7 +262,7 @@ void process_frame(int frame_start);
 void buffer_shift(int shift_amount);
 void sm_menu(void);
 
-int setup_serial(const char* port_pat);
+int setup_serial(const char* port_path, int baud_rate, int databits, int parity, int stopbits);
 void clear_screen();
 void print_lcd_screen(int error_count);
 int validate_frame(const char* frame);
@@ -331,6 +331,39 @@ void print_frame( char *buffer, int buffer_len )
 }
 
 
+static speed_t baud_to_constant(int baud)
+{
+    switch (baud) {
+        case 50: return B50;
+        case 75: return B75;
+        case 110: return B110;
+        case 134: return B134;
+        case 150: return B150;
+        case 200: return B200;
+        case 300: return B300;
+        case 600: return B600;
+        case 1200: return B1200;
+        case 1800: return B1800;
+        case 2400: return B2400;
+        case 4800: return B4800;
+        case 9600: return B9600;
+        case 19200: return B19200;
+        case 38400: return B38400;
+#ifdef B57600
+        case 57600: return B57600;
+#endif
+#ifdef B115200
+        case 115200: return B115200;
+#endif
+#ifdef B230400
+        case 230400: return B230400;
+#endif
+        default:
+            return 0;   // invalid
+    }
+}
+
+
 int main(int argc, char* argv[])
 {
     int status = init(argc, argv);
@@ -366,22 +399,26 @@ int main(int argc, char* argv[])
     }
 }
 
-
 int init(int argc, char* argv[])
 {
-    if (argc != 2) {
-        fprintf(stderr, "Usage: %s <serial_port>\n", argv[0]);
+    if (argc != 6) {
+        fprintf(stderr,
+                "Usage: %s <serial_port> <baud_rate> <databits> <parity> <stop_bits>\n",
+                argv[0]);
         return 1;
     }
 
     const char* port_path = argv[1];
-    speed_t baud_rate = B9600;
-    
+    int baud_rate = atoi(argv[2]);
+    int databits  = atoi(argv[3]);
+    int parity    = atoi(argv[4]);   // 0 = none, 1 = odd, 2 = even
+    int stop_bits = atoi(argv[5]);   // 1 or 2
+
     printf("Opening device: %s\n", port_path);
-    printf("Baud: %u Port:%s", baud_rate, port_path);
+    printf("Port: %s Baud: %d Databits: %d Parity: %d Stop_bits: %d ",port_path, baud_rate, databits, parity, stop_bits);
 
     // Setup serial port
-    g_state.serial_fd = setup_serial(port_path);
+    g_state.serial_fd = setup_serial(port_path, baud_rate, databits, parity, stop_bits);
     if (g_state.serial_fd < 0) {
         fprintf(stderr, "Failed to open serial port %s\n", port_path);
         return 1;
@@ -530,7 +567,8 @@ void buffer_shift(int shift_amount) {
 }
 
 
-int setup_serial(const char* port_path) {
+int setup_serial(const char* port_path, int baud_rate, int databits, int parity, int stopbits)
+{
     int fd = open(port_path, O_RDWR | O_NOCTTY);
     if (fd < 0) {
         perror("open");
@@ -543,38 +581,62 @@ int setup_serial(const char* port_path) {
         close(fd);
         return -1;
     }
-    
-    // Set baud rate
-    cfsetospeed(&tty, B9600);
-    cfsetispeed(&tty, B9600);
-    
-    // Configure for raw mode
-    tty.c_cflag &= ~PARENB;  // No parity
-    tty.c_cflag &= ~CSTOPB;  // 1 stop bit
-    tty.c_cflag &= ~CSIZE;   // Clear data size bits
-    tty.c_cflag |= CS8;     // 8 data bits
-    tty.c_cflag &= ~CLOCAL; // Disable hardware flow control
-    tty.c_cflag |= CREAD | CLOCAL; // Enable receiver, ignore modem control lines
-    
-    tty.c_lflag &= ~ICANON;  // No canonical input processing
-    tty.c_lflag &= ~ECHO;    // No echo
-    tty.c_lflag &= ~ECHOE;   // No echo erase
-    tty.c_lflag &= ~ISIG;    // No signal chars
-    tty.c_iflag &= ~IXON;    // No software flow control
-    tty.c_iflag &= ~IXOFF;   // No software flow control
-    tty.c_iflag &= ~IXANY;   // No software flow control
-    tty.c_iflag &= ~IGNBRK;  // No ignore break
-    tty.c_oflag &= ~OPOST;   // No output processing
-    
-    // Set timeouts
-    tty.c_cc[VMIN] = 0;     // Non-blocking read
-    tty.c_cc[VTIME] = 1;    // 0.1 second timeout
-    
+
+    // Map baud int -> termios speed_t
+    speed_t speed = baud_to_constant(baud_rate);
+    if (speed == 0) {
+        fprintf(stderr, "Unsupported baud rate: %d\n", baud_rate);
+        close(fd);
+        return -1;
+    }
+
+    cfsetospeed(&tty, speed);
+    cfsetispeed(&tty, speed);
+
+    tty.c_cflag |= (CLOCAL | CREAD);
+
+    // Data bits
+    tty.c_cflag &= ~CSIZE;
+    switch(databits) {
+        case 5: tty.c_cflag |= CS5; break;
+        case 6: tty.c_cflag |= CS6; break;
+        case 7: tty.c_cflag |= CS7; break;
+        case 8:
+        default:
+            tty.c_cflag |= CS8; break;
+    }
+
+    // Parity: 0 = none, 1 = odd, 2 = even
+    tty.c_cflag &= ~(PARENB | PARODD);
+    if (parity == 1) {
+        tty.c_cflag |= PARENB;
+        tty.c_cflag |= PARODD;
+    } else if (parity == 2) {
+        tty.c_cflag |= PARENB;
+        // PARODD already cleared above => even
+    }
+
+    // Stop bits
+    if (stopbits == 2) {
+        tty.c_cflag |= CSTOPB;
+    } else {
+        tty.c_cflag &= ~CSTOPB;
+    }
+
+    // Raw-ish mode
+    tty.c_cc[VMIN]  = 0;
+    tty.c_cc[VTIME] = 1;
+
+    tty.c_lflag &= ~(ICANON | ECHO | ECHOE | ISIG);
+    tty.c_iflag &= ~(IXON | IXOFF | IXANY | IGNBRK);
+    tty.c_oflag &= ~OPOST;
+
     if (tcsetattr(fd, TCSANOW, &tty) != 0) {
         perror("tcsetattr");
         close(fd);
         return -1;
     }
+
     return fd;
 }
 
