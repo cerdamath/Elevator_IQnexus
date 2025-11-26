@@ -262,7 +262,7 @@ void process_frame(int frame_start);
 void buffer_shift(int shift_amount);
 void sm_menu(void);
 
-int setup_serial(const char* port_path, speed_t baud_rate);
+int setup_serial(const char* port_pat);
 void clear_screen();
 void print_lcd_screen(int error_count);
 int validate_frame(const char* frame);
@@ -381,7 +381,7 @@ int init(int argc, char* argv[])
     printf("Baud: %u Port:%s", baud_rate, port_path);
 
     // Setup serial port
-    g_state.serial_fd = setup_serial(port_path, baud_rate);
+    g_state.serial_fd = setup_serial(port_path);
     if (g_state.serial_fd < 0) {
         fprintf(stderr, "Failed to open serial port %s\n", port_path);
         return 1;
@@ -530,8 +530,7 @@ void buffer_shift(int shift_amount) {
 }
 
 
-int setup_serial(const char* port_path, speed_t baud_rate) {
-    (void)baud_rate;
+int setup_serial(const char* port_path) {
     int fd = open(port_path, O_RDWR | O_NOCTTY);
     if (fd < 0) {
         perror("open");
@@ -630,7 +629,6 @@ void print_menu_position() {
     case MENU_INPUT:
         printf("Input Menu\n");
         break;
-    default:
     }
 }
 

@@ -1,15 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <errno.h>
-#include <termios.h>
-#include <time.h>
-#include <sys/select.h>
 #include <stdint.h>
-#include <stdbool.h>
+#include <stdbool.h> (Keil MDK for STM32L0 supports C99; if not, you can typedef a BOOL enum instead).
+#include <string.h>
 #include <ctype.h>
+
 
 #define FRAME_LENGTH 35
 #define BUFFER_SIZE 1024
@@ -34,12 +27,14 @@ typedef enum {
 typedef struct
 {
     void (*callback)();
+    char top_screen[LCD_WIDTH + 1];
+    char bottom_screen[LCD_WIDTH + 1];
     sm_menu_e position;
     char car_id[2];         // "A" + '\0'
     char direction[2];      // "-" + '\0'
     char level[3];          // "01" + '\0'
     char ocss[4];           // "IDL" + '\0'
-    char mcss[3];           // "ST" + '\0'
+    //char mcss[3];           // "ST" + '\0'
     char front_door[3];     // "][" + '\0'
     char rear_door[3];      // "[]" + '\0'
     int frame_error_count;
@@ -114,6 +109,85 @@ static const LookupEntry mcss_map[] = {
     {"RS", "Rescue Run"}, {"SR", "Slow Run"}, {"ST", "Stop"}
 };
 
+// Helpers to check substrings and input menu
+bool contains(const char *haystack, const char *needle) {
+    return strstr(haystack, needle) != NULL;
+}
+bool is_input_menu(const char *top_screen) {
+    char ch = top_screen[0];
+    return (ch == 'A' || ch == 'B' || ch == 'C');
+}
+
+// Global state encapsulation
+static metro_state_t g_state = {0};
+
+
+int main(int argc, char* argv[])
+{
+    int status = init(argc, argv);
+    
+    if (status != 0) {
+        return 1;
+    }
+    
+    else {
+        g_state.elevator.position = NA;
+        while (1) {
+            // Read serial data into buffer
+            serial_read();
+
+            // Find and process complete frames
+            int frame_start = -1;
+            find_frame_boundaries(&frame_start);
+            if (frame_start != -1) {
+                process_frame(frame_start);
+                
+                // Update display and menu state
+                clear_screen();
+                print_lcd_screen(g_state.frame_errors);
+                print_menu_position();
+                dispatch_menu();
+                //printf("Last Keyboard Input: %s", keyboard_buffer);
+                //sm_menu();
+
+            }
+        }
+        close(g_state.serial_fd);
+        return 0;
+    }
+}
+
+int init(int argc, char* argv[])
+{
+    // if (argc != 2) {
+    //     fprintf(stderr, "Usage: %s <serial_port>\n", argv[0]);
+    //     return 1;
+    // }
+
+    // const char* port_path = argv[1];
+    // speed_t baud_rate = B9600;
+    
+    // printf("Opening device: %s\n", port_path);
+    // printf("Baud: %u Port:%s", baud_rate, port_path);
+
+    // // Setup serial port
+    // g_state.serial_fd = setup_serial(port_path);
+    // if (g_state.serial_fd < 0) {
+    //     fprintf(stderr, "Failed to open serial port %s\n", port_path);
+    //     return 1;
+    // }
+
+    // Initialize buffer and variables
+    g_state.buffer_pos = 0;
+    g_state.frame_errors = 0;
+    
+    // // Clear screen and start display
+     clear_screen();
+    
+    // printf("Reading from %s at %ld baud\n", port_path, (long)baud_rate);
+    // printf("Press Ctrl+C to exit\n");
+     return 0;
+}
 
 static uint8_t map_car_id(const char *car_id) {
     if (car_id >= 'A' && car_id <= 'C') {
@@ -132,29 +206,22 @@ static uint8_t map_direction(const char *dir) {
     return 3;
 }
 
-static uint8_t map_level(const char *level_str) {
-    if (level_str == NULL) {
+static uint8_t map_level(const char *level) {
+    level += 1;
+    if (level == NULL) {
         return 0;
     }
     
-    int value = 0;
-    // first digit
-    if (level_str >= '0' && s <= '9') {
-        value = s - '0';
-    } else {
-        return 0;
+    uint8_t value = 0;
+    if (level >= '0' && level <= '9') {
+        value = level - '0';
+    } 
+    
+    else {
+        return 255;
     }
 
-    // optional second digit
-    if (s >= '0' && s <= '9') {[1]
-        value = value * 10 + (s - '0');[1]
-    }
-
-    // clamp to 0..255 for uint8_t
-    if (value < 0)   value = 0;
-    if (value > 255) value = 255;
-
-    return (uint8_t)value;
+    return value;
 }
 
 static bool is_door_closed(const char* door) {
@@ -166,20 +233,113 @@ static bool is_door_closed(const char* door) {
 
 static uint8_t map_ocss(const char *ocss)
 {
-// Simple fixed mapping: IDL=0, INS=1, NOR=2, etc.
-if (strncmp(ocss, "IDL", 3) == 0) return 0;
-if (strncmp(ocss, "INS", 3) == 0) return 1;
-if (strncmp(ocss, "NOR", 3) == 0) return 2;
+// Simple fixed mapping: NOR=0, PRK=1, IDL=2, etc.
+if (strncmp(ocss, "NOR", 3) == 0){
+    return 1;
+} 
+if (strncmp(ocss, "IDL", 3) == 0){
+    return 2;
+} 
+if (strncmp(ocss, "PRK", 3) == 0) {
+    return 3;
+}
 // add more mappings as needed
-return 255; // unknown
+return 0; // unknown
 }
 
-static uint8_t map_mcss(const char *mcss)
-{
-if (strncmp(mcss, "ST", 2) == 0) return 0;
-if (strncmp(mcss, "FR", 2) == 0) return 1;
-if (strncmp(mcss, "SR", 2) == 0) return 2;
-if (strncmp(mcss, "ID", 2) == 0) return 3;
 
-return 255;
+void find_frame_boundaries(int* frame_start) {
+    *frame_start = -1;
+    
+    // Find first newline character
+    for (int i = 0; i < g_state.buffer_pos; i++) {
+        if (g_state.buffer[i] == '\n') {
+            *frame_start = i;
+            break;
+        }
+    }
+    
+    // If we found a newline, check if we have enough data for a complete frame
+    if (*frame_start != -1) {
+        if (*frame_start + FRAME_LENGTH <= g_state.buffer_pos) {
+            // Complete frame found
+            return;
+        }
+    }
+    
+    // Incomplete frame or no frame start found
+    *frame_start = -1;
+}
+
+void process_frame(int frame_start) {
+    // Extract potential frame
+    char frame[FRAME_LENGTH + 1];
+    memcpy(frame, g_state.buffer + frame_start, FRAME_LENGTH);
+    frame[FRAME_LENGTH] = '\0';
+    
+    // Validate frame
+    if (validate_frame(frame)) {
+        // Extract parts for LCD display
+        extract_frame_parts(frame);
+        
+        // Shift buffer to remove processed data
+        int shift_amount = frame_start + FRAME_LENGTH;
+        buffer_shift(shift_amount);
+    } else {
+        // Frame validation failed
+        g_state.frame_errors++;
+        
+        // Find next potential frame start
+        int next_newline = -1;
+        for (int i = frame_start + 1; i < g_state.buffer_pos; i++) {
+            if (g_state.buffer[i] == '\n') {
+                next_newline = i;
+                break;
+            }
+        }
+        
+        // If we found a next newline, shift buffer to that position
+        if (next_newline != -1) {
+            buffer_shift(next_newline);
+        } else {
+            // No next newline found, clear buffer
+            g_state.buffer_pos = 0;
+        }
+    }
+}
+
+void buffer_shift(int shift_amount) {
+    memmove(g_state.buffer, g_state.buffer + shift_amount, g_state.buffer_pos - shift_amount);
+    g_state.buffer_pos -= shift_amount;
+}
+
+// Main logic
+void dispatch_menu() {
+
+    if (is_input_menu(g_state.elevator.top_screen)) {
+        g_state.elevator.position = MENU_INPUT;
+        input_menu_parse();
+        return;
+    }
+
+    if (contains(g_state.elevator.top_screen, "Menu")) {
+        if (contains(g_state.elevator.top_screen, "SYSTEM")) {
+            g_state.elevator.position = MENU_SYSTEM;
+            return;
+        }
+        if (contains(g_state.elevator.top_screen, "STATUS")) {
+            g_state.elevator.position = MENU_STATUS;
+            return;
+        }
+        if (contains(g_state.elevator.top_screen, "TCBC")) {
+            g_state.elevator.position = MENU_TCBC;
+            return;
+        }
+        return;
+    }
+    if (contains(g_state.elevator.top_screen, "TCBC"))
+    {
+        // If no keywords above, principal menu by default
+        g_state.elevator.position = MENU_PRINCIPAL;
+    }
 }
