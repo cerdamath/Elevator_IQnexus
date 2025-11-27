@@ -24,46 +24,41 @@ typedef enum {
     MENU_INPUT
 } sm_menu_e;
 
-typedef union 
+#define PAYLOAD_SIZE 7
+typedef union
 {
-    elevator_payload;
-    struct 
+    uint8_t elevator_payload[PAYLOAD_SIZE];
+    struct
     {
         uint8_t
-        car_id      :2,     
-        dir         :2,     
-        level       :4;      
-        
-        uint8_t
-        f_door      :1,
-        r_door      :1,
-        ocss        :6;
-        
-        uint8_t
-        mcss        :4,
-        reserved    :4;
-    
-        uint8_t
-        var_status  :1,
-        var1        :8;
-        
-        uint8_t
-        var_status  :1,
-        var2        :8;
+            car_id : 2,
+            dir : 2,
+            level : 4;
 
         uint8_t
-        var_status  :1,
-        var3        :8;
+            f_door : 2,
+            r_door : 2,
+            mcss : 4;
+
+        uint8_t ocss;
 
         uint8_t
-        var_status  :1,
-        var4        :8;
+            var_status : 1,
+            var_1 : 7;
+
+        uint8_t
+            var_status : 1,
+            var_2 : 7;
+
+        uint8_t
+            var_status : 1,
+            var_3 : 7;
+
+        uint8_t
+            var_status : 1,
+            var_4 : 7;
     };
-};
-
-
-
-
+} elevator_packet_t;
 
 //simple bitmaps?
 typedef struct
