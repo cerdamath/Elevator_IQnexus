@@ -24,6 +24,48 @@ typedef enum {
     MENU_INPUT
 } sm_menu_e;
 
+typedef union 
+{
+    elevator_payload;
+    struct 
+    {
+        uint8_t
+        car_id      :2,     
+        dir         :2,     
+        level       :4;      
+        
+        uint8_t
+        f_door      :1,
+        r_door      :1,
+        ocss        :6;
+        
+        uint8_t
+        mcss        :4,
+        reserved    :4;
+    
+        uint8_t
+        var_status  :1,
+        var1        :8;
+        
+        uint8_t
+        var_status  :1,
+        var2        :8;
+
+        uint8_t
+        var_status  :1,
+        var3        :8;
+
+        uint8_t
+        var_status  :1,
+        var4        :8;
+    };
+};
+
+
+
+
+
+//simple bitmaps?
 typedef struct
 {
     void (*callback)();
@@ -536,3 +578,20 @@ void build_extended_payload(uint8_t *payload_buffer, int *payload_len)
            is_variable_uppercase(e->var4));
     #endif
 }
+
+static void pack_bits(uint8_t *byte, uint8_t start_bit, uint8_t num_bits, uint8_t value)
+{
+    // Defensive bounds checking for production code
+    if (start_bit + num_bits > 8) {
+        #ifdef DEBUG_MODE
+        printf("[ERROR] pack_bits: start_bit(%u) + num_bits(%u) > 8\r\n", 
+               start_bit, num_bits);
+        #endif
+        return;  // Or assert() in debug builds
+    }
+    
+    uint8_t mask = (1 << num_bits) - 1;
+    uint8_t shift_val = value & mask;
+    *byte |= (shift_val << start_bit);
+}
+
