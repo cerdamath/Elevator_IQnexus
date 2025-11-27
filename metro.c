@@ -393,7 +393,7 @@ int main(int argc, char* argv[])
                 print_lcd_screen(g_state.frame_errors);
                 print_menu_position();
                 dispatch_menu();
-                printf("Last Keyboard Input: %s", keyboard_buffer);
+
                 //sm_menu();
 
             }
@@ -455,19 +455,9 @@ void serial_read(void) {
     timeout.tv_sec = 1;
     timeout.tv_usec = 0;
     
-     int activity = select(max_fd, &readfds, NULL, NULL, &timeout); // Wait for input on any FDs in the set, up to 1s.
-    
-    if (activity < 0) {
-        perror("select error");
-        return;
-    }
-    
-    if (activity == 0) {
-        // Timeout, continue loop
-        return;
-    }
+    int activity = select(max_fd, &readfds, NULL, NULL, &timeout); // Wait for input on any FDs in the set, up to 1s.
 
-     // If there's input from the keyboard/terminal:
+      // If there's input from the keyboard/terminal:
     if (FD_ISSET(STDIN_FILENO, &readfds)) {
         if (fgets(keyboard_buffer, sizeof(keyboard_buffer), stdin)) {
             ssize_t written = write(g_state.serial_fd, keyboard_buffer, strlen(keyboard_buffer));
@@ -477,6 +467,16 @@ void serial_read(void) {
             }
             // Send the contents of the keyboard buffer to the serial port.
         }
+    }
+    
+    if (activity < 0) {
+        perror("select error");
+        return;
+    }
+    
+    if (activity == 0) {
+        // Timeout, continue loop
+        return;
     }
     
     if (FD_ISSET(g_state.serial_fd, &readfds)) {
@@ -638,7 +638,7 @@ int setup_serial(const char* port_path, int baud_rate, int databits, int parity,
     if (tcsetattr(fd, TCSANOW, &tty) != 0) {
         perror("tcsetattr");
         close(fd);
-        return -1;
+        return -1; 
     }
 
     return fd;
