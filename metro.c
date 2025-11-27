@@ -264,6 +264,8 @@ void buffer_shift(int shift_amount);
 void sm_menu(void);
 
 int setup_serial(const char* port_path, int baud_rate, int databits, int parity, int stopbits);
+void enable_raw_mode(void);
+void disable_raw_mode(void);
 void clear_screen();
 void print_lcd_screen(int error_count);
 int validate_frame(const char* frame);
@@ -393,11 +395,9 @@ int main(int argc, char* argv[])
                 print_lcd_screen(g_state.frame_errors);
                 print_menu_position();
                 dispatch_menu();
-
-                //sm_menu();
-
             }
         }
+        disable_raw_mode();
         close(g_state.serial_fd);
         return 0;
     }
@@ -427,6 +427,8 @@ int init(int argc, char* argv[])
         fprintf(stderr, "Failed to open serial port %s\n", port_path);
         return 1;
     }
+    
+    enable_raw_mode();
 
     // Initialize buffer and variables
     g_state.buffer_pos = 0;
@@ -438,6 +440,22 @@ int init(int argc, char* argv[])
     printf("Reading from %s at %ld baud\n", port_path, (long)baud_rate);
     printf("Press Ctrl+C to exit\n");
     return 0;
+}
+
+void enable_raw_mode() {
+    struct termios term;
+    tcgetattr(STDIN_FILENO, &term);
+    term.c_lflag &= ~(ICANON | ECHO);  // Disable canonical mode and echo
+    term.c_cc[VMIN] = 0;               // Non-blocking read
+    term.c_cc[VTIME] = 0;              // No timeout
+    tcsetattr(STDIN_FILENO, TCSANOW, &term);
+}
+
+void disable_raw_mode() {
+    struct termios term;
+    tcgetattr(STDIN_FILENO, &term);
+    term.c_lflag |= (ICANON | ECHO);   // Re-enable canonical mode and echo
+    tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
 
@@ -457,17 +475,6 @@ void serial_read(void) {
     
     int activity = select(max_fd, &readfds, NULL, NULL, &timeout); // Wait for input on any FDs in the set, up to 1s.
 
-      // If there's input from the keyboard/terminal:
-    if (FD_ISSET(STDIN_FILENO, &readfds)) {
-        if (fgets(keyboard_buffer, sizeof(keyboard_buffer), stdin)) {
-            ssize_t written = write(g_state.serial_fd, keyboard_buffer, strlen(keyboard_buffer));
-            if (written < 1) {
-                printf("Error writing from STDIN");
-                return;    
-            }
-            // Send the contents of the keyboard buffer to the serial port.
-        }
-    }
     
     if (activity < 0) {
         perror("select error");
@@ -477,6 +484,25 @@ void serial_read(void) {
     if (activity == 0) {
         // Timeout, continue loop
         return;
+    }
+
+    if (FD_ISSET(STDIN_FILENO, &readfds)) {
+        char single_char;
+        ssize_t read_count = read(STDIN_FILENO, &single_char, 1);
+
+        if (read_count > 0) {
+            // Send immediately to serial port
+            ssize_t written = write(g_state.serial_fd, &single_char, 1);
+            if (written < 1) {
+                printf("Error writing to serial port\n");
+                fflush(stdout);
+            }
+            // Echo the character locally (optional)
+            printf("%c", single_char);
+            fflush(stdout);
+        } else if (read_count < 0 && errno != EAGAIN && errno != EWOULDBLOCK) {
+            perror("read from stdin");
+        }
     }
     
     if (FD_ISSET(g_state.serial_fd, &readfds)) {
@@ -571,8 +597,7 @@ void buffer_shift(int shift_amount) {
 }
 
 
-int setup_serial(const char* port_path, int baud_rate, int databits, int parity, int stopbits)
-{
+int setup_serial(const char* port_path, int baud_rate, int databits, int parity, int stopbits) {
     int fd = open(port_path, O_RDWR | O_NOCTTY);
     if (fd < 0) {
         perror("open");
@@ -638,7 +663,7 @@ int setup_serial(const char* port_path, int baud_rate, int databits, int parity,
     if (tcsetattr(fd, TCSANOW, &tty) != 0) {
         perror("tcsetattr");
         close(fd);
-        return -1; 
+        return -1;
     }
 
     return fd;
