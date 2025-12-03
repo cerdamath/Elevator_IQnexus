@@ -11,10 +11,9 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-#define FRAME_LENGTH 36
+#define FRAME_LENGTH 37
 #define BRACKET_POS 18
 #define H_POS 19
-
 #define MOVE_BUFFER_BY 1
 
 #define BUFFER_SIZE 1024
@@ -73,8 +72,8 @@ typedef struct {
     menu_field_t fields[2];
     bool new_line;
     bool escape;
-    bool debug;
     bool h_b_bool;
+    bool debug;
     char h_pos[1];
     char b_pos[1];
 } metro_state_t;
@@ -393,6 +392,11 @@ int main(int argc, char* argv[])
         g_state.elevator.position = NA;
         while (1) {
             // Read serial data into b
+            g_state.h_b_bool = false;
+            g_state.new_line = false;
+            g_state.escape = false;
+            g_state.elevator.top_screen[0] = '\0';
+            g_state.elevator.bottom_screen[0] = '\0';
             serial_read();
             // Find and process complete frames
             int frame_start = -1;
@@ -566,7 +570,6 @@ void find_frame_boundaries(int* frame_start) {
     for (int i = 0; i < g_state.buffer_pos; i++) {
         if (g_state.buffer[i] == '\x1B') {
             g_state.escape = true;
-            g_state.h_b_bool = true;
         }
     }
     
@@ -771,6 +774,7 @@ int validate_frame(const char* frame) {
     
     // Check if 17th and 18th characters are "[H"
     if (frame[BRACKET_POS] != '[' || frame[H_POS] != 'H') {
+        g_state.h_b_bool = true;
         g_state.h_pos[0] = frame[H_POS];
         g_state.h_pos[1] = '\0';
         g_state.b_pos[0] = frame[BRACKET_POS];
@@ -781,6 +785,7 @@ int validate_frame(const char* frame) {
 }
 
 void extract_frame_parts(const char* frame) {
+    printf("here1");
     // Extract the part after the newline and before "[H"
     const char* top_frame = frame + MOVE_BUFFER_BY;  // Skip the newline
     const char* bottom_frame = strstr(top_frame, "[H");
@@ -789,6 +794,7 @@ void extract_frame_parts(const char* frame) {
         // If no "[H" found, return empty strings
         g_state.elevator.top_screen[0] = '\0';
         g_state.elevator.bottom_screen[0] = '\0';
+        printf("hello");
         return;
     }
 
