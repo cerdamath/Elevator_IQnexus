@@ -12,9 +12,9 @@
 #include <ctype.h>
 
 #define FRAME_LENGTH 37
-#define BRACKET_POS 18
-#define H_POS 19
-#define MOVE_BUFFER_BY 1
+#define BRACKET_POS 19
+#define H_POS 20
+#define MOVE_BUFFER_BY 2
 
 #define BUFFER_SIZE 1024
 #define LCD_WIDTH 16
@@ -561,10 +561,6 @@ void find_frame_boundaries(int* frame_start) {
             g_state.new_line = true;
             break;
         }
-        if (g_state.buffer[i] == '\n') {
-            *frame_start = i;
-            break;
-        }
     }
 
     for (int i = 0; i < g_state.buffer_pos; i++) {
@@ -613,10 +609,10 @@ void process_frame(int frame_start) {
         // Find next potential frame start
         int next_newline = -1;
         for (int i = frame_start + 1; i < g_state.buffer_pos; i++) {
-            if (g_state.buffer[i] == '\n') {
-                next_newline = i;
-                break;
-            }
+            if (g_state.buffer[i] == '\n' && g_state.buffer[i + 1] == '\n') {
+            next_newline = i;
+            break;
+        }
         }
         
         // If we found a next newline, shift buffer to that position
