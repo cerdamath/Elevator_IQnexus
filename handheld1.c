@@ -764,7 +764,7 @@ int validate_frame(const char* frame) {
     }
     
     // Check if frame starts with newline
-    if (frame[0] != '\n') {
+    if (frame[0] != '\n' && frame[1] == '\n') {
         return 0;
     }
     
