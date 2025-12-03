@@ -11,12 +11,18 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-#define FRAME_LENGTH 35
+#define FRAME_LENGTH 36
+#define BRACKET_POS 18
+#define H_POS 19
+
+#define MOVE_BUFFER_BY 1
+
 #define BUFFER_SIZE 1024
 #define LCD_WIDTH 16
 #define MAX_LABEL_LEN 9  
 #define MAX_VALUE_LEN 6   
 #define MAX_FIELDS 4
+
 typedef struct {
     char label[MAX_LABEL_LEN];
     char value[MAX_VALUE_LEN];
@@ -65,6 +71,12 @@ typedef struct {
     int frame_errors;
     elevator_obj_t elevator;
     menu_field_t fields[2];
+    bool new_line;
+    bool escape;
+    bool debug;
+    bool h_b_bool;
+    char h_pos[1];
+    char b_pos[1];
 } metro_state_t;
 
 typedef struct {
@@ -275,8 +287,7 @@ void menu_parse();
 void input_menu_parse();
 void print_menu_position();
 void dispatch_menu();
-
-char keyboard_buffer [128];
+void debug_message(void);
 
 // Helpers to check substrings and input menu
 bool contains(const char *haystack, const char *needle) {
@@ -381,9 +392,8 @@ int main(int argc, char* argv[])
     else {
         g_state.elevator.position = NA;
         while (1) {
-            // Read serial data into buffer
+            // Read serial data into b
             serial_read();
-
             // Find and process complete frames
             int frame_start = -1;
             find_frame_boundaries(&frame_start);
@@ -395,6 +405,9 @@ int main(int argc, char* argv[])
                 print_lcd_screen(g_state.frame_errors);
                 print_menu_position();
                 dispatch_menu();
+                if(g_state.debug){
+                    debug_message();
+                }
             }
         }
         disable_raw_mode();
@@ -405,9 +418,9 @@ int main(int argc, char* argv[])
 
 int init(int argc, char* argv[])
 {
-    if (argc != 6) {
+     if (argc < 6 || argc > 7) {
         fprintf(stderr,
-                "Usage: %s <serial_port> <baud_rate> <databits> <parity> <stop_bits>\n",
+                "Usage: %s <serial_port> <baud_rate> <databits> <parity> <stop_bits> optional[<D>]\n",
                 argv[0]);
         return 1;
     }
@@ -417,6 +430,9 @@ int init(int argc, char* argv[])
     int databits  = atoi(argv[3]);
     int parity    = atoi(argv[4]);   // 0 = none, 1 = odd, 2 = even
     int stop_bits = atoi(argv[5]);   // 1 or 2
+    if (argc > 6 && strcmp(argv[6], "D") == 0) {
+        g_state.debug = true;
+    } 
 
     printf("Opening device: %s\n", port_path);
     printf("Port: %s Baud: %d Databits: %d Parity: %d Stop_bits: %d ",port_path, baud_rate, databits, parity, stop_bits);
@@ -536,9 +552,21 @@ void find_frame_boundaries(int* frame_start) {
     
     // Find first newline character
     for (int i = 0; i < g_state.buffer_pos; i++) {
+        if (g_state.buffer[i] == '\n' && g_state.buffer[i + 1] == '\n') {
+            *frame_start = i;
+            g_state.new_line = true;
+            break;
+        }
         if (g_state.buffer[i] == '\n') {
             *frame_start = i;
             break;
+        }
+    }
+
+    for (int i = 0; i < g_state.buffer_pos; i++) {
+        if (g_state.buffer[i] == '\x1B') {
+            g_state.escape = true;
+            g_state.h_b_bool = true;
         }
     }
     
@@ -554,12 +582,19 @@ void find_frame_boundaries(int* frame_start) {
     *frame_start = -1;
 }
 
+
+void debug_message() {
+    g_state.new_line ? printf("New line chars : 2\nIncrease MOVE_BUFFER_BY\n") : printf("New line chars : 1\n");
+    g_state.escape ? printf("Escape Character Found\n") : 0;
+    g_state.h_b_bool ? printf("BRACKET_CHAR: %s \nH_CHAR: %s\n", g_state.b_pos, g_state.h_pos) : printf("Found '[H'\n");
+}
+
 void process_frame(int frame_start) {
     // Extract potential frame
     char frame[FRAME_LENGTH + 1];
     memcpy(frame, g_state.buffer + frame_start, FRAME_LENGTH);
     frame[FRAME_LENGTH] = '\0';
-    
+
     // Validate frame
     if (validate_frame(frame)) {
         // Extract parts for LCD display
@@ -735,7 +770,11 @@ int validate_frame(const char* frame) {
     }
     
     // Check if 17th and 18th characters are "[H"
-    if (frame[17] != '[' || frame[18] != 'H') {
+    if (frame[BRACKET_POS] != '[' || frame[H_POS] != 'H') {
+        g_state.h_pos[0] = frame[H_POS];
+        g_state.h_pos[1] = '\0';
+        g_state.b_pos[0] = frame[BRACKET_POS];
+        g_state.b_pos[1] = '\0';
         return 0;
     }
     return 1;
@@ -743,25 +782,22 @@ int validate_frame(const char* frame) {
 
 void extract_frame_parts(const char* frame) {
     // Extract the part after the newline and before "[H"
-    const char* data_start = frame + 1;  // Skip the newline
-    const char* marker_pos = strstr(data_start, "[H");
+    const char* top_frame = frame + MOVE_BUFFER_BY;  // Skip the newline
+    const char* bottom_frame = strstr(top_frame, "[H");
     
-    if (marker_pos == NULL) {
+    if (bottom_frame == NULL) {
         // If no "[H" found, return empty strings
         g_state.elevator.top_screen[0] = '\0';
         g_state.elevator.bottom_screen[0] = '\0';
         return;
     }
-    
-    // Calculate length of data before "[H"
-    int data_length = marker_pos - data_start;
-    
+
     // Split data into two parts
-    int half_length = data_length;
+    int half_length = LCD_WIDTH;
     
     // Copy first half to bottom line
     if (half_length > 0) {
-        strncpy(g_state.elevator.bottom_screen, data_start, half_length);
+        memcpy(g_state.elevator.bottom_screen, top_frame, half_length);
         g_state.elevator.bottom_screen[half_length] = '\0';
     } else {
         g_state.elevator.bottom_screen[0] = '\0';
@@ -769,7 +805,7 @@ void extract_frame_parts(const char* frame) {
     
     // Copy second half to top line
     if (half_length > 0) {
-        strncpy(g_state.elevator.top_screen, data_start + half_length + 2, half_length);
+        memcpy(g_state.elevator.top_screen, bottom_frame + 2, half_length);
         g_state.elevator.top_screen[half_length] = '\0';
     } else {
         g_state.elevator.top_screen[0] = '\0';
