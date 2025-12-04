@@ -557,7 +557,6 @@ void find_frame_boundaries(int* frame_start) {
     // Find first newline character
     for (int i = 0; i < g_state.buffer_pos; i++) {
         if (g_state.buffer[i] == '\n' && g_state.buffer[i + 1] == '\n') {
-            *frame_start = i;
             g_state.new_line = true;
             break;
         }
