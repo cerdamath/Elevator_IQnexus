@@ -11,10 +11,25 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-#define FRAME_LENGTH 37
-#define BRACKET_POS 19
-#define H_POS 20
-#define MOVE_BUFFER_BY 2
+/* 1 new line & 1 escape 
+#define FRAME_LENGTH 36
+#define BRACKET_POS 18
+#define H_POS 19
+#define MOVE_BUFFER_BY 1 
+*/
+
+
+/* 1 new line & no escape 
+#define FRAME_LENGTH 35
+#define BRACKET_POS 17
+#define H_POS 18
+#define MOVE_BUFFER_BY 1 
+*/
+
+#define FRAME_LENGTH 36
+#define BRACKET_POS 18
+#define H_POS 19
+#define MOVE_BUFFER_BY 1   //number of new lines 
 
 #define BUFFER_SIZE 1024
 #define LCD_WIDTH 16
@@ -556,7 +571,7 @@ void find_frame_boundaries(int* frame_start) {
     
     // Find first newline character
     for (int i = 0; i < g_state.buffer_pos; i++) {
-        if (g_state.buffer[i] == '\n' && g_state.buffer[i + 1] == '\n') {
+        if (g_state.buffer[i] == '\n') {
             *frame_start = i;
             g_state.new_line = true;
             break;
@@ -583,7 +598,7 @@ void find_frame_boundaries(int* frame_start) {
 
 
 void debug_message() {
-    g_state.new_line ? printf("New line chars : 2\nIncrease MOVE_BUFFER_BY\n") : printf("New line chars : 1\n");
+    g_state.new_line ? printf("New line chars : 1\n") : printf("New line chars : More than 1\n");
     g_state.escape ? printf("Escape Character Found\n") : 0;
     g_state.h_b_bool ? printf("BRACKET_CHAR: %s \nH_CHAR: %s\n", g_state.b_pos, g_state.h_pos) : printf("Found '[H'\n");
 }
@@ -609,7 +624,7 @@ void process_frame(int frame_start) {
         // Find next potential frame start
         int next_newline = -1;
         for (int i = frame_start + 1; i < g_state.buffer_pos; i++) {
-            if (g_state.buffer[i] == '\n' && g_state.buffer[i + 1] == '\n') {
+            if (g_state.buffer[i] == '\n') {
             next_newline = i;
             break;
         }
@@ -764,7 +779,7 @@ int validate_frame(const char* frame) {
     }
     
     // Check if frame starts with newline
-    if (frame[0] != '\n' && frame[1] == '\n') {
+    if (frame[0] != '\n') {
         return 0;
     }
     
@@ -772,16 +787,13 @@ int validate_frame(const char* frame) {
     if (frame[BRACKET_POS] != '[' || frame[H_POS] != 'H') {
         g_state.h_b_bool = true;
         g_state.h_pos[0] = frame[H_POS];
-        g_state.h_pos[1] = '\0';
         g_state.b_pos[0] = frame[BRACKET_POS];
-        g_state.b_pos[1] = '\0';
         return 0;
     }
     return 1;
 }
 
 void extract_frame_parts(const char* frame) {
-    printf("here1");
     // Extract the part after the newline and before "[H"
     const char* top_frame = frame + MOVE_BUFFER_BY;  // Skip the newline
     const char* bottom_frame = strstr(top_frame, "[H");

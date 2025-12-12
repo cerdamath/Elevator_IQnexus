@@ -7,8 +7,8 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
-#define SVT_DATA "[H  local SVT     \n\n  disconnected  \x1B"
-#define PRINCIPAL_DATA "[H1:TCBC  2:DRIVE \n\n5:SPBC  6:RMH   \x1B"
+#define SVT_DATA "[H  local SVT     \n  disconnected  \x1B"
+#define PRINCIPAL_DATA "[H1:TCBC  2:DRIVE \n\n5:SPBC  6:RMH   "
 #define TCBC_DATA "[H  TCBC  - Menu  \n\nSystem=1 Tools=2\x1B"
 #define SYSTEM_DATA "[H SYSTEM - Menu >\n\nStatus=1  Test=2\x1B"
 #define STATUS_DATA "[H STATUS - Menu >\n\n Calls=1 Input=2\x1B"
