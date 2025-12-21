@@ -8,11 +8,11 @@
 #include <stdlib.h>
 
 #define SVT_DATA "[H  local SVT     \n  disconnected  \x1B"
-#define PRINCIPAL_DATA "[H1:TCBC  2:DRIVE \n\n5:SPBC  6:RMH   "
-#define TCBC_DATA "[H  TCBC  - Menu  \n\nSystem=1 Tools=2\x1B"
-#define SYSTEM_DATA "[H SYSTEM - Menu >\n\nStatus=1  Test=2\x1B"
-#define STATUS_DATA "[H STATUS - Menu >\n\n Calls=1 Input=2\x1B"
-#define INPUT_DATA "[HA-01 IDL ST ][][\n\n lwo LWX lns    \x1B"
+#define PRINCIPAL_DATA "[H1:TCBC  2:DRIVE \n5:SPBC  6:RMH   \x1B"
+#define TCBC_DATA "[H  TCBC  - Menu  \nSystem=1 Tools=2\x1B"
+#define SYSTEM_DATA "[H SYSTEM - Menu >\nStatus=1  Test=2\x1B"
+#define STATUS_DATA "[H STATUS - Menu >\n Calls=1 Input=2\x1B"
+#define INPUT_DATA "[HAd09 IDL IN <>><\n^gcb 1lv CFS brk\x1B"
 
 void serial_read(void);
 
@@ -203,6 +203,8 @@ int setup_serial(const char *port_path, int baud_rate, int databits, int parity,
 
 int main(int argc, char *argv[])
 {
+    sm_menu_e currentState = NA;
+    char *currentData = SVT_DATA;
 
     if (argc != 6)
     {
@@ -229,8 +231,6 @@ int main(int argc, char *argv[])
         return 1;
     }
 
-    sm_menu_e currentState = NA;
-    char *currentData = PRINCIPAL_DATA;
     while (1)
     {
 
@@ -247,7 +247,7 @@ int main(int argc, char *argv[])
         {
         case NA:
             currentData = SVT_DATA;
-            if (validateCommand('0', fd))
+            if (validateCommand('m', fd))
             {
                 currentState = MENU_PRINCIPAL;
                 currentData = PRINCIPAL_DATA;
