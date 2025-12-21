@@ -235,7 +235,7 @@ int main(int argc, char *argv[])
         } else {
             printf("Sent block %d (%zd bytes)\n", i+1, written);
         }
-        usleep(1000*1000);
+        usleep(1000*5000);
     }
     printf("\n==== TOTAL FRAMES SENT: %d ====\n", total_frames);
 
