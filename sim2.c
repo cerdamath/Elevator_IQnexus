@@ -223,21 +223,15 @@ int main(int argc, char *argv[])
 
     int total_frames = 0;
     for (int i = 0; i < 62; ++i) {
-        size_t len = strlen(blocks[i]);
-        int frames_in_block = count_H_frames(blocks[i]);
-        total_frames += frames_in_block;
-        printf("\n=== Sending burst/block %d (%zu bytes, %d frames): ===\n%s\n",
-            i+1, len, frames_in_block, blocks[i]);
-        ssize_t written = write(fd, blocks[i], len);
-        tcdrain(fd);
-        if (written < 0) {
-            printf("Write error on block %d: %s\n", i+1, strerror(errno));
-        } else {
-            printf("Sent block %d (%zd bytes)\n", i+1, written);
+         printf("\n==== FRAME SENT: %s ====\n", blocks[i]);
+        ssize_t written = write(fd, blocks[i], strlen(blocks[i]));
+        if (written < 0)
+        {
+            printf("ERROR WRITING");
         }
+        tcdrain(fd);
         usleep(1000*5000);
     }
-    printf("\n==== TOTAL FRAMES SENT: %d ====\n", total_frames);
 
     close(fd);
     return 0;
