@@ -222,7 +222,7 @@ int main(int argc, char *argv[])
     }
 
     int total_frames = 0;
-    for (int i = 0; i < 62; ++i) {
+    for (int i = 0; i < 1500; ++i) {
          printf("\n==== FRAME SENT: %s ====\n", blocks[i]);
         ssize_t written = write(fd, blocks[i], strlen(blocks[i]));
         if (written < 0)
