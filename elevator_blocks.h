@@ -1,6 +1,6 @@
 /**
- * Elevator Control System - 150 Single Frame Blocks
- * ==================================================
+ * Elevator Control System - 1500 Single Frame Blocks
+ * ===================================================
  * 
  * Each block is a single 36-char frame
  * Frame structure: [H + car + dir + lvl + space + ocss + space + mcss + space + doors + \n + inputs + \x1B
@@ -168,31 +168,1513 @@ char block147[] = "[HAd27 EPC IN ><><\nROT 2EF GDS ^SGS\x1B";
 char block148[] = "[HC-15 WCS CR <>[]\nGDS DDS ^DCL ACC\x1B";
 char block149[] = "[HAu12 ANS CR ][[]\nXEF HTS UIB ^DOS\x1B";
 char block150[] = "[HAu06 WCS ES <>][\n^FAN NUG DCB RRB\x1B";
+char block151[] = "[HAu04 INS ID []><\nNUD ^WDC CFB TDO\x1B";
+char block152[] = "[HAu04 IDL SR ][][\nCCT EQ2 TCB ^WDC\x1B";
+char block153[] = "[HCd27 EQO IN ><<>\n^GSM ISP 1TH DIB\x1B";
+char block154[] = "[HC-18 HBP EF ][][\nHTS RTB COH ^FAN\x1B";
+char block155[] = "[HA-00 DCP CR <>][\nPDD WDO LNS ^WDC\x1B";
+char block156[] = "[HC-29 DTC ST <>><\nEFK CFS NRF ^WDC\x1B";
+char block157[] = "[HC-19 ESB ST ><><\n2SE GCO HFA ^EDP\x1B";
+char block158[] = "[HA-16 PRK CR ][][\nCTL HCO ^DOL NOR\x1B";
+char block159[] = "[HAu11 IDL EW []><\nESK ^DHB LWX DFC\x1B";
+char block160[] = "[HB-25 HAD ES ][][\n2EF ^DOS MDD 1EF\x1B";
+char block161[] = "[HAu04 GCB ID <>][\nLWX ^LRD WDC LNS\x1B";
+char block162[] = "[HA-28 ANS RS <>><\nETS ^GCB LNS 2EF\x1B";
+char block163[] = "[HA-01 DLM IN ><<>\n^GSM CHC DHB RRB\x1B";
+char block164[] = "[HB-05 INI IN <>><\nTDC ISP EFO ^FAN\x1B";
+char block165[] = "[HAu11 ROT IN ><[]\n^DCL CCB CFS 2SE\x1B";
+char block166[] = "[HAd31 CHC EW <>[]\nCTL GCO ^MDD FAN\x1B";
+char block167[] = "[HC-05 EPC ID []][\nGDS EDP ^EDP HFA\x1B";
+char block168[] = "[HCd31 INI EW <>][\nEQW LRD ^TDO ACH\x1B";
+char block169[] = "[HA-16 WCO FR <>[]\nGSI ^GCB LWO EQW\x1B";
+char block170[] = "[HAd11 EQR SR ><[]\nTDO WDC CCT ^SGS\x1B";
+char block171[] = "[HCu22 LNS SR []<>\nCOC EDB PKG ^SGS\x1B";
+char block172[] = "[HBu05 ROT RL <>[]\n^MDD UIB 1LV DCL\x1B";
+char block173[] = "[HCd22 EFO FR <>][\n^FAN ETS TCI NRF\x1B";
+char block174[] = "[HC-29 ARD EW ><[]\n^DOL GDS DFD ISP\x1B";
+char block175[] = "[HAu06 CBP RL []][\nIST L50 2EF ^MDD\x1B";
+char block176[] = "[HA-25 PKS ES []<>\nDFD ^DOB SGS ERO\x1B";
+char block177[] = "[HCd15 EPR EF ][><\nETS HCO ISS ^DHB\x1B";
+char block178[] = "[HAu16 INS RS ][[]\nMDD EQR CCT ^DOB\x1B";
+char block179[] = "[HAd17 CTL RS <>><\nDIB DHB GCB ^GSM\x1B";
+char block180[] = "[HB-23 OLD ES ><><\nMDD ^EDP 2EF GSI\x1B";
+char block181[] = "[HA-21 OLD IN [][]\nHFA DDS ESH ^GCB\x1B";
+char block182[] = "[HB-28 PKS NR ][><\nEFO ^DCL GCO ISS\x1B";
+char block183[] = "[HB-21 DLM RL ><><\nNUD ^TDC BRK AEF\x1B";
+char block184[] = "[HCd02 INI IN <>[]\n^EDP ADB BRK CFB\x1B";
+char block185[] = "[HC-01 OLD RL <>[]\nL30 ^TDC ISP NUG\x1B";
+char block186[] = "[HBu06 DHB ST []><\nPKG LWX ^GSM EQ1\x1B";
+char block187[] = "[HAd21 LNS RL <>><\nCOH TDO AEF ^WDO\x1B";
+char block188[] = "[HAu06 ARD ST ><[]\nFAN 1LS ^WDC 1LV\x1B";
+char block189[] = "[HAd16 DHB IN ][[]\nCOC EDB HFA ^SGS\x1B";
+char block190[] = "[HBu15 HBP ID <>][\nEQ1 ^WDO CTC EQS\x1B";
+char block191[] = "[HA-21 DLM ST <><>\nTDC HCH ^MDD HTS\x1B";
+char block192[] = "[HBu24 NOR ST []<>\n^SGS NAV FAN TDO\x1B";
+char block193[] = "[HBd15 EFO SR ><[]\nCTL GDS GDS ^SGS\x1B";
+char block194[] = "[HB-24 ESB EF ][><\n1EF ACC 1EF ^TDO\x1B";
+char block195[] = "[HAu08 IDL CR [][]\nL30 TCB ^ISS XEF\x1B";
+char block196[] = "[HAd10 EPR FR <>[]\nLRD 2TH 1LV ^DOS\x1B";
+char block197[] = "[HA-00 PRK EW ][<>\n^ISS EQ1 ASL ROT\x1B";
+char block198[] = "[HAu23 GCB IN ><][\nDHB ^ISS HCH 2SE\x1B";
+char block199[] = "[HAd10 DTO FR ><><\nGCO HCH ^DOB ESH\x1B";
+char block200[] = "[HBd02 ISC SR <><>\n^DCL EQS DCL PKG\x1B";
+char block201[] = "[HCd04 EPW IN <><>\nWDO PKG 1TH ^DOS\x1B";
+char block202[] = "[HAd13 NOR RL ][><\nCTL ^TDO DCL NUG\x1B";
+char block203[] = "[HC-15 ACP RS ][<>\nTCI ACC ^TDC SGS\x1B";
+char block204[] = "[HAd03 DHB IN ><><\nEDP ETS ^TDC CTC\x1B";
+char block205[] = "[HBu24 DTO IN [][]\nDCL AEF ^DHB GCO\x1B";
+char block206[] = "[HCu06 HBP IN <>><\n^EDP EDP DIB 2EF\x1B";
+char block207[] = "[HAd30 EFO RS ][><\nDHB WDO HCO ^GCB\x1B";
+char block208[] = "[HAu31 DBF RS []><\n^SDB TDO DES LRD\x1B";
+char block209[] = "[HAu18 DBF CR <>><\n^DHB PKS EQ1 HTS\x1B";
+char block210[] = "[HBu08 ACP CR ><][\nMDD LNS ^LRD LNS\x1B";
+char block211[] = "[HC-31 PRK EW [][]\nDCL DRD ^GSM DCB\x1B";
+char block212[] = "[HA-00 EHS RL <><>\nHCO CCT EQW ^GSM\x1B";
+char block213[] = "[HCd13 EQO ID [][]\n^SGS HFA SGS L50\x1B";
+char block214[] = "[HBu25 ANS ID <>><\nACH ^DHB EFK UIB\x1B";
+char block215[] = "[HC-14 NAV SR ][><\n1TH ^DCB BRK 1EF\x1B";
+char block216[] = "[HAd10 DTC IN [][]\n^LRD PKS CCB 1LV\x1B";
+char block217[] = "[HCd25 EPC RL []][\nROT DHB ^DHB L30\x1B";
+char block218[] = "[HBd12 HBP SR ><][\nTCB TCI ^ISS ESH\x1B";
+char block219[] = "[HBd09 EQO EF <><>\nCOC ^TDO NAV NOR\x1B";
+char block220[] = "[HAd31 WCS RL ><][\n^WDO TDO GCB ACH\x1B";
+char block221[] = "[HCu22 EPC SR <>><\nEQ1 ^LRD ACH PKG\x1B";
+char block222[] = "[HA-25 EFS NR ><[]\nLWX ^DHB NRF GSI\x1B";
+char block223[] = "[HAu07 EMT CR ><][\nSDB EQ1 NUD ^DCL\x1B";
+char block224[] = "[HA-11 NOR RL ><[]\nIST ^DOB PKS 2TH\x1B";
+char block225[] = "[HAd12 OLD ST ][][\n^TDO GDS EQS ACH\x1B";
+char block226[] = "[HBd01 EQR ID ><<>\n^WDO ESH LWX NOR\x1B";
+char block227[] = "[HAu03 HAD FR ><<>\n^TDO NUD GSM ASL\x1B";
+char block228[] = "[HAd14 INS SR <>><\nFAN EQS ^ISS RRB\x1B";
+char block229[] = "[HCu19 ACP EF []><\nSDB ^DCL ISS ACH\x1B";
+char block230[] = "[HAu16 EPW ES ][><\nDHB HCO HCO ^TDC\x1B";
+char block231[] = "[HAu11 MIT ES ][<>\n^FAN NUG CFB COC\x1B";
+char block232[] = "[HCd15 ANS NR ><[]\nNUG EDB ^GSM 2TH\x1B";
+char block233[] = "[HAu00 DHB CR <>><\nPKG ^WDO 2LS CHC\x1B";
+char block234[] = "[HA-06 REI CR <>[]\nWDC L30 ^DOS 1LS\x1B";
+char block235[] = "[HAd15 ISC ES <><>\n^WDC TDO DFD LNS\x1B";
+char block236[] = "[HA-12 EPW FR [][]\n2LS DCL ^TDO GSM\x1B";
+char block237[] = "[HBd12 NAV CR ][<>\n^SGS EFO ASL ERO\x1B";
+char block238[] = "[HCd22 IDL FR ][><\nISS DFD DCB ^DCB\x1B";
+char block239[] = "[HAd02 WCS EW ][][\nMDD ^GCB GDS GCB\x1B";
+char block240[] = "[HCd13 INS SR []<>\nCTC CTC ^DCB DCB\x1B";
+char block241[] = "[HAu05 CBP RS [][]\nISS ^DOS ETS CFS\x1B";
+char block242[] = "[HCu05 INS ST <>[]\nCOC PKG ^FAN CRC\x1B";
+char block243[] = "[HBd06 COR EW []][\n^DOS DIB WDC ACC\x1B";
+char block244[] = "[HCu31 INS NR <>][\nDHB ^EDP ISS IST\x1B";
+char block245[] = "[HBu16 EFO EF ][><\n^SGS 2SE ERO NAV\x1B";
+char block246[] = "[HCu20 ATT ID [][]\n2LS ISP ESK ^DCL\x1B";
+char block247[] = "[HBd07 ROT EW []][\n1LV AEF ^ISS ISS\x1B";
+char block248[] = "[HAd02 EQO ES ><><\nESH ^DOB AEF EQ2\x1B";
+char block249[] = "[HB-30 ANS NR <><>\nNOR ^TDC BRK EFB\x1B";
+char block250[] = "[HAu10 IDL ID <><>\nDFD ^SDB HTS EQ2\x1B";
+char block251[] = "[HC-01 IDL IN ><><\nPKS XEF NUG ^WDO\x1B";
+char block252[] = "[HC-19 HBP IN <>[]\nDRD ^DOL NAV LRD\x1B";
+char block253[] = "[HB-25 EMT ST ><[]\nEQW CHC ^DCL ISS\x1B";
+char block254[] = "[HC-14 WCS ST []><\nEQR ^EDP SGS PKS\x1B";
+char block255[] = "[HBu14 PKS ST ><<>\n^FAN XEF CRC LWX\x1B";
+char block256[] = "[HB-07 EQR FR []<>\nDIB HCO ^WDC ISP\x1B";
+char block257[] = "[HCu23 WCS ES ][][\nEFK MDD ^DOL TDO\x1B";
+char block258[] = "[HBu24 DTC ST ][][\nDRD ^LRD CCT 1LV\x1B";
+char block259[] = "[HAd24 PKS IN <>][\n^MDD PDD HCO NRF\x1B";
+char block260[] = "[HC-12 COR ES <><>\n^DOB GCO NUG L30\x1B";
+char block261[] = "[HCd08 EMT EW <><>\n^WDO CFS DRD GSI\x1B";
+char block262[] = "[HCu27 ANS NR ><<>\n2LS DRD EQS ^EDP\x1B";
+char block263[] = "[HA-03 DHB SR ][><\n^DOB NAV DRD L30\x1B";
+char block264[] = "[HBu16 DBF ES ><][\nCHC LWX ^DOS ISS\x1B";
+char block265[] = "[HBd00 EQR SR <>][\n1LV DCL NOR ^DOB\x1B";
+char block266[] = "[HCu23 CHC RS ><><\n^MDD XEF HTS NUD\x1B";
+char block267[] = "[HAd01 PKS NR <>][\nEDP UIB WDO ^EDP\x1B";
+char block268[] = "[HA-25 OLD IN ][[]\nROT ESK GCO ^EDP\x1B";
+char block269[] = "[HC-26 EPR ES ><><\nTCI TDC EFB ^FAN\x1B";
+char block270[] = "[HBu13 EFS EF []<>\nESK ^DOB 1TH DIB\x1B";
+char block271[] = "[HC-07 MIT ES ][][\nL50 ETS CTO ^SDB\x1B";
+char block272[] = "[HC-07 EMT ST []<>\n^DHB COC EDP RRB\x1B";
+char block273[] = "[HAd24 ATT SR []<>\n^EDP UIB EQ2 GDS\x1B";
+char block274[] = "[HC-01 IDL CR ><><\nUIB COH ^SGS ETS\x1B";
+char block275[] = "[HCd22 CBP ID ><><\nERO ^WDC DFD EFB\x1B";
+char block276[] = "[HBu24 DLM CR []><\nDFD 2LV ^SGS DDS\x1B";
+char block277[] = "[HBu15 DTC EW <>><\nERO ASL CTL ^MDD\x1B";
+char block278[] = "[HC-30 PRK ES ><][\n^ISS SGS LNS DFC\x1B";
+char block279[] = "[HBd04 EMT FR <>][\nESK DES NUG ^GCB\x1B";
+char block280[] = "[HCu06 DTC ID <>><\nROT ^WDO NAV ERO\x1B";
+char block281[] = "[HB-22 DBF EW <>[]\n^SDB WDC IST ESH\x1B";
+char block282[] = "[HCd13 DTC RS ][<>\n^FAN NOR GSI 1TH\x1B";
+char block283[] = "[HC-25 EFO NR <><>\n^TDC IST AEF CCB\x1B";
+char block284[] = "[HA-27 EPW IN ][<>\n^SDB XEF LWO EQW\x1B";
+char block285[] = "[HA-03 ARD CR <>[]\nEDP ^DOL IST ADB\x1B";
+char block286[] = "[HAu26 DTC EW ][<>\n^SDB PKS CCT DFC\x1B";
+char block287[] = "[HCd22 NOR IN ><<>\n^TDC 1TH CCB TDO\x1B";
+char block288[] = "[HAd00 INI ID ][[]\nEFB ^SDB CFB HTS\x1B";
+char block289[] = "[HB-01 IDL NR ><][\nIST NUD ^EDP LRD\x1B";
+char block290[] = "[HCu01 DCP ST ><><\nXEF ^TDO LWX TDO\x1B";
+char block291[] = "[HAd21 IDL EW ><][\n^DOL ESK FAN CCT\x1B";
+char block292[] = "[HA-29 HAD EF ><><\nGSI ISS ^GCB EQ2\x1B";
+char block293[] = "[HBu28 OLD IN ][><\n^DCL XEF 2SE GCO\x1B";
+char block294[] = "[HA-26 NAV ST ><][\nADB ^LRD 1LV 1EF\x1B";
+char block295[] = "[HC-12 EMT RS <><>\nCOH L50 EFK ^ISS\x1B";
+char block296[] = "[HBd03 ANS ST ][<>\nWDO ACH ^MDD PDD\x1B";
+char block297[] = "[HC-18 DHB ST []<>\n^GCB EQS CCT LWO\x1B";
+char block298[] = "[HAd09 CTL RL ][[]\nEDP 2SE ^SDB TDC\x1B";
+char block299[] = "[HA-02 DCS RS [][]\nESK EQW ^FAN COH\x1B";
+char block300[] = "[HAu11 PRK SR ><<>\n^LRD 2LS TDO 1LV\x1B";
+char block301[] = "[HCd15 INS SR ><[]\n^WDC PDD L50 XEF\x1B";
+char block302[] = "[HAd04 ARD ES []][\n^LRD ISS FAN RTB\x1B";
+char block303[] = "[HAu09 EPW ES []<>\n^LRD ISS WDO 2LS\x1B";
+char block304[] = "[HBd04 EQR EF ][][\n2LS PDD LRD ^TDC\x1B";
+char block305[] = "[HBu06 EPR RL <>[]\nEFO ^MDD IST COC\x1B";
+char block306[] = "[HAd02 DCP ES []<>\n^DOL DRD NUD EDB\x1B";
+char block307[] = "[HCu24 DCS CR <>][\n^MDD 1LV GSI ROT\x1B";
+char block308[] = "[HAu24 HAD SR ][<>\n^GSM GSM EFB 1LS\x1B";
+char block309[] = "[HB-23 ACP ES []][\nGDS ^DOB IST GCB\x1B";
+char block310[] = "[HCu10 ACP ID ><[]\nDIB CTO CFS ^WDC\x1B";
+char block311[] = "[HA-04 EMT ES ><[]\nAEF ^FAN CFB ESH\x1B";
+char block312[] = "[HCu25 ATT IN ][][\n1TH TDC NRF ^TDO\x1B";
+char block313[] = "[HC-18 DBF ES []><\nMDD TCI ^DOL CFB\x1B";
+char block314[] = "[HCd00 ACP NR ][][\n^DCL HAD EQW L30\x1B";
+char block315[] = "[HAd03 CHC ES ><][\n^DOL ETS EFO GCB\x1B";
+char block316[] = "[HBu06 ACP SR ][[]\nDDS DFC ^DOL HFA\x1B";
+char block317[] = "[HA-30 IDL RL <>][\nNUG LNS DCL ^SGS\x1B";
+char block318[] = "[HA-18 DHB ID [][]\nACC ESK ROT ^DOS\x1B";
+char block319[] = "[HC-24 DCS ST ][[]\nSGS DIB CCB ^DHB\x1B";
+char block320[] = "[HCu06 EFS RS <><>\nGSI TCI 1LV ^WDO\x1B";
+char block321[] = "[HCd12 EMT ID ><[]\nGCO ^DHB PDD 1LS\x1B";
+char block322[] = "[HCu00 INI ES []<>\n^TDC NAV SDB HCH\x1B";
+char block323[] = "[HC-25 EQR RS <><>\n^DCB 2SE EQ2 LWO\x1B";
+char block324[] = "[HCd28 IDL ID ][><\nUIB LWO PKS ^SDB\x1B";
+char block325[] = "[HBd18 LNS IN []<>\nCTC 2LV ^FAN MDD\x1B";
+char block326[] = "[HB-23 EQO CR ><[]\n^LRD COH CCB CTL\x1B";
+char block327[] = "[HCd00 PRK ST <><>\nHCH ^ISS 2EF DCB\x1B";
+char block328[] = "[HC-21 ACP ID ][][\nACH ^TDO SDB SDB\x1B";
+char block329[] = "[HC-24 ACP EW [][]\n^ISS TDC LNS CFB\x1B";
+char block330[] = "[HB-07 PKS ES <>[]\nEDP ERO ^WDO MDD\x1B";
+char block331[] = "[HB-28 INS EW []<>\nCHC ^DHB PDD CRC\x1B";
+char block332[] = "[HAu17 ESB ID ><][\nCHC GSI PKS ^GSM\x1B";
+char block333[] = "[HBu15 ISC ES ][<>\nDCB ^TDC COH SGS\x1B";
+char block334[] = "[HC-07 NOR SR ][[]\nETS ROT ^TDO GSI\x1B";
+char block335[] = "[HC-11 DCP SR ][][\nEFB EDP ^EDP CFS\x1B";
+char block336[] = "[HA-24 MIT RL [][]\nLNS ^GSM ROT CTC\x1B";
+char block337[] = "[HCu17 PRK SR ][[]\nHCH 2EF ^DCB 1EF\x1B";
+char block338[] = "[HB-15 ATT RL ][<>\nWDO COC ^DCB ADB\x1B";
+char block339[] = "[HC-05 NAV SR <><>\nPKG NUG EDB ^WDO\x1B";
+char block340[] = "[HCd24 GCB ID [][]\n1LV SDB HCH ^LRD\x1B";
+char block341[] = "[HA-18 DTC NR []><\nISS 1EF DHB ^ISS\x1B";
+char block342[] = "[HAd03 NAV SR ][><\n^GSM ASL CTC LWO\x1B";
+char block343[] = "[HCu25 NOR ES <>[]\n2LS ^WDC DFC GDS\x1B";
+char block344[] = "[HBd20 COR ID <><>\n^TDC CTC LWO RTB\x1B";
+char block345[] = "[HBd29 GCB ID ><][\n^TDO ERO ACC WDO\x1B";
+char block346[] = "[HBd07 DLM IN []][\nFAN GSI ISS ^DHB\x1B";
+char block347[] = "[HC-30 EPW NR ><[]\nCTL HAD ^FAN 2LV\x1B";
+char block348[] = "[HBu07 EFS ID []][\n^GCB CCT DDS 2LV\x1B";
+char block349[] = "[HA-25 EFS CR ><><\nL30 WDO ^GCB 2SE\x1B";
+char block350[] = "[HC-23 HBP ID ><><\nEQS L50 ^DOS EFK\x1B";
+char block351[] = "[HBu11 PKS SR []<>\nNAV GCO ^SDB 2EF\x1B";
+char block352[] = "[HCd30 ISC RL []<>\nUIB ESH 2EF ^DCB\x1B";
+char block353[] = "[HC-03 DCP EF ><[]\nEQ1 ^WDC CFS EQS\x1B";
+char block354[] = "[HAd03 PRK IN <>><\n^GSM EFO WDO CCT\x1B";
+char block355[] = "[HC-14 LNS RL []><\nISP PDD COC ^GCB\x1B";
+char block356[] = "[HCd17 ARD SR [][]\nDRD EQS CTC ^DOL\x1B";
+char block357[] = "[HCu29 WCS SR ][][\n2LS ^DCB L50 FAN\x1B";
+char block358[] = "[HC-02 CHC ST []><\n^DOS WDC L50 1LV\x1B";
+char block359[] = "[HCd20 INI IN <>><\n^DCL EQ1 EQW NOR\x1B";
+char block360[] = "[HAd20 GCB RL []][\nADB ^MDD 1EF GSI\x1B";
+char block361[] = "[HA-05 WCS ST ><><\n^MDD SDB CCB DFD\x1B";
+char block362[] = "[HA-24 EQO RL []<>\n^DCL CTC CRC NAV\x1B";
+char block363[] = "[HBu15 PKS FR ][><\nCTO NRF ACC ^FAN\x1B";
+char block364[] = "[HCd25 ACP RS ][][\n^WDO EDB WDC BRK\x1B";
+char block365[] = "[HCd07 WCO RS ><<>\n2EF ISP ^DCL ESH\x1B";
+char block366[] = "[HCd24 EMT EW ][[]\n^GSM ISP CTL NAV\x1B";
+char block367[] = "[HC-06 ISC ID ][[]\nHCO ^SGS NUG NAV\x1B";
+char block368[] = "[HB-29 ACP IN <>><\n1TH EQS LWO ^TDO\x1B";
+char block369[] = "[HA-04 INI EW []><\n^DHB NUD NOR LNS\x1B";
+char block370[] = "[HCd07 PRK ID ><[]\nEFK ^DCB 2LV GCO\x1B";
+char block371[] = "[HCu21 REI FR <>[]\nDDS HCH ^DCL ROT\x1B";
+char block372[] = "[HCd09 HBP CR []<>\nCTL CFS CCB ^TDO\x1B";
+char block373[] = "[HCd14 ANS SR ><><\n^FAN GCO CTC ETS\x1B";
+char block374[] = "[HCd06 WCS ID <><>\nEDP DIB CHC ^TDO\x1B";
+char block375[] = "[HAu28 ANS RS <><>\nACC LNS 2SE ^WDO\x1B";
+char block376[] = "[HBd02 ANS IN ][><\nETS ^TDO PDD MDD\x1B";
+char block377[] = "[HAu23 INS IN ][][\nESK ISS SGS ^GSM\x1B";
+char block378[] = "[HAd27 EFO EW ][<>\nDCB PDD CFB ^TDC\x1B";
+char block379[] = "[HC-15 EQO RL [][]\n^DOS NUD LRD NRF\x1B";
+char block380[] = "[HAd17 DHB ES ><[]\n^SGS COC L50 PDD\x1B";
+char block381[] = "[HAu23 DTO SR <>][\nPKS ROT DFC ^TDC\x1B";
+char block382[] = "[HAu21 INI FR ][><\nCTO COC TDC ^GCB\x1B";
+char block383[] = "[HBd19 DLM CR <><>\nCOC ^SGS UIB TCB\x1B";
+char block384[] = "[HB-30 ESB EF ][<>\n^TDC CCT 2SE 2SE\x1B";
+char block385[] = "[HBu11 DHB RL []<>\nDFC COC GCB ^DOB\x1B";
+char block386[] = "[HBu31 MIT ES []][\n1LV ^GCB 1TH ETS\x1B";
+char block387[] = "[HAu21 PRK ID ][><\nIST COH TDO ^GSM\x1B";
+char block388[] = "[HCu04 ESB IN <>[]\n1LV NUD HAD ^SGS\x1B";
+char block389[] = "[HBu03 ESB SR <>[]\nPDD DFD 2EF ^EDP\x1B";
+char block390[] = "[HC-30 ISC RS ><[]\n^EDP GSM CRC WDO\x1B";
+char block391[] = "[HAu30 EHS RS ><<>\nHCO LRD ^FAN XEF\x1B";
+char block392[] = "[HBd20 DLM RL []<>\nCTL 1TH ^DOL DFD\x1B";
+char block393[] = "[HA-29 EMT IN ][][\nACC ^LRD CFB CCB\x1B";
+char block394[] = "[HBu28 DCS SR []<>\nHCH 2EF ^LRD EQ2\x1B";
+char block395[] = "[HB-08 DTC SR ][[]\nHCH ^LRD HTS ETS\x1B";
+char block396[] = "[HCd12 IDL EF <>><\nBRK ^FAN AEF ROT\x1B";
+char block397[] = "[HCd18 CHC CR ><><\n^DCB WDO SDB DFD\x1B";
+char block398[] = "[HA-23 ESB CR ><><\nNRF ^DCB RRB BRK\x1B";
+char block399[] = "[HC-18 EMT RS <>][\nETS ^WDO ISS GCB\x1B";
+char block400[] = "[HCd22 COR EF ][][\nTDO NRF ^WDO 1LV\x1B";
+char block401[] = "[HCd27 CTL IN ><[]\n2LV CTL LWX ^SGS\x1B";
+char block402[] = "[HCd22 DLM NR []><\nDCL ESK GCB ^ISS\x1B";
+char block403[] = "[HA-09 REI IN ][][\nUIB WDO NAV ^GSM\x1B";
+char block404[] = "[HAd26 EFS FR [][]\nEFO WDC ^DCB COC\x1B";
+char block405[] = "[HBu15 INS EF []<>\nCTC PDD ^GSM DIB\x1B";
+char block406[] = "[HBu26 NOR NR <><>\nCOH ISP ^WDC ASL\x1B";
+char block407[] = "[HA-18 EHS RL <>[]\nL50 ^DHB DCB NUD\x1B";
+char block408[] = "[HCd19 EHS EF ][[]\n1TH ^DOB DCL SGS\x1B";
+char block409[] = "[HCd16 EFS IN ][[]\n^DHB TDC LNS NAV\x1B";
+char block410[] = "[HC-26 MIT ID []<>\nDRD DDS 1TH ^FAN\x1B";
+char block411[] = "[HBu02 WCS FR ][><\nEQ2 EQS ^TDC HAD\x1B";
+char block412[] = "[HC-27 OLD ID <>[]\n^WDO UIB DCL TDO\x1B";
+char block413[] = "[HA-29 ROT RS <>][\nHCH ^DOB TDO 2LS\x1B";
+char block414[] = "[HA-18 HBP ST ][][\nTDC ^WDO GSM 1LV\x1B";
+char block415[] = "[HCu12 HAD RL []][\nCOH CFS NUG ^DOB\x1B";
+char block416[] = "[HAu04 ROT IN []<>\nCHC UIB ^DHB EQ1\x1B";
+char block417[] = "[HAd08 ATT NR []<>\n^GCB SGS HTS SGS\x1B";
+char block418[] = "[HC-15 EPC RL ><[]\nUIB ^GSM TCB ESH\x1B";
+char block419[] = "[HCu10 COR ST <><>\nGDS WDO ^DHB ESH\x1B";
+char block420[] = "[HBd23 IDL RS []><\nESH FAN ^DOL HFA\x1B";
+char block421[] = "[HC-31 DTC EF ][[]\n1EF 2SE ^GSM EQS\x1B";
+char block422[] = "[HC-15 HAD RS <>[]\nEDP ^MDD EDB DFC\x1B";
+char block423[] = "[HA-15 EQO RS []><\n^LRD ETS LWO GSM\x1B";
+char block424[] = "[HC-12 EPC IN <><>\n1EF ^SGS COH ISS\x1B";
+char block425[] = "[HB-17 DTC CR ][><\n^DCB HAD RRB EFB\x1B";
+char block426[] = "[HCd19 DTO SR ><][\nEFK ^EDP 1EF NRF\x1B";
+char block427[] = "[HCu27 NAV EF ][<>\nCFB CTC ASL ^WDO\x1B";
+char block428[] = "[HB-17 NOR NR ][><\n^SDB CTO EQ2 ACH\x1B";
+char block429[] = "[HCd09 ATT ID <>[]\nEQ2 ^GSM TCI 2LS\x1B";
+char block430[] = "[HC-07 EMT ST ][[]\nDES ^SDB BRK NRF\x1B";
+char block431[] = "[HAu27 NOR NR ><><\n^FAN TCB EFK DDS\x1B";
+char block432[] = "[HA-09 ESB CR [][]\nNRF PKG GCO ^FAN\x1B";
+char block433[] = "[HBd03 PKS RS <>[]\nADB WDO ^EDP GCB\x1B";
+char block434[] = "[HBd15 CBP ID []][\nPDD LNS ^FAN L30\x1B";
+char block435[] = "[HCu15 HBP FR ][][\nACC EQS ^ISS CFS\x1B";
+char block436[] = "[HA-10 ANS SR ><[]\n^GSM SGS TCI NUD\x1B";
+char block437[] = "[HAu01 EPR NR ][><\nEFB ^WDO EDP EQ1\x1B";
+char block438[] = "[HC-24 EPR ST <>[]\n^DCL L50 HCO HFA\x1B";
+char block439[] = "[HAu17 INI CR <>[]\nL50 AEF LWX ^DCB\x1B";
+char block440[] = "[HCu09 HAD RS ][<>\nCFB EDP 2LV ^DCL\x1B";
+char block441[] = "[HBu30 OLD CR ][[]\nWDC ISS ^SGS TDO\x1B";
+char block442[] = "[HB-24 GCB EW <>><\n^WDO PKS GCB EFB\x1B";
+char block443[] = "[HAu25 WCO SR []><\nHCO ^DOL EQW HTS\x1B";
+char block444[] = "[HBu23 INS EW ><[]\nGSI FAN GCB ^SGS\x1B";
+char block445[] = "[HA-27 GCB RL ><[]\nIST ^TDO TCB CFS\x1B";
+char block446[] = "[HAu25 ESB CR ][[]\nHCO DFC ^TDO LWX\x1B";
+char block447[] = "[HB-02 ROT IN ><<>\nEQW ^WDC CFB PKS\x1B";
+char block448[] = "[HCd06 EFO FR ><[]\nACC EDB CTO ^DOL\x1B";
+char block449[] = "[HA-26 ROT CR ><[]\nACH ACH ^WDC CHC\x1B";
+char block450[] = "[HC-17 EPC RL <>[]\nDCL 1LS ^DOS EQS\x1B";
+char block451[] = "[HBu13 DTO FR ><<>\nCOH PDD HFA ^WDO\x1B";
+char block452[] = "[HBu30 COR ID [][]\nLRD ISP EQW ^GSM\x1B";
+char block453[] = "[HC-30 OLD NR ][<>\nCCT GSI ^MDD COC\x1B";
+char block454[] = "[HCd03 ROT NR []><\n^GCB LNS EQS ROT\x1B";
+char block455[] = "[HA-26 CTL FR ][><\nESH WDO 1LV ^GSM\x1B";
+char block456[] = "[HC-14 ISC NR <>][\n1EF EFK ^DHB DRD\x1B";
+char block457[] = "[HBd04 EQO ES ><<>\n1EF LNS ^TDO PKG\x1B";
+char block458[] = "[HA-15 DLM NR [][]\n^DCB AEF NUG DCB\x1B";
+char block459[] = "[HAu11 HBP ID []><\nDFD DFC ^WDO EQS\x1B";
+char block460[] = "[HA-16 LNS SR ][><\nDFC CFS BRK ^EDP\x1B";
+char block461[] = "[HC-10 DTO IN <><>\nBRK DIB TCI ^WDC\x1B";
+char block462[] = "[HA-31 ROT NR ><[]\n^MDD TDO TDO DFC\x1B";
+char block463[] = "[HA-24 COR EW ][[]\nACH EQ2 ^SGS DIB\x1B";
+char block464[] = "[HAu14 CBP NR []][\nRRB ^MDD NUG AEF\x1B";
+char block465[] = "[HAd27 ARD EW ><][\nSDB ^EDP SGS EDP\x1B";
+char block466[] = "[HB-30 ACP RL <>><\nDFD ^GSM EQS WDC\x1B";
+char block467[] = "[HAd18 EFO SR ><[]\nDIB NAV ERO ^SDB\x1B";
+char block468[] = "[HCu26 ANS IN ][][\nHCH ^TDC GCO CTO\x1B";
+char block469[] = "[HB-05 HBP ES []<>\nTCB DDS WDC ^DOB\x1B";
+char block470[] = "[HCd05 DCS ID ][][\n^EDP ACC CTO CCT\x1B";
+char block471[] = "[HB-21 EPR ES <>][\n^WDO HCH DHB ISS\x1B";
+char block472[] = "[HAu22 DHB ST ><[]\nDRD NUD ^DCL DRD\x1B";
+char block473[] = "[HB-02 LNS EW ><[]\nDIB HTS EQW ^WDO\x1B";
+char block474[] = "[HBd18 NOR RL ><><\n2EF CTC ^TDO PKG\x1B";
+char block475[] = "[HB-24 CTL IN ><<>\nGSI ^SGS CFB CRC\x1B";
+char block476[] = "[HCu11 ARD EF <>><\nCFS NOR EFB ^SGS\x1B";
+char block477[] = "[HAu16 ISC IN ><><\nEQR HTS ^SGS EDB\x1B";
+char block478[] = "[HAd06 INI ST <>][\nCRC EDP ADB ^DCL\x1B";
+char block479[] = "[HBu07 NOR FR ][><\n^TDC EQS NOR IST\x1B";
+char block480[] = "[HBu10 EQR SR ][][\n^TDO RRB CFS SGS\x1B";
+char block481[] = "[HAu15 ESB SR ][][\nDFD CCT TDC ^DOL\x1B";
+char block482[] = "[HC-20 IDL RS ][][\nEFB GSM HTS ^DHB\x1B";
+char block483[] = "[HAd26 EQR ES ][><\nCTC ERO ^GCB LWO\x1B";
+char block484[] = "[HA-08 LNS EF <>><\nEQW GCB WDC ^TDO\x1B";
+char block485[] = "[HAu14 HBP ES <>[]\nESK EDP CFB ^TDC\x1B";
+char block486[] = "[HCd26 ISC ID ][<>\n^DHB LRD HTS 2SE\x1B";
+char block487[] = "[HCu06 ISC SR ][><\nDRD WDO ^LRD 2SE\x1B";
+char block488[] = "[HCd27 DTO EF <>[]\nUIB COC ^SDB NUD\x1B";
+char block489[] = "[HA-26 WCO ID ><][\nEQW GCO ^DOB L50\x1B";
+char block490[] = "[HC-08 EPW RS []<>\nTDC ^WDC NAV ISP\x1B";
+char block491[] = "[HBu19 PKS FR ][][\n^WDO GDS ROT ISS\x1B";
+char block492[] = "[HA-17 GCB RL ][><\n1LS ACC ^FAN LRD\x1B";
+char block493[] = "[HAd07 EMT RL []><\nPKS PKG DES ^DOB\x1B";
+char block494[] = "[HCu08 PRK FR <><>\nTCI ACC ^GCB FAN\x1B";
+char block495[] = "[HB-31 EMT RS ><[]\n^SGS ERO L30 CTC\x1B";
+char block496[] = "[HBu30 EPW EF ][><\n2SE ^WDO DRD CTC\x1B";
+char block497[] = "[HCd20 DCP NR []><\n^DOL 2TH GSM HFA\x1B";
+char block498[] = "[HA-12 ISC IN ><<>\nBRK ^ISS ISS EFO\x1B";
+char block499[] = "[HAu05 DLM ES ><<>\nXEF ^WDO WDO GCO\x1B";
+char block500[] = "[HB-17 ESB EW ><[]\nNUD EDP NOR ^DOS\x1B";
+char block501[] = "[HCd29 EPR ES ][[]\nDCL GCO ^WDC COC\x1B";
+char block502[] = "[HCu11 ROT ES ><[]\nLWX NOR HCO ^DOL\x1B";
+char block503[] = "[HC-20 DTC RL <>[]\n^DOS HFA ACC LNS\x1B";
+char block504[] = "[HBd21 DCS ST ><<>\nDRD LWX EFB ^SDB\x1B";
+char block505[] = "[HCd23 WCO RL <><>\nESH NUG ISS ^GSM\x1B";
+char block506[] = "[HC-19 DCP CR <>><\n^DCL GSI HCH NOR\x1B";
+char block507[] = "[HB-08 EHS SR <>][\nL50 DCB DHB ^ISS\x1B";
+char block508[] = "[HB-20 IDL FR <>][\nSGS UIB ^DCB LRD\x1B";
+char block509[] = "[HBu27 PKS EF [][]\n^ISS EQ2 UIB 1TH\x1B";
+char block510[] = "[HCu12 WCO CR ><][\nTCI CCT ^SDB DCB\x1B";
+char block511[] = "[HBu00 DCP EW []<>\nEFK HFA ETS ^LRD\x1B";
+char block512[] = "[HCd06 ROT SR ][][\n1LV 2LV ^LRD HCO\x1B";
+char block513[] = "[HCu27 EFO NR <>][\n^DCL TCI DCB ERO\x1B";
+char block514[] = "[HBu25 GCB NR ><><\n^SGS DDS 1TH TDO\x1B";
+char block515[] = "[HC-07 DLM RL []<>\nDFC DCB EQR ^EDP\x1B";
+char block516[] = "[HCd12 EMT SR ><[]\nSDB SDB LRD ^SGS\x1B";
+char block517[] = "[HC-03 EQR ST ][><\nNUG ^LRD ISP CCB\x1B";
+char block518[] = "[HB-31 EPR ES ][<>\n^LRD DRD CHC DCL\x1B";
+char block519[] = "[HA-15 OLD ES ][[]\nAEF ^LRD EFO HCH\x1B";
+char block520[] = "[HBu27 ATT CR ][[]\n^DHB GCB CFB BRK\x1B";
+char block521[] = "[HA-00 NOR CR []][\n^DHB DCB CHC TDC\x1B";
+char block522[] = "[HCd19 ACP SR ><][\nLWO ^GCB GDS PKG\x1B";
+char block523[] = "[HCd03 WCO IN []][\nEQ1 FAN ^WDC GCB\x1B";
+char block524[] = "[HCd30 REI ES <>[]\n^GCB ESH GCO LRD\x1B";
+char block525[] = "[HC-03 CTL ES [][]\nROT HCH TDC ^GCB\x1B";
+char block526[] = "[HA-06 ROT RL <>][\n^DOB DES ACH LWO\x1B";
+char block527[] = "[HC-30 HAD EF <>][\nLNS HCH TDO ^WDC\x1B";
+char block528[] = "[HCu06 ESB ID <><>\n^DOL HAD UIB TCB\x1B";
+char block529[] = "[HA-21 LNS ES <>][\n^SGS PDD GDS WDO\x1B";
+char block530[] = "[HCd04 ISC EF <>[]\n^SDB L50 IST DHB\x1B";
+char block531[] = "[HCu02 ISC RS []][\nEFO ACC ^WDC EFB\x1B";
+char block532[] = "[HCd20 PRK ID ][][\n^EDP 1EF ACC LNS\x1B";
+char block533[] = "[HCu24 NAV ID ><][\nLNS GDS ^WDO CCT\x1B";
+char block534[] = "[HBd22 HAD ES []><\nDHB BRK DCL ^TDC\x1B";
+char block535[] = "[HBu04 DBF ST <><>\nLWO EDP ^LRD EFO\x1B";
+char block536[] = "[HA-12 EPC ES [][]\nERO ^GSM RTB DCB\x1B";
+char block537[] = "[HAu03 CTL SR []][\nEDB ^DHB NRF 1EF\x1B";
+char block538[] = "[HCu20 INI RS <>[]\nGSI ^SDB EDB 1LV\x1B";
+char block539[] = "[HAd16 DBF ID <>><\n^DOB TDC CFB ACC\x1B";
+char block540[] = "[HBd16 PRK ID <><>\n^GCB CTL GCO WDC\x1B";
+char block541[] = "[HCd26 DBF EF []<>\n^DCB 1LS TCB LWO\x1B";
+char block542[] = "[HCd30 COR CR ><><\nEFK 2EF ^DCB ROT\x1B";
+char block543[] = "[HCu13 DTO RL []<>\nEFO RTB WDO ^DHB\x1B";
+char block544[] = "[HAd06 ROT CR ><<>\n1LS EQ2 ^MDD GSI\x1B";
+char block545[] = "[HAu01 COR NR <>[]\nXEF ^DCL CTC ADB\x1B";
+char block546[] = "[HC-14 INI CR <><>\n2EF ^SGS ADB HAD\x1B";
+char block547[] = "[HA-25 HBP RL <><>\nEQS ^DOL EQW MDD\x1B";
+char block548[] = "[HCu19 PRK IN <>[]\n1EF ^LRD MDD UIB\x1B";
+char block549[] = "[HBu13 DTO IN <>[]\nHTS EDB NAV ^DCL\x1B";
+char block550[] = "[HC-20 REI SR ><><\n^GCB 2LV EFK FAN\x1B";
+char block551[] = "[HA-25 EMT FR []][\nL30 TCI CHC ^ISS\x1B";
+char block552[] = "[HA-02 EQR EF ][><\nGSM CHC EFK ^MDD\x1B";
+char block553[] = "[HBd29 PKS NR [][]\nCFB ^FAN DCB CRC\x1B";
+char block554[] = "[HBu31 DBF FR [][]\nCRC WDO ISS ^ISS\x1B";
+char block555[] = "[HA-13 EQO ID ][<>\nLRD ^FAN CFS IST\x1B";
+char block556[] = "[HC-30 ANS EF ><][\n^GSM UIB GCB TCB\x1B";
+char block557[] = "[HB-24 EQO RS ><][\nGDS EQ1 EQ1 ^FAN\x1B";
+char block558[] = "[HCd00 ARD ES []<>\n^FAN LRD 2TH EFO\x1B";
+char block559[] = "[HA-02 NOR SR <>[]\n^ISS ADB NOR 1EF\x1B";
+char block560[] = "[HA-28 ACP NR ][><\nSDB ^DHB PKG CTL\x1B";
+char block561[] = "[HCu18 HBP EF <>><\nCTL CHC HAD ^SDB\x1B";
+char block562[] = "[HCd07 WCO SR ><][\n^FAN DRD BRK 1LV\x1B";
+char block563[] = "[HAu17 NAV CR <>><\nEDP DFD GSI ^WDO\x1B";
+char block564[] = "[HB-14 COR ES ][[]\nNOR ESH ESK ^ISS\x1B";
+char block565[] = "[HBd22 DCS ES ><][\nEDB ^ISS 1EF ETS\x1B";
+char block566[] = "[HBu23 CHC EF ><[]\nDFC UIB EFB ^MDD\x1B";
+char block567[] = "[HCu29 ISC RL <><>\nCOC ^GSM 1LS PKS\x1B";
+char block568[] = "[HAd20 CBP EF ><[]\nNRF AEF CTL ^SDB\x1B";
+char block569[] = "[HB-02 PRK FR ][[]\nDFD ^DCB L30 TDC\x1B";
+char block570[] = "[HCd30 DCP ES ><][\nCFB ^SGS ASL TCI\x1B";
+char block571[] = "[HC-23 OLD ID ><<>\nETS ISS ^ISS DCL\x1B";
+char block572[] = "[HBd25 EFO EW ][><\nTCB FAN HTS ^SGS\x1B";
+char block573[] = "[HB-10 HAD RL []><\nUIB PKS RRB ^DCB\x1B";
+char block574[] = "[HBd18 COR EF ][<>\nCTL ^DHB EQ1 1TH\x1B";
+char block575[] = "[HBu00 EPW FR ><><\nEQ1 ^DCL NAV CFB\x1B";
+char block576[] = "[HAd03 ANS SR <>][\nFAN DCB EDP ^DOS\x1B";
+char block577[] = "[HCd03 EFO SR <>><\n^GSM 1LS DDS AEF\x1B";
+char block578[] = "[HCd01 HAD SR ><[]\nCCB LNS ^DOL 1LV\x1B";
+char block579[] = "[HAu21 MIT ID ][[]\nACC NUG RRB ^WDC\x1B";
+char block580[] = "[HA-29 DTC ES [][]\nETS ^MDD NUD DDS\x1B";
+char block581[] = "[HBd17 CTL ST ><][\nNRF ^WDC ETS BRK\x1B";
+char block582[] = "[HCd16 HAD RS ][><\nESH TDO EDB ^TDC\x1B";
+char block583[] = "[HB-12 EQO SR ][<>\nEQ2 ^DOS PKG COC\x1B";
+char block584[] = "[HAu03 IDL ES []><\nXEF CTO ^FAN PKS\x1B";
+char block585[] = "[HAd15 EPR IN ><][\n^SGS EQS CCT WDO\x1B";
+char block586[] = "[HB-11 ESB NR <>[]\nNOR ^LRD SGS DCB\x1B";
+char block587[] = "[HC-06 CBP SR ><[]\nHAD CCT ^WDO PKS\x1B";
+char block588[] = "[HBd04 ROT ID [][]\nEQS ^DOL DES CHC\x1B";
+char block589[] = "[HBd30 INI FR []][\nPKS GDS ^DCB FAN\x1B";
+char block590[] = "[HC-14 CBP IN []][\nDDS CHC LWX ^DOB\x1B";
+char block591[] = "[HCu16 EHS ID <>><\nWDC ^SGS DIB PDD\x1B";
+char block592[] = "[HBd05 REI CR <>][\n^TDO EQ2 BRK ROT\x1B";
+char block593[] = "[HAd00 CTL ST ][<>\n^MDD 1TH GCO UIB\x1B";
+char block594[] = "[HAu25 REI SR <><>\nWDO DRD ^SGS CTC\x1B";
+char block595[] = "[HC-08 OLD CR <><>\nMDD ^SGS 2EF 2TH\x1B";
+char block596[] = "[HCd19 EFS EF ][<>\n^DHB ESH RRB ADB\x1B";
+char block597[] = "[HB-24 CBP ID <>[]\nHFA ^GSM CFS EQ1\x1B";
+char block598[] = "[HCd21 DLM CR <>][\n1EF ^DCB EDB TDO\x1B";
+char block599[] = "[HBu19 DTO RL ][][\nDDS TDC ^TDC EQR\x1B";
+char block600[] = "[HCd21 EPR EF []><\n^MDD ACC EFB COH\x1B";
+char block601[] = "[HCu09 LNS ST ><[]\nRTB AEF TDC ^DOS\x1B";
+char block602[] = "[HAu11 COR EW <>[]\nWDC ^EDP PKS CFB\x1B";
+char block603[] = "[HAd12 ARD FR []<>\nCFS WDO ^MDD 1EF\x1B";
+char block604[] = "[HAd12 MIT EF []][\nETS ^DOL SDB EQ1\x1B";
+char block605[] = "[HAu01 EMT ID [][]\n^DCL NUD CHC DES\x1B";
+char block606[] = "[HCd24 ISC NR <><>\nCFS ^GCB ADB WDO\x1B";
+char block607[] = "[HB-19 INI FR ][[]\nCCT HCO ESK ^DCL\x1B";
+char block608[] = "[HA-27 DLM NR ><[]\n2TH EQS DHB ^SGS\x1B";
+char block609[] = "[HC-19 MIT ST ><><\n2LS ^DOB ESK 1EF\x1B";
+char block610[] = "[HAu14 OLD IN ><[]\nROT ^MDD 2LS RTB\x1B";
+char block611[] = "[HB-27 DHB NR <>[]\nACH COC ^TDO MDD\x1B";
+char block612[] = "[HB-04 INS ES ][><\nPKG ACH ^TDO GSM\x1B";
+char block613[] = "[HBu28 HAD ST ><><\nCHC 2SE ^SDB 2EF\x1B";
+char block614[] = "[HCd31 EQO FR []><\nGSM HTS DHB ^MDD\x1B";
+char block615[] = "[HAd08 INS RL []><\n2EF ^TDO ADB DHB\x1B";
+char block616[] = "[HAu12 EHS ST <>[]\nFAN 2LS CTO ^DHB\x1B";
+char block617[] = "[HCu18 EQR FR ><[]\nSDB ^EDP NAV XEF\x1B";
+char block618[] = "[HBu18 EPW SR ][[]\nGSM 1LS CFS ^DHB\x1B";
+char block619[] = "[HC-26 ROT ES ><][\nGCO ISP XEF ^DCL\x1B";
+char block620[] = "[HA-17 COR ID <>][\nCTC HFA MDD ^WDC\x1B";
+char block621[] = "[HBu03 ANS NR ][<>\n^WDC DDS 2SE HFA\x1B";
+char block622[] = "[HCu09 INS ES <>><\nCCB ^DCB CCT GCO\x1B";
+char block623[] = "[HAu02 EHS ST []][\nCHC EFK ^DCL 2LV\x1B";
+char block624[] = "[HC-12 EQO RL ><[]\nEQS ^DCL DES ASL\x1B";
+char block625[] = "[HBd24 ARD NR ][><\nPKG NUG EFB ^FAN\x1B";
+char block626[] = "[HAd05 ACP EW ><><\n^DCL CTO ETS EDP\x1B";
+char block627[] = "[HBd29 PKS RS ][><\n^DHB SDB WDC HFA\x1B";
+char block628[] = "[HB-23 EPC EF []<>\nESH FAN 1EF ^DCB\x1B";
+char block629[] = "[HBu21 DCS EF ><<>\n^WDO BRK WDC GDS\x1B";
+char block630[] = "[HBu26 EHS SR ><<>\n^WDC 1EF GSI L30\x1B";
+char block631[] = "[HCd31 ISC SR []][\n^SGS EQS HCH ISP\x1B";
+char block632[] = "[HAu13 INI RL []][\nL30 EQS CFS ^SGS\x1B";
+char block633[] = "[HBu00 EMT EW <>][\nHFA 1TH GCB ^EDP\x1B";
+char block634[] = "[HBu28 DCP EW []][\nSGS TDC ^SGS CFB\x1B";
+char block635[] = "[HB-10 EFO NR ><<>\n^TDC ROT CHC CTC\x1B";
+char block636[] = "[HCd09 ANS EF ][<>\nGDS ^DOB NRF DFC\x1B";
+char block637[] = "[HCu13 ROT NR ><][\n^DOL HCH EQW SGS\x1B";
+char block638[] = "[HC-24 CTL EF [][]\nDIB CTO ^FAN LWX\x1B";
+char block639[] = "[HBd17 DHB EF ][[]\nEQS PDD HTS ^WDC\x1B";
+char block640[] = "[HA-20 MIT EW <><>\n2SE ^GCB L50 COC\x1B";
+char block641[] = "[HAd18 INS EF []][\nTCB CFB LNS ^DHB\x1B";
+char block642[] = "[HAd01 WCS ST []><\n^DOB 1LS BRK EQ1\x1B";
+char block643[] = "[HCd29 ROT FR []><\nL50 ^DOS ISP CRC\x1B";
+char block644[] = "[HC-11 NAV SR ><][\nRRB ^EDP FAN 1LV\x1B";
+char block645[] = "[HAd26 DLM CR []][\nCTO TCB ^WDO GCO\x1B";
+char block646[] = "[HA-20 EQR RL ><][\nDCL EFO COH ^TDO\x1B";
+char block647[] = "[HBd08 CHC NR []][\nACC DCL ISP ^WDO\x1B";
+char block648[] = "[HBu29 ESB RS [][]\nXEF EQW CCB ^EDP\x1B";
+char block649[] = "[HB-28 HAD ES ><><\n^WDO NRF NUG CCT\x1B";
+char block650[] = "[HCu13 DTC CR <>><\n1EF XEF EFO ^TDO\x1B";
+char block651[] = "[HCu31 REI ES <>><\nETS EDP ^DOB RRB\x1B";
+char block652[] = "[HA-02 GCB CR []<>\nEDP ETS ^EDP COH\x1B";
+char block653[] = "[HA-06 ANS RL ][><\nDCB ERO ^TDC CTO\x1B";
+char block654[] = "[HCd09 ISC EF <>][\nSDB GCB ^DOL CFS\x1B";
+char block655[] = "[HCu11 NAV CR ><<>\nROT MDD RTB ^SDB\x1B";
+char block656[] = "[HA-15 EPW CR []><\nLWO ^SDB CTO SDB\x1B";
+char block657[] = "[HBu27 EPR IN ][><\nTCI ^EDP EQS COC\x1B";
+char block658[] = "[HA-25 ACP EW [][]\n1TH ^TDO MDD TDC\x1B";
+char block659[] = "[HAu16 CHC EW <><>\n^GCB DDS ACC LWX\x1B";
+char block660[] = "[HC-14 EFO EW []><\nLWO SGS 2SE ^DHB\x1B";
+char block661[] = "[HA-02 INI EW ][[]\nXEF 2LV ^DOS EQ2\x1B";
+char block662[] = "[HC-11 REI ID <>[]\n^LRD 2LS 2LV EQS\x1B";
+char block663[] = "[HCd15 EMT FR []><\nAEF ESH ^DOS EDB\x1B";
+char block664[] = "[HCu24 ROT FR ><[]\n^GSM GSI DDS ETS\x1B";
+char block665[] = "[HA-15 ARD IN <><>\nHTS 1LV ^SGS WDC\x1B";
+char block666[] = "[HAu00 CBP ES []][\n^WDO 2TH LWX FAN\x1B";
+char block667[] = "[HAd27 EHS CR []><\nDRD NAV ^EDP ETS\x1B";
+char block668[] = "[HCd02 DTC SR <>][\nADB PKS CFB ^ISS\x1B";
+char block669[] = "[HBu20 EQO IN []><\n^GSM LWO EQ1 ISP\x1B";
+char block670[] = "[HCu03 EMT EW <>><\nWDC CTC ^MDD NOR\x1B";
+char block671[] = "[HB-02 IDL FR ][][\nTCI PKS ^FAN 2EF\x1B";
+char block672[] = "[HB-17 DLM RS ][><\n^GCB TCI ISS 1EF\x1B";
+char block673[] = "[HC-07 DLM RL <>[]\nADB ^MDD HCO RRB\x1B";
+char block674[] = "[HCd12 EQO EW ][><\n^FAN PKG RTB IST\x1B";
+char block675[] = "[HA-19 EPR ES ][><\nEFB ADB CTC ^WDO\x1B";
+char block676[] = "[HC-03 COR SR []][\nTDC ADB ^GSM DCL\x1B";
+char block677[] = "[HB-20 EPC EF ><][\nLNS LRD CHC ^SDB\x1B";
+char block678[] = "[HBd02 EQR ID ][<>\nCHC 2SE LWX ^EDP\x1B";
+char block679[] = "[HCu22 CBP ES []><\nCOC ^FAN CCT ERO\x1B";
+char block680[] = "[HBu17 GCB IN <>][\n^LRD ESK WDO 1LS\x1B";
+char block681[] = "[HCu25 WCO SR <>><\n^EDP PKG GSM FAN\x1B";
+char block682[] = "[HC-12 LNS CR <>><\n^TDO COH 2LV 1TH\x1B";
+char block683[] = "[HAu24 CHC EW ><[]\nPKS EFB ^DHB ESK\x1B";
+char block684[] = "[HBu30 HAD RS ><[]\nLWO HFA ^DOS EFK\x1B";
+char block685[] = "[HC-23 DLM RL <>][\nDIB ERO ETS ^SDB\x1B";
+char block686[] = "[HCu15 ATT ST <>][\nCCT XEF ^WDC AEF\x1B";
+char block687[] = "[HC-02 DCS EW ][][\n^TDC RRB 2LS CHC\x1B";
+char block688[] = "[HBu20 DCS CR <>><\nWDO ^DOB EQ2 TCB\x1B";
+char block689[] = "[HCd25 ATT FR [][]\nCOC 1LS ^TDC 2LS\x1B";
+char block690[] = "[HBd25 GCB ES ][><\nBRK ^WDO DHB EDB\x1B";
+char block691[] = "[HB-09 GCB EW ><><\nHFA 1TH ^WDO L30\x1B";
+char block692[] = "[HAu00 EPC CR <><>\nWDO ^TDO GCB HCH\x1B";
+char block693[] = "[HAd15 ANS FR ><[]\n^ISS CCB ESH ESH\x1B";
+char block694[] = "[HAd10 WCO SR <>><\n^GSM HFA EQ2 EFB\x1B";
+char block695[] = "[HC-12 ATT ST []<>\nCHC NRF ^ISS GSM\x1B";
+char block696[] = "[HCu13 EPW EW <><>\n^WDC PKS 1LV CFS\x1B";
+char block697[] = "[HAu13 PRK SR <>][\nEQS ^GCB CRC DHB\x1B";
+char block698[] = "[HBu11 ISC RS ><<>\nRTB ^DCL GCB AEF\x1B";
+char block699[] = "[HAu25 EFO SR ][[]\nHTS DES ISP ^GCB\x1B";
+char block700[] = "[HCu31 INI ST []><\n^TDC ACC TDC WDO\x1B";
+char block701[] = "[HAu01 EFS ST ><<>\nCTL ^DOB CFS 1EF\x1B";
+char block702[] = "[HAu00 DBF RS ][][\nGSM DHB ^DOL ERO\x1B";
+char block703[] = "[HAd06 ROT NR <>[]\nLWX ^ISS DCL 1LV\x1B";
+char block704[] = "[HCd09 INI RS []][\nCFB ^GCB 1LV L50\x1B";
+char block705[] = "[HBd00 COR RL ][[]\n^SDB GCO 1EF DES\x1B";
+char block706[] = "[HB-18 EHS RS <>[]\n^DHB 1TH DCL CFS\x1B";
+char block707[] = "[HA-26 CBP RS <>><\n2LV GCO ACC ^DCL\x1B";
+char block708[] = "[HB-29 CHC ST ><][\n^WDO RRB EQW 1EF\x1B";
+char block709[] = "[HA-16 DBF RS <>[]\n^SGS HFA 2SE CRC\x1B";
+char block710[] = "[HCu05 GCB RS ><><\nCRC ^LRD CFB GSI\x1B";
+char block711[] = "[HA-14 REI IN ][<>\n^EDP NAV 1LV 1LS\x1B";
+char block712[] = "[HBd03 ATT SR <>[]\n^DOB DDS DFD ISS\x1B";
+char block713[] = "[HC-14 DHB ID []<>\nCOH 1TH ^TDO GDS\x1B";
+char block714[] = "[HAd27 EFS NR <>[]\n1LV RTB ^DOL DCL\x1B";
+char block715[] = "[HBu21 DCS RL ><><\nNRF DRD COH ^EDP\x1B";
+char block716[] = "[HAd15 ESB IN <>][\n1LS ^MDD GSM EDB\x1B";
+char block717[] = "[HBu26 NOR NR <>][\nCTO ^DOS LRD CTO\x1B";
+char block718[] = "[HA-19 ATT EF []><\nEFO AEF ^EDP WDO\x1B";
+char block719[] = "[HAd14 ANS ST <>][\nGSI ROT LRD ^ISS\x1B";
+char block720[] = "[HA-19 EQR NR <>][\nNUG DDS ^WDO 1EF\x1B";
+char block721[] = "[HBd17 CTL EW ][][\nDRD ^WDO DES COH\x1B";
+char block722[] = "[HC-20 EQR NR <>[]\n^DOS GSM ERO ADB\x1B";
+char block723[] = "[HBu11 DHB RS []<>\nHCO ^TDC IST CRC\x1B";
+char block724[] = "[HC-21 DBF ES ][<>\nHFA ^TDO ADB ROT\x1B";
+char block725[] = "[HC-10 ACP EW [][]\nPDD ESK ^DOB NUG\x1B";
+char block726[] = "[HAu17 WCS ST ><><\nL50 GCB ^DCB NAV\x1B";
+char block727[] = "[HA-31 EFS ST <>[]\nFAN EFB L30 ^DCB\x1B";
+char block728[] = "[HAd22 NAV CR <>[]\nEDP RTB 2LS ^GCB\x1B";
+char block729[] = "[HCd28 GCB NR ><[]\nLRD NUD ^MDD RTB\x1B";
+char block730[] = "[HCd09 CHC EF ><[]\nTCI HCH ^SGS NRF\x1B";
+char block731[] = "[HBu01 PKS SR []<>\nEFK 1LS IST ^WDC\x1B";
+char block732[] = "[HA-30 OLD IN ><<>\n1LV TCB GSI ^TDC\x1B";
+char block733[] = "[HBu31 ISC CR ><><\nCCT ACC ^TDC CRC\x1B";
+char block734[] = "[HAu28 DHB EW <>[]\n^DCB EQR CCT DES\x1B";
+char block735[] = "[HBu23 IDL EF ><<>\nFAN ^DCB CTL HCH\x1B";
+char block736[] = "[HCd03 LNS SR ><><\nCTC AEF ^ISS SDB\x1B";
+char block737[] = "[HCd10 DHB ID []][\nASL ACH ^WDO GSI\x1B";
+char block738[] = "[HB-03 CTL FR ][[]\n^WDC EFB XEF CTO\x1B";
+char block739[] = "[HAu21 ROT RL []][\n^LRD LWO FAN ESK\x1B";
+char block740[] = "[HC-09 ROT EF []<>\nCHC ^DCL 2EF AEF\x1B";
+char block741[] = "[HCd09 EPW CR <>><\n^DOB LWO DCB HCH\x1B";
+char block742[] = "[HC-22 DHB RS ][<>\nDRD PDD TDO ^FAN\x1B";
+char block743[] = "[HC-20 IDL EF ><><\n^DCL LNS WDO 2LV\x1B";
+char block744[] = "[HAd28 INS FR ][><\nROT HCH ^GSM DIB\x1B";
+char block745[] = "[HCd21 EQR RL []><\nISS L50 LWO ^DOL\x1B";
+char block746[] = "[HB-05 PRK ST <>][\n2LS ^DOB EQW LWO\x1B";
+char block747[] = "[HB-17 DTC ST ><><\nGCB COH ^TDC BRK\x1B";
+char block748[] = "[HAd11 EFS FR ><][\nGSI ^DCB HCO NRF\x1B";
+char block749[] = "[HBu09 REI ID <>[]\n^DHB EQW CFB FAN\x1B";
+char block750[] = "[HAd01 DCP EF []<>\n^DCB 2LS L50 DCB\x1B";
+char block751[] = "[HBd00 NOR NR ><[]\n^DCB SDB DDS 1TH\x1B";
+char block752[] = "[HCd15 EHS FR []<>\nCRC ^MDD ROT ACH\x1B";
+char block753[] = "[HC-26 EPC EF []][\nERO ^DOB DFD COH\x1B";
+char block754[] = "[HC-08 EMT CR []<>\n^LRD CCT L30 DRD\x1B";
+char block755[] = "[HCd15 INI ID ><<>\n^EDP AEF ACH GDS\x1B";
+char block756[] = "[HCd28 HAD RS ><][\nACC GCB ^DOB CTL\x1B";
+char block757[] = "[HA-04 EPR FR <>[]\nMDD COC ^LRD CTO\x1B";
+char block758[] = "[HB-17 EHS RS ][><\nACC ^GCB RTB NAV\x1B";
+char block759[] = "[HA-03 OLD FR <>[]\nCFB ADB DHB ^TDO\x1B";
+char block760[] = "[HAd00 LNS IN <><>\nRRB DFD ^DCB EQW\x1B";
+char block761[] = "[HC-07 EPR CR []][\nEFB ^WDC 2SE DCB\x1B";
+char block762[] = "[HCu00 WCS EW []<>\nRTB UIB ^DCB CFB\x1B";
+char block763[] = "[HAd21 EPC RL ><><\nWDO CRC CTC ^DOS\x1B";
+char block764[] = "[HCu30 DCP FR <>><\n^GSM CTC ISS ADB\x1B";
+char block765[] = "[HB-00 DTC EF ><<>\nDFC EDB ^DOL GCO\x1B";
+char block766[] = "[HA-20 COR RS ><][\n^ISS LWX EQS EQS\x1B";
+char block767[] = "[HBd28 CBP NR <><>\nEQ2 ^GSM EDB NOR\x1B";
+char block768[] = "[HCd14 INS ID []<>\nHCH ^LRD NRF DCL\x1B";
+char block769[] = "[HCd09 EPR ID ][][\n^DOL DHB 2LS WDO\x1B";
+char block770[] = "[HA-16 DTC IN ><><\nAEF GSM ^SGS GSM\x1B";
+char block771[] = "[HCu04 EPC FR ><[]\nGCO GDS UIB ^DHB\x1B";
+char block772[] = "[HBd01 ESB SR <>][\nSDB ISP XEF ^TDO\x1B";
+char block773[] = "[HBd22 DTO NR <><>\n^ISS 1TH ERO FAN\x1B";
+char block774[] = "[HAu22 NOR ID []][\nESK ^TDC 2LV COH\x1B";
+char block775[] = "[HBu02 REI CR <>[]\nDES LRD ^TDC NOR\x1B";
+char block776[] = "[HAd16 GCB IN ][<>\n^DCB UIB COC 1LS\x1B";
+char block777[] = "[HA-23 COR SR []><\nISP ^GCB DCB WDC\x1B";
+char block778[] = "[HA-26 REI CR ><][\n2LS ^GSM GCO UIB\x1B";
+char block779[] = "[HBu23 DLM NR <>><\nEDB EFK ^LRD EDB\x1B";
+char block780[] = "[HAu17 GCB EF ><][\nTDC CHC BRK ^DCL\x1B";
+char block781[] = "[HA-08 INS ST <>[]\nETS ^ISS RRB EDP\x1B";
+char block782[] = "[HCu30 CTL IN <>][\nGSM EQS ^TDO GCO\x1B";
+char block783[] = "[HCd11 ANS ST []][\n2LV ^DOL 1LV GSI\x1B";
+char block784[] = "[HB-21 INI SR ><[]\nDHB XEF ^DCL ESK\x1B";
+char block785[] = "[HAd00 GCB ES []<>\nNUD ^MDD EDB SGS\x1B";
+char block786[] = "[HBd00 LNS NR ][<>\nCTO ^SGS 1LV GSM\x1B";
+char block787[] = "[HAu09 DCS ES <>[]\n^WDO EDP GSI TDC\x1B";
+char block788[] = "[HB-20 HBP EF <>><\n1EF ^DOL BRK DFD\x1B";
+char block789[] = "[HCd09 EMT RL [][]\nEFB EFO WDC ^DOL\x1B";
+char block790[] = "[HC-21 LNS EW <><>\nUIB HFA ^WDC COH\x1B";
+char block791[] = "[HBu15 EQO IN <>><\nFAN ^WDO ACC ROT\x1B";
+char block792[] = "[HBu03 ARD EW []><\nRTB EFB PKS ^TDC\x1B";
+char block793[] = "[HC-22 ARD RL ><><\nMDD UIB ^GCB GSM\x1B";
+char block794[] = "[HAd22 EMT IN ][[]\n^WDO CRC WDO EQ2\x1B";
+char block795[] = "[HBd24 DBF EW <>][\nSDB 2EF ^LRD EDB\x1B";
+char block796[] = "[HBu20 HBP RL ][][\nRRB DFC CTL ^LRD\x1B";
+char block797[] = "[HCu22 CTL RS []><\nCFS ADB RTB ^SDB\x1B";
+char block798[] = "[HBd11 DHB CR ><><\nCFS 2LS TCB ^MDD\x1B";
+char block799[] = "[HCd12 DBF IN ><<>\n^SGS ACC 1LS EFO\x1B";
+char block800[] = "[HCd06 DBF EW ][<>\nNAV DFD ^SGS GDS\x1B";
+char block801[] = "[HCu31 DCP CR <>[]\nNAV CCB RRB ^WDO\x1B";
+char block802[] = "[HBu07 PRK IN ><><\nHTS ^MDD 2LS 2LS\x1B";
+char block803[] = "[HA-19 PRK EF <><>\n1LV DCL ACH ^DCB\x1B";
+char block804[] = "[HCu05 CBP CR <>><\nDDS CTL ^WDO GSM\x1B";
+char block805[] = "[HC-18 DTC RL <>][\nGDS NOR PDD ^DCL\x1B";
+char block806[] = "[HBd25 PRK EW <>><\nLWO NOR ACC ^DOS\x1B";
+char block807[] = "[HAd21 HBP ID ][[]\nDCL NAV NUG ^DCL\x1B";
+char block808[] = "[HBu19 LNS RL ][<>\nEQW ROT WDO ^TDO\x1B";
+char block809[] = "[HCd18 OLD SR []><\nDHB EQ2 ^GCB EQR\x1B";
+char block810[] = "[HAu20 DCS EW <>[]\n^WDO DCB DFC NUG\x1B";
+char block811[] = "[HAu17 EPR FR ][<>\n^TDC COC ISS PKS\x1B";
+char block812[] = "[HAd02 ARD RS <>><\nCFS ISP ^ISS ETS\x1B";
+char block813[] = "[HA-14 PKS ID ><[]\nGDS ^DCL ISS PKS\x1B";
+char block814[] = "[HCd24 DTO NR ][[]\n^LRD BRK HAD NOR\x1B";
+char block815[] = "[HB-07 HAD RS []><\nHTS PKG ^FAN CCT\x1B";
+char block816[] = "[HA-31 HAD EW [][]\n^ISS GSI DDS EQ1\x1B";
+char block817[] = "[HBu05 DTC FR ][<>\n^EDP COH ESK EQ1\x1B";
+char block818[] = "[HBd21 EPR IN <>][\n1TH ^LRD NOR LNS\x1B";
+char block819[] = "[HC-00 EPR EF ><<>\nCCB ETS GCO ^FAN\x1B";
+char block820[] = "[HBd13 DTC EW ][><\nCHC ^SGS 2EF DCB\x1B";
+char block821[] = "[HAd28 PKS SR <>][\nAEF HFA L30 ^TDO\x1B";
+char block822[] = "[HAu16 ARD EW ][[]\n^SGS ROT HCH ADB\x1B";
+char block823[] = "[HCu23 ACP ST <>><\n^DCB NAV ESH RTB\x1B";
+char block824[] = "[HCd23 CBP FR ><><\nCTO CTC ^SGS PKG\x1B";
+char block825[] = "[HCd29 DCP EW ><<>\nTDC MDD ^DHB LWX\x1B";
+char block826[] = "[HAu24 EHS NR ><<>\n^GSM NUD ESH EDP\x1B";
+char block827[] = "[HB-06 CTL ID ][<>\nNAV TCB NAV ^SGS\x1B";
+char block828[] = "[HA-10 IDL NR []><\nASL EQW PKG ^SGS\x1B";
+char block829[] = "[HBd05 NAV RL <>><\nIST ^ISS DIB EFO\x1B";
+char block830[] = "[HBd12 DTO SR []][\nEFK 2SE ^DOB FAN\x1B";
+char block831[] = "[HBu25 EFS RL ><][\nGSM ^DOL 1TH TCB\x1B";
+char block832[] = "[HBd26 GCB EF []<>\n1LV 2LS 2TH ^DOS\x1B";
+char block833[] = "[HCu25 DCS IN <><>\nRRB ^SDB 1EF BRK\x1B";
+char block834[] = "[HA-02 ARD EW <>[]\nGCO ^GSM ERO HCH\x1B";
+char block835[] = "[HCu23 ARD ES ][<>\n^GCB RTB EQR NAV\x1B";
+char block836[] = "[HAd04 DBF FR ][][\n^ISS LWO 1EF COH\x1B";
+char block837[] = "[HAd26 INS RS [][]\nPKS CCB 1TH ^DOS\x1B";
+char block838[] = "[HC-01 NOR ST <><>\n^DCB GCB SGS COC\x1B";
+char block839[] = "[HAu13 ATT ST <><>\n^WDO L50 LNS ESK\x1B";
+char block840[] = "[HBu31 GCB ID <>][\nDCB ^LRD PKS LRD\x1B";
+char block841[] = "[HB-22 WCO SR <>[]\nGSI DES ^TDC PKG\x1B";
+char block842[] = "[HCu23 DCS FR <>><\n^TDO ESK RRB 2TH\x1B";
+char block843[] = "[HCd13 EPR FR <>[]\nGDS ^DOL LRD 2EF\x1B";
+char block844[] = "[HB-15 ANS RL ><><\n^TDO SDB DES 2LS\x1B";
+char block845[] = "[HA-07 INS RL ][><\nNUD EFO ^EDP AEF\x1B";
+char block846[] = "[HBd14 ACP NR ><][\n2SE ^WDC CRC EFK\x1B";
+char block847[] = "[HAd31 DBF EF ][[]\nNUD ^WDO IST GCO\x1B";
+char block848[] = "[HBd27 CTL SR <>][\n2TH EFK ISS ^ISS\x1B";
+char block849[] = "[HB-29 HAD RS ][[]\nNOR BRK TCI ^ISS\x1B";
+char block850[] = "[HA-17 WCS ID []][\nIST EQ1 HCH ^SGS\x1B";
+char block851[] = "[HBu14 ISC EF ><[]\n^DCB DRD EDP CCT\x1B";
+char block852[] = "[HC-30 DBF ES ][[]\nPKG ^FAN DDS TCI\x1B";
+char block853[] = "[HCd02 LNS CR <>][\n^SGS COH CTL ACC\x1B";
+char block854[] = "[HAd24 INS FR <>][\n^GSM DFC ESK L30\x1B";
+char block855[] = "[HBu30 ARD ES ><><\nDFC ^DCL NUD LNS\x1B";
+char block856[] = "[HBd06 EFS IN ><[]\nDIB COH ^WDC ASL\x1B";
+char block857[] = "[HBu03 ACP NR [][]\n^ISS EDB DRD MDD\x1B";
+char block858[] = "[HCu14 EQR EF ][><\n^DOL DDS MDD PKG\x1B";
+char block859[] = "[HCd25 HBP RL []][\nSDB GCO ^ISS 1LS\x1B";
+char block860[] = "[HCd26 HAD ST []][\nESK ^DOS GCB NAV\x1B";
+char block861[] = "[HAu10 DTC EF ][><\nHFA ^FAN EFO MDD\x1B";
+char block862[] = "[HCd18 ANS EF ><][\nGCB ^SGS CTL L30\x1B";
+char block863[] = "[HBd10 ISC ID <>][\nGDS IST TDO ^DOB\x1B";
+char block864[] = "[HBd17 DCP RL ><><\n^TDO IST NOR SGS\x1B";
+char block865[] = "[HAu12 ISC FR ><><\nETS LRD ^LRD IST\x1B";
+char block866[] = "[HB-15 WCS ES []][\nCCT 2EF ^DHB GSI\x1B";
+char block867[] = "[HCd04 EMT EW ][><\nPDD HFA EDB ^GCB\x1B";
+char block868[] = "[HAu26 REI ID ><><\nL30 PDD COH ^EDP\x1B";
+char block869[] = "[HAu08 ARD ID ><><\n^MDD SDB DDS TDC\x1B";
+char block870[] = "[HB-03 ESB IN []><\n^DHB 1EF 2TH GDS\x1B";
+char block871[] = "[HA-25 ANS FR []<>\nMDD ^GCB CRC DHB\x1B";
+char block872[] = "[HBd10 EFO ST <>[]\nCTO ^DCL PDD GCB\x1B";
+char block873[] = "[HAd19 DCP ES ><][\nEQ1 L30 ^LRD HAD\x1B";
+char block874[] = "[HBd06 EPR RL ><<>\nDIB NRF BRK ^FAN\x1B";
+char block875[] = "[HBd25 EQR ES [][]\nTDC DDS ^EDP LWX\x1B";
+char block876[] = "[HBu09 CTL RL [][]\n^WDC HTS EQS TCB\x1B";
+char block877[] = "[HC-28 GCB NR []<>\n^DCB GSI DIB HCO\x1B";
+char block878[] = "[HAu18 ACP FR ][][\nADB CFB ^DCB ESH\x1B";
+char block879[] = "[HBd24 COR FR ><][\n^EDP ESK CRC LRD\x1B";
+char block880[] = "[HAu04 HAD RL <><>\nDDS ^TDO PDD DRD\x1B";
+char block881[] = "[HC-28 DCP RL ><><\nCOH ^ISS EQR ACH\x1B";
+char block882[] = "[HBu11 EMT CR <><>\nESK 1LV ^DOS HCH\x1B";
+char block883[] = "[HBd11 DTC FR <>][\nMDD DHB ^EDP HAD\x1B";
+char block884[] = "[HCu18 EHS RL []><\nDHB DFC ^DHB EQ1\x1B";
+char block885[] = "[HAd24 LNS ST ><][\nDDS 1EF ^SGS L50\x1B";
+char block886[] = "[HB-09 EHS RS [][]\nLWO 2LS ^EDP DDS\x1B";
+char block887[] = "[HA-28 EPW RS ][][\nPKS DRD NAV ^SDB\x1B";
+char block888[] = "[HBu11 CHC SR ][][\nL50 ^DHB 1EF GCB\x1B";
+char block889[] = "[HB-23 NAV NR <>[]\nTDO SGS ^MDD CCT\x1B";
+char block890[] = "[HAu17 MIT FR <><>\nDRD TDC GCB ^DOL\x1B";
+char block891[] = "[HAd15 ANS ST <><>\nTCB ^DCL HTS DIB\x1B";
+char block892[] = "[HCu25 INS NR ><<>\n^DCL 2LV DIB 1LS\x1B";
+char block893[] = "[HAd10 HBP EF []<>\nDRD ^LRD EDP DIB\x1B";
+char block894[] = "[HCu21 COR IN <>[]\nXEF ^WDO NUD DIB\x1B";
+char block895[] = "[HCu26 HBP IN []][\n^DOB HCH GSI 2EF\x1B";
+char block896[] = "[HBd20 DCP RL ><<>\n1TH ^SDB EQW 1EF\x1B";
+char block897[] = "[HCu09 OLD RS <><>\nAEF ^FAN WDC GSI\x1B";
+char block898[] = "[HBd27 EHS EW []][\n^WDC 1EF ASL FAN\x1B";
+char block899[] = "[HBu03 INI ES []<>\nEQ2 1LV ^LRD SGS\x1B";
+char block900[] = "[HB-30 NAV CR []<>\nCOH MDD ^WDO NUD\x1B";
+char block901[] = "[HAu12 CTL IN []][\nL30 ^FAN EDP IST\x1B";
+char block902[] = "[HCu21 PKS IN ][][\n1TH SGS UIB ^LRD\x1B";
+char block903[] = "[HAu24 DLM SR <>[]\n^ISS ERO EQR CCT\x1B";
+char block904[] = "[HBu10 NAV EW []<>\n^DOB EFB ISP EQ1\x1B";
+char block905[] = "[HAu05 ANS NR ><><\nPDD GSM 1TH ^WDO\x1B";
+char block906[] = "[HCd12 OLD SR ][[]\nNAV 1TH ISP ^DOB\x1B";
+char block907[] = "[HB-25 CBP ID ][><\nEQW ^DOS HFA CCB\x1B";
+char block908[] = "[HB-13 PRK EF ][><\n^GCB SGS EDB HCO\x1B";
+char block909[] = "[HCu03 ROT FR [][]\n^SDB HTS ISS CCT\x1B";
+char block910[] = "[HBu03 EPC CR [][]\nLWO EFO ^FAN ASL\x1B";
+char block911[] = "[HCu20 DTC NR ><><\n1LV ^WDC EFB FAN\x1B";
+char block912[] = "[HCu00 EFO ST []><\nDRD ^DOB ISS PKS\x1B";
+char block913[] = "[HA-06 ESB IN ][][\nIST NAV ^EDP 1TH\x1B";
+char block914[] = "[HAd02 EFS ST <>][\n^GSM CTO CCB EDP\x1B";
+char block915[] = "[HBu06 PKS RL ><][\n^DHB 2EF GSI WDO\x1B";
+char block916[] = "[HBu07 INI EF <>><\nCOH ^DCL COC NRF\x1B";
+char block917[] = "[HCu31 NAV NR <>][\nDIB ^TDO DCL EQW\x1B";
+char block918[] = "[HCu19 WCO ES <>][\n1EF HAD ESH ^DCL\x1B";
+char block919[] = "[HAd29 PKS EW <>][\n^SDB 1EF DFD IST\x1B";
+char block920[] = "[HCd14 DBF IN ><][\nLNS SGS ^WDO PKS\x1B";
+char block921[] = "[HCd24 HAD RL []><\nLWX ^GSM CFB 1EF\x1B";
+char block922[] = "[HAu09 COR CR [][]\nROT ^WDO DHB 2TH\x1B";
+char block923[] = "[HBd25 DTO NR ][][\nNUD LRD ^FAN EQS\x1B";
+char block924[] = "[HAd05 WCO NR ][><\nHTS UIB DHB ^DOS\x1B";
+char block925[] = "[HCd17 INS SR <><>\nXEF ^DOB EFO SGS\x1B";
+char block926[] = "[HAu11 OLD EF [][]\nIST L30 ^WDC CRC\x1B";
+char block927[] = "[HC-27 DTC ID ><][\n^SDB FAN TCI 2EF\x1B";
+char block928[] = "[HCu21 EPW CR []<>\nCFS CCT ^DCL WDC\x1B";
+char block929[] = "[HBu08 ISC ID <>][\nESK 2TH ACC ^GSM\x1B";
+char block930[] = "[HAu14 ESB RS []][\n^LRD EQ2 ASL CHC\x1B";
+char block931[] = "[HBu04 NAV EF ][<>\nPDD NAV ISS ^LRD\x1B";
+char block932[] = "[HBu00 DTC ST ][><\nIST ^DHB CFS CCT\x1B";
+char block933[] = "[HCu14 DLM RL [][]\nMDD ^DCL ASL TCI\x1B";
+char block934[] = "[HAu06 INI RS []][\n^DOS 2LS EQ1 DRD\x1B";
+char block935[] = "[HCu13 EMT IN []<>\nNRF CTO ^GSM DHB\x1B";
+char block936[] = "[HB-20 EQO NR ><[]\nISP CRC ISS ^SGS\x1B";
+char block937[] = "[HAd31 CTL SR <>><\nACC CFS FAN ^DOL\x1B";
+char block938[] = "[HBd19 EPC NR []><\nGCO ^WDC TCB ROT\x1B";
+char block939[] = "[HBu07 IDL NR ><][\nNAV NOR ^ISS NAV\x1B";
+char block940[] = "[HBu08 DLM IN ][][\nL30 LWX EQW ^ISS\x1B";
+char block941[] = "[HAd17 CHC ID ><><\nLRD DHB 1EF ^MDD\x1B";
+char block942[] = "[HBu20 EQO ST []><\nNRF ^WDC 2TH WDC\x1B";
+char block943[] = "[HCu25 HBP ES [][]\n^MDD EDB IST 1LS\x1B";
+char block944[] = "[HB-09 EPR SR []><\nNRF EFO ^TDO EQ1\x1B";
+char block945[] = "[HB-00 IDL FR []][\nASL EFO MDD ^TDC\x1B";
+char block946[] = "[HA-04 EQO SR []><\nLNS 1TH ^TDC CFS\x1B";
+char block947[] = "[HB-00 WCS EW []><\nUIB ^SGS 1TH 1EF\x1B";
+char block948[] = "[HAd29 ARD RL ><[]\nISP AEF ^DOS NUD\x1B";
+char block949[] = "[HCu02 PRK SR ][][\n^DHB NUD GSI ASL\x1B";
+char block950[] = "[HB-07 DHB ID ][><\nNOR 2TH TDC ^DCL\x1B";
+char block951[] = "[HCd08 EFS CR <>][\nCTL ^FAN GCO L50\x1B";
+char block952[] = "[HCu04 CTL IN ][<>\nESH ASL PDD ^DCL\x1B";
+char block953[] = "[HCd17 WCS SR ><[]\n1EF ^GCB EQ1 2LS\x1B";
+char block954[] = "[HB-26 IDL ES []][\nDFC ^LRD HAD LWX\x1B";
+char block955[] = "[HC-07 DCP RL []][\nTDC WDC CTL ^DCB\x1B";
+char block956[] = "[HCu23 ARD NR ><><\nLRD ^SGS SDB GDS\x1B";
+char block957[] = "[HAu12 NOR ID ><<>\nCFS HFA SDB ^WDO\x1B";
+char block958[] = "[HC-10 PRK ES [][]\nROT ERO LRD ^FAN\x1B";
+char block959[] = "[HB-14 HAD ST ][><\nERO ETS GCB ^WDC\x1B";
+char block960[] = "[HA-20 DTC ST []<>\nCTC ISS ^DCL ADB\x1B";
+char block961[] = "[HBd01 DTO NR ><<>\n^ISS GCB EFO DFD\x1B";
+char block962[] = "[HCu24 MIT FR []><\nBRK ^LRD EFO DDS\x1B";
+char block963[] = "[HB-10 DBF CR ><<>\nGSI PKS ^DOB NOR\x1B";
+char block964[] = "[HCd09 CTL RS ><][\nPDD ^WDO ACC PKG\x1B";
+char block965[] = "[HAu20 INS EW [][]\nACC AEF HTS ^SDB\x1B";
+char block966[] = "[HBd16 INS EW <>][\nHAD DRD ^WDC CFB\x1B";
+char block967[] = "[HA-01 ESB FR ][<>\n^WDO 1LV DRD NUG\x1B";
+char block968[] = "[HAd27 ROT EW <>><\nL30 2SE COH ^GCB\x1B";
+char block969[] = "[HB-16 LNS SR []<>\nHCH GDS ^FAN L30\x1B";
+char block970[] = "[HA-17 DTC NR <>><\n^DCL EQR 2LS EFO\x1B";
+char block971[] = "[HC-06 ROT RL []><\nNOR FAN ^LRD HFA\x1B";
+char block972[] = "[HB-23 ATT FR ][[]\nCHC ^DOS PKG CFB\x1B";
+char block973[] = "[HAd18 CBP RL ][<>\nROT EQ1 DFC ^LRD\x1B";
+char block974[] = "[HA-24 REI RL ><><\nCFS ^DOS TDC EQW\x1B";
+char block975[] = "[HC-15 EPW FR ][><\n^TDO EFK ACH DRD\x1B";
+char block976[] = "[HA-22 EPR RS <><>\n^TDC COH DDS CFS\x1B";
+char block977[] = "[HCu05 DTC CR ][<>\n^LRD UIB 2EF LWO\x1B";
+char block978[] = "[HB-31 NAV SR []<>\nSGS 2SE DIB ^DOL\x1B";
+char block979[] = "[HCd19 DTO EW ][><\nEDB TCB ACH ^GSM\x1B";
+char block980[] = "[HCd03 NOR EW ][<>\nGCB ERO ^GCB ADB\x1B";
+char block981[] = "[HC-10 DCP ST []><\n1LS ^MDD EQW L30\x1B";
+char block982[] = "[HC-12 INS FR []><\nDFD ^DCB GCB PDD\x1B";
+char block983[] = "[HCd21 ATT SR ><][\n2TH ^GSM EQ2 CFS\x1B";
+char block984[] = "[HAu03 MIT FR ><[]\n^DCL EQS ESK EQS\x1B";
+char block985[] = "[HCd30 ESB RS ][][\n^DOL ISS BRK DHB\x1B";
+char block986[] = "[HC-06 DCP CR ><][\nSDB 2LS ^EDP EFB\x1B";
+char block987[] = "[HB-31 NOR RS <>[]\nGDS ^DCB 2EF XEF\x1B";
+char block988[] = "[HA-11 EQR CR ><[]\n2SE 2TH NAV ^DHB\x1B";
+char block989[] = "[HB-02 ROT NR []][\nETS CCT HTS ^EDP\x1B";
+char block990[] = "[HAu01 EPW IN <>><\nETS IST RTB ^DOS\x1B";
+char block991[] = "[HAu21 WCS ES <>><\n^GCB ACC 1TH EFO\x1B";
+char block992[] = "[HCd30 PRK ES <>><\nRTB DFC 2SE ^DCL\x1B";
+char block993[] = "[HB-02 EHS NR ><><\n^TDO CCB DFC EFO\x1B";
+char block994[] = "[HBu20 COR ST []><\nCFS PKG GSM ^DOS\x1B";
+char block995[] = "[HBu05 NAV ES <>][\n^DCB UIB CCT CFB\x1B";
+char block996[] = "[HCu15 EMT EF [][]\n^DCB 1LV COC CTC\x1B";
+char block997[] = "[HBu31 PRK SR <>[]\nCTC EQW NOR ^GCB\x1B";
+char block998[] = "[HC-14 GCB EF ][<>\nNOR PKG EQS ^EDP\x1B";
+char block999[] = "[HCd15 WCS EF ><<>\nEQ2 ASL ^EDP XEF\x1B";
+char block1000[] = "[HBu14 NOR SR <>[]\n^DOB ESH EQR DDS\x1B";
+char block1001[] = "[HCd24 PRK ES ][<>\nCFB DHB ^DOB DES\x1B";
+char block1002[] = "[HB-05 DBF SR <>][\nNRF ^SGS 2TH GSI\x1B";
+char block1003[] = "[HBd05 ATT IN ><<>\nHTS EQR HTS ^DHB\x1B";
+char block1004[] = "[HCd10 INS ID ><[]\nCOC WDC ^TDO ASL\x1B";
+char block1005[] = "[HB-17 DLM RS ><][\nACC NRF ^SGS DRD\x1B";
+char block1006[] = "[HC-30 ACP ID ][><\nADB ^ISS DFD EQ1\x1B";
+char block1007[] = "[HBu17 EHS ES ][><\n^ISS TCI AEF EDP\x1B";
+char block1008[] = "[HAu24 CHC FR ><[]\nL30 PKS ^DOS L30\x1B";
+char block1009[] = "[HBu24 GCB FR [][]\n^DCB ADB EFB 1TH\x1B";
+char block1010[] = "[HCu08 DTC SR ><<>\nACH ^DOB 2LV DCB\x1B";
+char block1011[] = "[HCu31 LNS CR ><><\n2TH PKS ^SGS EDP\x1B";
+char block1012[] = "[HCu21 GCB NR ><[]\nTDO TCI ^FAN RRB\x1B";
+char block1013[] = "[HBd16 OLD ES <>[]\n^TDO ERO FAN 2LV\x1B";
+char block1014[] = "[HB-22 EFS ST <><>\nFAN ^FAN NUD 1TH\x1B";
+char block1015[] = "[HA-08 EFO NR <>[]\nCCB ^SGS SDB 2EF\x1B";
+char block1016[] = "[HAu27 CBP NR ][][\nLRD NUD CTO ^TDO\x1B";
+char block1017[] = "[HAd29 OLD NR ][[]\n2TH ^EDP CRC EFB\x1B";
+char block1018[] = "[HCd06 EQO RS <><>\nNUG CHC ^LRD AEF\x1B";
+char block1019[] = "[HBd27 DBF SR ><[]\nISS WDC EQW ^SDB\x1B";
+char block1020[] = "[HC-21 ACP EF <><>\n2EF ^TDO ASL ERO\x1B";
+char block1021[] = "[HA-16 CHC ES ][><\n^GCB CFB ACH UIB\x1B";
+char block1022[] = "[HAu23 CTL ID ][<>\n^WDC 2LS LWX HTS\x1B";
+char block1023[] = "[HCd29 DCP EF ><][\nTCI HCH ^MDD TDC\x1B";
+char block1024[] = "[HCd06 ESB RL ][<>\nRRB ETS ^DCL GSI\x1B";
+char block1025[] = "[HB-07 CBP SR <>[]\nCOH ^DOL WDC PDD\x1B";
+char block1026[] = "[HCd08 COR RL ><[]\n^TDO DCB EFK WDO\x1B";
+char block1027[] = "[HBd23 REI ES [][]\nPKS XEF ^ISS DRD\x1B";
+char block1028[] = "[HBd24 ESB EF ><><\nDCL ^SGS DFC TDO\x1B";
+char block1029[] = "[HA-25 DCP RS []<>\n^GSM ROT EQS DDS\x1B";
+char block1030[] = "[HAu20 ANS ID ][][\nGSM DFD ^WDO 2LV\x1B";
+char block1031[] = "[HCd04 DCP SR []><\nEQW L30 ^DOL DIB\x1B";
+char block1032[] = "[HC-30 IDL NR <>][\nEQ2 EDP CHC ^GCB\x1B";
+char block1033[] = "[HC-22 HBP IN <>][\n^ISS NOR BRK GSI\x1B";
+char block1034[] = "[HCu00 INS FR ><><\nESK ESK L30 ^EDP\x1B";
+char block1035[] = "[HB-24 DTO RS ][><\nGSM FAN DES ^DOB\x1B";
+char block1036[] = "[HC-31 IDL RL []><\n^GSM 1LV XEF EQ1\x1B";
+char block1037[] = "[HB-14 PRK RL ][><\nEQW GSM ^DOL NAV\x1B";
+char block1038[] = "[HAu17 DCP ST ><<>\nBRK TCI ^SGS RRB\x1B";
+char block1039[] = "[HBd08 EMT SR []><\nEFO COC EQ2 ^TDO\x1B";
+char block1040[] = "[HBu09 NAV RL ][[]\nFAN HFA HCH ^GSM\x1B";
+char block1041[] = "[HCu03 INS EF [][]\nBRK CCB ^DOB DES\x1B";
+char block1042[] = "[HBu02 PRK ST <>[]\nEQS ^DOL 1LS ROT\x1B";
+char block1043[] = "[HAu18 HBP EW []<>\n^LRD LNS ASL DIB\x1B";
+char block1044[] = "[HCd18 INS IN <>><\nCRC ^LRD DHB TCI\x1B";
+char block1045[] = "[HAd14 REI EW [][]\n^WDO HCO DIB 2SE\x1B";
+char block1046[] = "[HBu22 HAD NR []][\nDIB ^DOL 1LV CTL\x1B";
+char block1047[] = "[HBd11 DTO ST []><\nNOR DCB EDP ^EDP\x1B";
+char block1048[] = "[HBd03 DCS ES <>][\n2LS WDC ^DOS EQS\x1B";
+char block1049[] = "[HC-01 EHS RS <><>\n^SGS 1EF TDC IST\x1B";
+char block1050[] = "[HBd20 NOR ST ][][\n^LRD TDC 1LS EQ2\x1B";
+char block1051[] = "[HC-18 DTO FR ][<>\nCFB MDD 2LV ^WDC\x1B";
+char block1052[] = "[HCd00 EQO EW ><][\nUIB PDD ^ISS DES\x1B";
+char block1053[] = "[HAu16 NOR FR ><[]\n^TDO DHB EQ2 DFC\x1B";
+char block1054[] = "[HAu24 EHS CR ][][\nXEF RTB NOR ^WDO\x1B";
+char block1055[] = "[HB-14 EPC RS ][[]\nCHC IST CFS ^WDC\x1B";
+char block1056[] = "[HCu11 EFS RL []><\n^MDD HCH EFO L30\x1B";
+char block1057[] = "[HB-24 ACP IN ><><\n^DOS L50 EFK EQ1\x1B";
+char block1058[] = "[HBu05 HAD EW ><[]\nDDS ^EDP CCB CTO\x1B";
+char block1059[] = "[HBu28 EPR FR <>><\n^LRD NUD LWO DCL\x1B";
+char block1060[] = "[HAu23 COR SR <>][\nDIB ^TDO LWO GSI\x1B";
+char block1061[] = "[HAd01 PKS EF ><[]\nXEF TCB ^TDO ESK\x1B";
+char block1062[] = "[HB-12 INI CR ][><\nISS NUG ^FAN ADB\x1B";
+char block1063[] = "[HCd19 ANS SR [][]\nDHB ^TDO HCO AEF\x1B";
+char block1064[] = "[HCu27 DCS ID ><[]\n^TDC SDB PDD ISP\x1B";
+char block1065[] = "[HC-15 ANS RS <><>\n^SGS HAD AEF CTL\x1B";
+char block1066[] = "[HBu24 LNS RL ][[]\nRTB ^DHB CTC BRK\x1B";
+char block1067[] = "[HBu17 ANS ES []><\nNUD EQ1 ^TDC PKS\x1B";
+char block1068[] = "[HAu09 DCS ES <>][\n1LS CTL ^DHB TDO\x1B";
+char block1069[] = "[HCu09 ROT IN ><<>\n^DOB DDS EQW WDO\x1B";
+char block1070[] = "[HAu27 INI ES ><[]\n^LRD IST CFS CHC\x1B";
+char block1071[] = "[HC-25 NOR CR ><<>\nACH ^DOS ASL RRB\x1B";
+char block1072[] = "[HBd00 EMT EF ><[]\nDHB NUG GCB ^TDC\x1B";
+char block1073[] = "[HAu08 ISC ES <><>\nADB ^EDP COC EQS\x1B";
+char block1074[] = "[HBu27 EPW ES ][][\nCOH HCO 2TH ^DOB\x1B";
+char block1075[] = "[HA-24 EQR CR <>][\nERO 1EF EQ2 ^SGS\x1B";
+char block1076[] = "[HBu24 EHS NR <>><\n^DCL 1LS DRD TDO\x1B";
+char block1077[] = "[HC-12 DLM SR ><[]\n2SE TCB ^DCL 1LV\x1B";
+char block1078[] = "[HAu06 ISC RL <>><\nCCT LWO 2EF ^TDC\x1B";
+char block1079[] = "[HA-20 NOR RL ][[]\nDHB CRC DES ^SGS\x1B";
+char block1080[] = "[HAu20 REI CR []][\nHFA ^WDO TDO CHC\x1B";
+char block1081[] = "[HCd19 EPW ES ][][\nXEF NUG CCB ^DOS\x1B";
+char block1082[] = "[HC-15 ACP SR <>][\n^TDO LWX DFD L30\x1B";
+char block1083[] = "[HB-11 DTC IN ][><\nDCB CRC ^LRD DCL\x1B";
+char block1084[] = "[HBd07 DHB RL <><>\n^SDB BRK EQ1 ETS\x1B";
+char block1085[] = "[HB-13 DHB ID []><\n^TDO FAN DCB GDS\x1B";
+char block1086[] = "[HAd26 PRK ES []><\nDIB ^DOS NUD LWO\x1B";
+char block1087[] = "[HAd28 LNS SR ><][\nDCL ADB ^GCB FAN\x1B";
+char block1088[] = "[HC-18 ATT EF ><][\n^LRD WDC EFK CTL\x1B";
+char block1089[] = "[HBd24 EFO RS ><<>\n2LV ACC NAV ^SGS\x1B";
+char block1090[] = "[HC-09 DCS SR [][]\nISP ^WDC PDD DRD\x1B";
+char block1091[] = "[HBu24 EQR FR <><>\nTCB ^ISS NRF GSI\x1B";
+char block1092[] = "[HCu10 ANS ES []><\nLWO ^DOL CFB DDS\x1B";
+char block1093[] = "[HBu09 CBP ID []><\nEQ1 EDB ^DOS ASL\x1B";
+char block1094[] = "[HBu10 ACP ES ><<>\nEQW NRF ^LRD DHB\x1B";
+char block1095[] = "[HB-15 EFO EW ><][\n^FAN 1EF TCB DES\x1B";
+char block1096[] = "[HA-31 COR EW ><<>\n^TDO DRD TCI WDC\x1B";
+char block1097[] = "[HAu22 HBP CR ><<>\nL30 LNS ^DOB EQ1\x1B";
+char block1098[] = "[HAu04 LNS CR ><][\nDHB EQW ^DOL TDC\x1B";
+char block1099[] = "[HBd07 EQO RS ><][\nL50 EFO ^EDP EFB\x1B";
+char block1100[] = "[HA-00 GCB FR []][\nESH ^SGS LWO DRD\x1B";
+char block1101[] = "[HBu01 ATT ID <>><\n2EF NUG CCT ^WDO\x1B";
+char block1102[] = "[HBu01 IDL NR ][><\nIST COC HTS ^GSM\x1B";
+char block1103[] = "[HA-12 PKS SR ><><\nGCO TCI ^DCB 2LS\x1B";
+char block1104[] = "[HA-19 EFO RS []][\nEDP LWO CTL ^DHB\x1B";
+char block1105[] = "[HBu21 CBP ES ><<>\nRRB DFC GDS ^LRD\x1B";
+char block1106[] = "[HAu09 WCS EW ][><\n1EF CTL ^GSM DIB\x1B";
+char block1107[] = "[HCd12 EQO EF ><><\nNUG ^SDB LRD CTL\x1B";
+char block1108[] = "[HCu22 ATT SR <>[]\nMDD ^LRD BRK UIB\x1B";
+char block1109[] = "[HA-07 NOR ID ><][\nERO AEF ^FAN ACH\x1B";
+char block1110[] = "[HAd19 CBP EW []><\nNUD LWX LRD ^DOS\x1B";
+char block1111[] = "[HBu11 LNS EW []><\nCHC ^SGS EQR CCB\x1B";
+char block1112[] = "[HCd04 CBP ES ><><\n2TH NAV EQS ^ISS\x1B";
+char block1113[] = "[HAu22 REI CR []><\nACC ^SGS 1LV ESH\x1B";
+char block1114[] = "[HC-05 EHS EF <><>\nGDS 2EF L50 ^FAN\x1B";
+char block1115[] = "[HBd10 LNS EW []><\nTCB ^TDC GDS ACH\x1B";
+char block1116[] = "[HC-11 INI ID ][[]\nESK EQ2 2EF ^GCB\x1B";
+char block1117[] = "[HA-22 DBF NR ][][\n^LRD EQR CTL L30\x1B";
+char block1118[] = "[HCu18 EPW EW <>[]\n^ISS EDP HTS TDO\x1B";
+char block1119[] = "[HAu15 EFO EW <>[]\nUIB UIB ^SGS EFO\x1B";
+char block1120[] = "[HBd22 ANS RL ][[]\nHCH MDD 1EF ^DOL\x1B";
+char block1121[] = "[HCu18 EPC ID ][<>\n^DCL ISS GSM TDC\x1B";
+char block1122[] = "[HC-03 ISC EF <>][\nSDB ^DCL 2SE EQW\x1B";
+char block1123[] = "[HAd26 DHB ES ><][\n^DOB EFO NRF EQ2\x1B";
+char block1124[] = "[HB-08 ESB FR <>><\n^EDP CCT LWO CTO\x1B";
+char block1125[] = "[HBd26 NAV NR [][]\nTDO ^GSM PKG DCL\x1B";
+char block1126[] = "[HAd10 EQO SR ><><\n^TDC SGS CTO NAV\x1B";
+char block1127[] = "[HAu02 DTC FR []><\n^DOB HAD ACH NUD\x1B";
+char block1128[] = "[HCd08 DBF FR ><][\nDFC NOR PDD ^DOL\x1B";
+char block1129[] = "[HAu12 OLD IN ><<>\nDES ^GCB DCL ACC\x1B";
+char block1130[] = "[HA-03 DCP EF ><<>\nCOH DDS CTO ^DCB\x1B";
+char block1131[] = "[HAd15 EMT IN []><\nNAV 2EF LWO ^FAN\x1B";
+char block1132[] = "[HA-09 EFS EW ><><\n2LV 2TH ^LRD FAN\x1B";
+char block1133[] = "[HAu19 HAD EW <>][\nROT FAN ^WDO DFD\x1B";
+char block1134[] = "[HBu08 OLD CR ][][\nISP ^WDC 1LV ACC\x1B";
+char block1135[] = "[HBu21 DLM NR ][><\n^EDP 1LV CRC HTS\x1B";
+char block1136[] = "[HA-30 DCS ST <>][\nDIB ^DCB DFC BRK\x1B";
+char block1137[] = "[HCd07 EQO SR []<>\nNRF ^DCB LRD GCB\x1B";
+char block1138[] = "[HCd31 EQO SR ><[]\n^DOB GDS GSI EFK\x1B";
+char block1139[] = "[HAd10 INI RL ><<>\n1LS ^ISS DCB ERO\x1B";
+char block1140[] = "[HBd02 EFO NR <>][\nHCH EQ1 WDO ^DOL\x1B";
+char block1141[] = "[HAd25 NAV RL ][><\nGCB ^ISS 1EF EDB\x1B";
+char block1142[] = "[HCd25 INS CR []][\nWDC FAN PDD ^LRD\x1B";
+char block1143[] = "[HC-09 EFO ID <>][\nDFD DCL AEF ^TDC\x1B";
+char block1144[] = "[HB-18 EFS IN <>[]\nDES DFC RRB ^EDP\x1B";
+char block1145[] = "[HCu13 EHS ID <>[]\nCOC TDC CCT ^DOB\x1B";
+char block1146[] = "[HBd22 COR ST []><\n^DCL NUD LWX EDP\x1B";
+char block1147[] = "[HCu22 WCS EF []><\nCRC CTO CHC ^DCB\x1B";
+char block1148[] = "[HB-15 ATT RS <>][\nHTS ^TDC LWO EFK\x1B";
+char block1149[] = "[HA-21 COR RL <>[]\nCCB LNS ^DHB EQS\x1B";
+char block1150[] = "[HB-15 EHS SR []<>\nDIB ^GCB EFB IST\x1B";
+char block1151[] = "[HBu17 COR FR ][><\n^DOB ROT GCO NAV\x1B";
+char block1152[] = "[HB-12 MIT RL []][\n1EF NUG ^DOB EDB\x1B";
+char block1153[] = "[HAd03 LNS FR <>][\nCHC LRD ^DOB FAN\x1B";
+char block1154[] = "[HA-23 DHB IN ][><\nHFA ^TDC CFS AEF\x1B";
+char block1155[] = "[HCu09 DLM CR <>><\nCTO CCB GDS ^SGS\x1B";
+char block1156[] = "[HB-28 EMT ES []><\nGDS EQS ^DOS CTO\x1B";
+char block1157[] = "[HBu29 EPW IN []><\nIST ^GCB GCO CCB\x1B";
+char block1158[] = "[HC-27 DCS SR ][[]\n^DOL DCB LNS 2EF\x1B";
+char block1159[] = "[HAd18 DCS RL <>[]\nETS ACC GCO ^SDB\x1B";
+char block1160[] = "[HAd04 HAD EW ><[]\nL30 DFC ^EDP EDP\x1B";
+char block1161[] = "[HAu28 CTL CR ][[]\n2SE ^DOB EFB EQR\x1B";
+char block1162[] = "[HCd17 ANS SR ][><\nACC SGS EFB ^DCL\x1B";
+char block1163[] = "[HBu18 LNS IN <>><\n^WDC WDO HFA EQR\x1B";
+char block1164[] = "[HCd16 EFO RL ><[]\nRTB ESK ^TDO 1LV\x1B";
+char block1165[] = "[HAu29 PRK ST <><>\nNUG ROT ^DOL ASL\x1B";
+char block1166[] = "[HCd27 COR EW ><[]\nEFB ^ISS ROT CTL\x1B";
+char block1167[] = "[HAd23 EHS RS ><[]\nLWX ^MDD EQ1 CCT\x1B";
+char block1168[] = "[HB-02 GCB EF ][><\n^GSM DCB TDO ADB\x1B";
+char block1169[] = "[HB-30 PRK EF [][]\nDIB NUD MDD ^SDB\x1B";
+char block1170[] = "[HCu23 IDL ST []><\nGSI EQW ^SDB UIB\x1B";
+char block1171[] = "[HBu19 NAV ST ][><\nPDD DRD ISS ^EDP\x1B";
+char block1172[] = "[HC-10 ROT NR []<>\nESK WDO ^SDB ISP\x1B";
+char block1173[] = "[HA-13 ESB CR ][><\nNOR ^DCB EDP 1LV\x1B";
+char block1174[] = "[HBd01 CHC ST []][\nLWX ESK ^DHB PDD\x1B";
+char block1175[] = "[HAu05 IDL ES ><][\nCTL LNS ACH ^SDB\x1B";
+char block1176[] = "[HB-11 EPR FR ][<>\n2SE ^TDO CCB PKS\x1B";
+char block1177[] = "[HCd17 ANS NR [][]\n^WDC CRC ISS ESK\x1B";
+char block1178[] = "[HCd18 DBF NR []<>\nESH ^DCL EQR DES\x1B";
+char block1179[] = "[HCu14 ROT EW []><\nFAN HCO ^DHB GDS\x1B";
+char block1180[] = "[HA-17 CBP ID <>><\n^ISS DHB ROT LRD\x1B";
+char block1181[] = "[HB-25 DTC ES []><\nL50 ^GCB AEF CTC\x1B";
+char block1182[] = "[HBu29 DTO NR []><\n2SE LNS ^EDP ESK\x1B";
+char block1183[] = "[HCd11 INS SR <>][\n^WDC EDP TDC CTC\x1B";
+char block1184[] = "[HC-23 PKS ID <>][\nEQ2 DCL 1EF ^SDB\x1B";
+char block1185[] = "[HCu04 OLD CR ><><\nRTB 1TH ^SGS AEF\x1B";
+char block1186[] = "[HAu10 EFO IN ><<>\nGCO CRC 1LV ^DOS\x1B";
+char block1187[] = "[HA-22 EQR ST ][][\n^WDO CFS EQR 2LS\x1B";
+char block1188[] = "[HC-20 EMT SR <>><\nGSI DCL ^DOS ERO\x1B";
+char block1189[] = "[HA-17 ISC EW ><<>\n^DOS CHC CCB EQR\x1B";
+char block1190[] = "[HC-12 EQR CR ][][\n^EDP GSM PDD EQ2\x1B";
+char block1191[] = "[HAd04 LNS EW []<>\nDFD ^WDC CFS PKG\x1B";
+char block1192[] = "[HA-04 CHC EW <>[]\n^LRD NUD ROT DES\x1B";
+char block1193[] = "[HCd00 ACP FR <><>\nMDD HFA ^ISS 1LV\x1B";
+char block1194[] = "[HB-12 ATT RS ><[]\nROT ^WDC DFD EQ1\x1B";
+char block1195[] = "[HC-30 COR CR <><>\n^SDB CFS GCO CTC\x1B";
+char block1196[] = "[HC-24 PKS FR []<>\nCCT CRC ^DOL UIB\x1B";
+char block1197[] = "[HAu12 ARD NR ><][\nEDB CFS GSI ^EDP\x1B";
+char block1198[] = "[HB-06 INS EW ><[]\n^LRD COH TCB NOR\x1B";
+char block1199[] = "[HBd09 DTC IN <>><\nEFB ^DHB IST UIB\x1B";
+char block1200[] = "[HC-05 DTO CR []<>\nCRC ASL ^DOS DCB\x1B";
+char block1201[] = "[HB-26 ISC EW <>][\n^EDP DHB FAN 2LS\x1B";
+char block1202[] = "[HBu13 WCO IN []<>\n2TH ACH ^DCB TCB\x1B";
+char block1203[] = "[HAu18 ACP EF [][]\n^SDB CCT XEF CTC\x1B";
+char block1204[] = "[HCu00 ANS ST []><\nPKG ^DHB EFK DES\x1B";
+char block1205[] = "[HAu01 DLM IN <><>\nESH ^DOS EFB DCB\x1B";
+char block1206[] = "[HA-21 WCO ST []<>\n^GSM L50 EDB ESH\x1B";
+char block1207[] = "[HC-25 REI NR ><[]\nHTS ^WDO GSM EQW\x1B";
+char block1208[] = "[HAu20 ISC ES <>><\n1TH EQR HCO ^TDO\x1B";
+char block1209[] = "[HBd16 PRK CR []<>\nEQS TDO ^DOS IST\x1B";
+char block1210[] = "[HBu11 EHS ID []<>\nDFC BRK ^DOS WDO\x1B";
+char block1211[] = "[HAd20 REI FR [][]\nGCO COC ^WDO PDD\x1B";
+char block1212[] = "[HAd03 EHS ID ><<>\nIST DDS ^TDC MDD\x1B";
+char block1213[] = "[HA-17 PKS RS ><[]\nTDO ERO ADB ^DCL\x1B";
+char block1214[] = "[HAu03 REI RL []><\nESH LWX CTO ^GCB\x1B";
+char block1215[] = "[HC-00 ROT EW <><>\nCOH EQS ^DOS WDO\x1B";
+char block1216[] = "[HA-21 REI FR ][<>\n^TDO EDB HAD NOR\x1B";
+char block1217[] = "[HCd12 PRK RS ][[]\n2SE ^TDC CHC DFD\x1B";
+char block1218[] = "[HCu14 REI SR ><<>\nUIB FAN EDB ^TDO\x1B";
+char block1219[] = "[HC-01 NOR SR ][][\n^LRD GSM WDO CCT\x1B";
+char block1220[] = "[HB-29 DLM NR ><><\nEQR L50 L50 ^ISS\x1B";
+char block1221[] = "[HAu22 OLD NR ><><\n^DOS DDS 2TH CHC\x1B";
+char block1222[] = "[HCd00 PRK SR ][[]\n^EDP DRD SDB 1TH\x1B";
+char block1223[] = "[HA-05 OLD FR ][[]\nTCI ^DCB L30 TCB\x1B";
+char block1224[] = "[HA-03 ANS SR <>][\nHCO 1EF ^WDO ETS\x1B";
+char block1225[] = "[HBd04 DCS SR ><><\nDFD MDD ESK ^MDD\x1B";
+char block1226[] = "[HAu17 DBF CR [][]\nWDO COC ^FAN MDD\x1B";
+char block1227[] = "[HAu11 OLD FR []><\nNRF NRF ^GSM ESH\x1B";
+char block1228[] = "[HCu13 EPW CR []><\n^WDO ACH 2TH UIB\x1B";
+char block1229[] = "[HBu05 WCS SR <><>\n2TH ^GCB FAN DHB\x1B";
+char block1230[] = "[HAd20 HAD NR []][\n1TH ADB ^GSM ISP\x1B";
+char block1231[] = "[HBu29 LNS ES []<>\nEFO ^GCB DIB CTC\x1B";
+char block1232[] = "[HCu24 ESB ES ><][\nWDO GCB 1LV ^DOL\x1B";
+char block1233[] = "[HB-08 DCS ES ><<>\nEDB ^GSM LWX GCO\x1B";
+char block1234[] = "[HCd15 COR RL [][]\n^GCB ACC 2LV 1LS\x1B";
+char block1235[] = "[HA-21 CBP FR ][][\nSDB DDS 1TH ^GCB\x1B";
+char block1236[] = "[HCu06 HBP RL []<>\nEQ2 BRK ^SGS LWO\x1B";
+char block1237[] = "[HAd08 ANS IN ][[]\nACC ^DHB ERO LWX\x1B";
+char block1238[] = "[HBd23 ANS ID ><><\n^DOL WDO ISP ETS\x1B";
+char block1239[] = "[HA-14 EFO EF []<>\nL50 DES ^SDB EQR\x1B";
+char block1240[] = "[HBd23 EQR ID <>[]\nDRD HCO 2LV ^DOS\x1B";
+char block1241[] = "[HAd19 DCS ID <>][\n^DOS NOR CRC ESH\x1B";
+char block1242[] = "[HCu04 CTL FR <>][\nPKG ^TDO DFD DDS\x1B";
+char block1243[] = "[HAu08 CHC SR [][]\nTDO ^GCB 1EF EFB\x1B";
+char block1244[] = "[HAd10 COR NR ><[]\nISP ^ISS GDS EFO\x1B";
+char block1245[] = "[HB-15 PKS EF [][]\n^WDC UIB PDD NUG\x1B";
+char block1246[] = "[HBu27 ARD RL <><>\nCFB 2LS PDD ^WDC\x1B";
+char block1247[] = "[HC-06 EFS EF ][[]\nCCB ^EDP 1LV L50\x1B";
+char block1248[] = "[HAu09 WCS EF ><><\n^EDP PDD PKG XEF\x1B";
+char block1249[] = "[HA-00 DCP IN ><<>\nCOH ^MDD GDS EQ1\x1B";
+char block1250[] = "[HA-16 ROT ES ][][\nACC DES ^LRD ESH\x1B";
+char block1251[] = "[HAu08 IDL RS <>][\n^SGS EFK COH DFC\x1B";
+char block1252[] = "[HBu19 INS CR []<>\n^WDC UIB GSI ESH\x1B";
+char block1253[] = "[HBd06 EHS ST []<>\nTCB BRK ^GSM L30\x1B";
+char block1254[] = "[HB-06 PRK EW ][[]\nCTL PDD BRK ^DOB\x1B";
+char block1255[] = "[HA-02 CTL SR ><><\n2LV CTO 2SE ^EDP\x1B";
+char block1256[] = "[HC-07 ARD RL ][><\n^DHB 2LS GSM EFO\x1B";
+char block1257[] = "[HBd26 ATT EW ][][\nEQ2 BRK EQR ^WDC\x1B";
+char block1258[] = "[HAd29 HBP IN ><><\nRTB CCB ^FAN ACH\x1B";
+char block1259[] = "[HC-20 DCP EW ><][\nTDO LRD L50 ^WDO\x1B";
+char block1260[] = "[HB-10 EPC FR ][<>\nTDO GCB ^FAN EDP\x1B";
+char block1261[] = "[HCu16 DLM NR [][]\nLNS ASL MDD ^SDB\x1B";
+char block1262[] = "[HCu16 HBP EW <>><\nCFB 1LS ^GCB LNS\x1B";
+char block1263[] = "[HCd31 DHB CR []<>\nCFS ^DCB EQ1 ACH\x1B";
+char block1264[] = "[HAd05 NAV EF ][><\nDCL ^DOB EQW LRD\x1B";
+char block1265[] = "[HB-01 NOR EW <>[]\nEQR HFA ^SDB DCB\x1B";
+char block1266[] = "[HA-00 HBP ID ><><\nCRC TDC ^DCB CCB\x1B";
+char block1267[] = "[HBu08 ATT RL <>][\n^WDC NAV CCB DFD\x1B";
+char block1268[] = "[HCd25 INS FR ><<>\nEQR EFO ^GSM EDP\x1B";
+char block1269[] = "[HAd27 GCB RL []><\n2EF ^GCB GDS NUG\x1B";
+char block1270[] = "[HA-03 COR RS []<>\nNRF BRK ^TDO ETS\x1B";
+char block1271[] = "[HB-21 CTL RS <>][\nEFO ^DOL XEF EFK\x1B";
+char block1272[] = "[HBd14 EFS EW <>][\nASL RRB ^DHB HFA\x1B";
+char block1273[] = "[HA-14 OLD ID ><<>\nEQ2 CFS CFB ^FAN\x1B";
+char block1274[] = "[HAu19 ESB RS []><\nMDD ^DOS DHB GDS\x1B";
+char block1275[] = "[HBd10 ISC ES <>][\nCFB DFC DES ^TDC\x1B";
+char block1276[] = "[HAd05 ROT IN ><][\n^EDP CTO ASL SDB\x1B";
+char block1277[] = "[HCd25 INI ES []][\n^DCL UIB TDC EQR\x1B";
+char block1278[] = "[HA-28 EPR RS ][<>\n2SE FAN ^GCB SGS\x1B";
+char block1279[] = "[HBd21 ESB RS []][\nL50 CCB EFK ^DCB\x1B";
+char block1280[] = "[HBd00 DCP RS ><[]\nDIB ^SGS UIB HTS\x1B";
+char block1281[] = "[HA-00 ROT NR ><[]\nTCB EFK EFK ^WDO\x1B";
+char block1282[] = "[HB-10 EPC FR ><><\n^ISS LRD 2LV TDO\x1B";
+char block1283[] = "[HB-08 HBP RL ][><\nCFS ISS DFD ^MDD\x1B";
+char block1284[] = "[HC-31 ESB SR ][<>\nPKG EDB NUD ^DCB\x1B";
+char block1285[] = "[HC-28 ESB CR <><>\nNOR ESH ^TDO ROT\x1B";
+char block1286[] = "[HC-20 PRK ST ][><\n2EF ^DOB COC IST\x1B";
+char block1287[] = "[HB-03 ACP SR []><\nCOC HAD RTB ^MDD\x1B";
+char block1288[] = "[HB-31 DBF SR [][]\nL50 LWO ISS ^GSM\x1B";
+char block1289[] = "[HB-00 PKS SR ><><\nL50 NOR ^WDC ADB\x1B";
+char block1290[] = "[HAd07 CHC ST []><\nPDD GCO ^ISS PKG\x1B";
+char block1291[] = "[HBd10 COR FR ><<>\nDDS FAN CCB ^WDO\x1B";
+char block1292[] = "[HCd21 EPC FR []><\n^TDC CCT CTC EFB\x1B";
+char block1293[] = "[HB-00 ESB RL []][\nCFS ^GSM L30 DCB\x1B";
+char block1294[] = "[HAd06 EMT IN ><][\nNUD ^EDP BRK GSM\x1B";
+char block1295[] = "[HBd21 INI NR <>][\nGSM ^DOL EDP COH\x1B";
+char block1296[] = "[HAd22 DCP SR ><][\nTDC ^DOL ERO EQ2\x1B";
+char block1297[] = "[HC-26 DTC IN ><<>\nLWX ^LRD ESH DCB\x1B";
+char block1298[] = "[HCu25 CBP ST ><><\nDFD 2TH ^DCL DIB\x1B";
+char block1299[] = "[HBu27 EPW CR ][><\nDRD TCI TDO ^GSM\x1B";
+char block1300[] = "[HCd21 HAD NR ][><\nLRD ^DCB ESH DFD\x1B";
+char block1301[] = "[HAd19 CBP RS [][]\n^TDC ESH BRK SGS\x1B";
+char block1302[] = "[HA-26 ESB ST ><<>\n^DCL SGS GSM DRD\x1B";
+char block1303[] = "[HBu30 DCS EW ><><\nEFK 2EF HCH ^DHB\x1B";
+char block1304[] = "[HAu07 DTO CR <>><\nEFB AEF ACC ^DOS\x1B";
+char block1305[] = "[HCu04 NAV IN ><][\nESK ^ISS 2TH CTO\x1B";
+char block1306[] = "[HC-17 EHS ES ][][\nNRF CTO ^DOL IST\x1B";
+char block1307[] = "[HA-03 ATT SR []][\nTCB L50 COC ^EDP\x1B";
+char block1308[] = "[HA-13 WCO RL []<>\nEQW ^DOB EQ2 HCH\x1B";
+char block1309[] = "[HA-18 DTC ID <>][\nCCT EQS ^DOS ISS\x1B";
+char block1310[] = "[HAd02 EFS ES ><][\nHCH WDO ^LRD CRC\x1B";
+char block1311[] = "[HBd25 CHC ES ][[]\nEDP ^EDP EQ2 ETS\x1B";
+char block1312[] = "[HCd24 ACP RS ][<>\nEFO 2SE 1EF ^DOS\x1B";
+char block1313[] = "[HBu16 EPW CR <>><\nEDP TDC MDD ^SDB\x1B";
+char block1314[] = "[HAd10 CBP IN <><>\n2EF IST 1EF ^DHB\x1B";
+char block1315[] = "[HBu31 INI ID ><][\nHAD ^EDP EFK NUD\x1B";
+char block1316[] = "[HCu31 INS FR ><][\nLRD ^ISS EDB NOR\x1B";
+char block1317[] = "[HBd00 DCP RL ><][\nNOR ACC DFC ^SGS\x1B";
+char block1318[] = "[HCd21 DCP CR []><\n^SDB 2LV RRB CFS\x1B";
+char block1319[] = "[HC-16 ESB SR ><][\n^ISS 2SE 2LS NUD\x1B";
+char block1320[] = "[HBu07 EQR ST <>><\n1TH DFC ^WDO 2TH\x1B";
+char block1321[] = "[HAd01 NOR SR <><>\nL50 ^FAN 1TH DRD\x1B";
+char block1322[] = "[HBu25 MIT FR ][><\n1LS ^DHB DHB NUG\x1B";
+char block1323[] = "[HBu02 ROT RL <><>\nGDS ^ISS SDB BRK\x1B";
+char block1324[] = "[HBd24 EFO RS <><>\nCFB GCB ISP ^EDP\x1B";
+char block1325[] = "[HA-09 EFO NR [][]\nTCI DCB ^DOS ADB\x1B";
+char block1326[] = "[HBd30 ARD CR <>[]\n^EDP COC ISP CTC\x1B";
+char block1327[] = "[HC-00 ATT ID <>][\n^DHB PDD IST ACH\x1B";
+char block1328[] = "[HC-28 ISC ST ><][\n^DCL 1LV ISP LRD\x1B";
+char block1329[] = "[HBu26 ANS ST []][\nTCB ^WDO CRC HCH\x1B";
+char block1330[] = "[HBd30 DLM ST <>[]\nEQ1 TDO ^TDC ISS\x1B";
+char block1331[] = "[HCd27 EQO IN ][<>\nCTL RTB ^DHB 1TH\x1B";
+char block1332[] = "[HCd03 INS NR ][][\nCTL 1LV ^SGS RTB\x1B";
+char block1333[] = "[HBu02 WCS CR <>><\nLRD DFD ^DHB CHC\x1B";
+char block1334[] = "[HCu16 ISC ST <>[]\n1LV LNS LRD ^WDC\x1B";
+char block1335[] = "[HCu04 EFS ES ][<>\nCOH SGS 1TH ^WDC\x1B";
+char block1336[] = "[HB-20 EFS ID []][\n^DOS HCH CCB 2LV\x1B";
+char block1337[] = "[HAu04 DCS CR ][[]\nCRC DES CTL ^GCB\x1B";
+char block1338[] = "[HA-29 EHS SR ><><\n^TDO 2EF EQR ESH\x1B";
+char block1339[] = "[HAu13 ANS ES ><][\nASL 1LV ^DOS ISP\x1B";
+char block1340[] = "[HB-09 ATT ES ][<>\n^MDD EDP EQ1 WDC\x1B";
+char block1341[] = "[HCu14 INS ID <>][\nDHB BRK ^DHB EFK\x1B";
+char block1342[] = "[HBu18 PKS IN <><>\nTCB GCB PDD ^DOB\x1B";
+char block1343[] = "[HA-21 DTO EW <><>\n^ISS DIB CCB CTC\x1B";
+char block1344[] = "[HC-13 ACP RL <><>\n2LS HAD 1EF ^TDC\x1B";
+char block1345[] = "[HAd09 IDL NR [][]\nERO ^EDP 2SE CCB\x1B";
+char block1346[] = "[HBd04 EFO CR []><\nGSM GCB ^GSM HAD\x1B";
+char block1347[] = "[HBu20 ESB RS ><<>\n^MDD XEF HCH DIB\x1B";
+char block1348[] = "[HC-23 HAD ES [][]\n^TDC CCT PKS GDS\x1B";
+char block1349[] = "[HA-18 HAD ST []><\n2EF NUG EFK ^EDP\x1B";
+char block1350[] = "[HBu30 REI EF []<>\nDIB CCB ^DOB TDO\x1B";
+char block1351[] = "[HCd29 ROT ES ][<>\nHCH ^DCB MDD HCO\x1B";
+char block1352[] = "[HA-24 EFS EF ><><\nPDD L50 ^DOS EFO\x1B";
+char block1353[] = "[HAu16 GCB RS <>][\nROT ^FAN NRF LWO\x1B";
+char block1354[] = "[HCd13 PRK NR ><<>\nISP EQ1 CHC ^WDO\x1B";
+char block1355[] = "[HCu25 LNS ES []><\n^WDC L30 UIB COH\x1B";
+char block1356[] = "[HCd20 INS IN ][<>\nLRD CTL ^TDO UIB\x1B";
+char block1357[] = "[HBd19 IDL ES ][<>\nESH DHB LWX ^DOS\x1B";
+char block1358[] = "[HCd24 IDL EW ][][\nPDD GSM 1EF ^EDP\x1B";
+char block1359[] = "[HCu01 DTC FR ><<>\n^DOL HCH GSM ACH\x1B";
+char block1360[] = "[HAu14 EFS ID []][\nTCI 1LV ^DHB MDD\x1B";
+char block1361[] = "[HC-06 INI RL ><><\nDHB PDD ^GCB SGS\x1B";
+char block1362[] = "[HA-24 INI IN <>[]\n2EF UIB CCT ^WDO\x1B";
+char block1363[] = "[HAd02 CTL ST <>][\n1LS RTB ^SDB PKG\x1B";
+char block1364[] = "[HAu20 EFO ST <>[]\n^DOB GDS AEF TCI\x1B";
+char block1365[] = "[HC-06 EPR IN []][\n^WDC AEF GSI 1LS\x1B";
+char block1366[] = "[HC-26 DTC RL [][]\nSGS EDP ^SGS DRD\x1B";
+char block1367[] = "[HBd07 INI ST ><><\n2SE ^MDD CFB EQ2\x1B";
+char block1368[] = "[HAd28 HBP IN ><<>\nTDO PKG ^DCB EFO\x1B";
+char block1369[] = "[HBu24 HBP EW [][]\nWDO HCO ^DOS EQR\x1B";
+char block1370[] = "[HBu02 PKS IN ><][\n^WDO CTC UIB NRF\x1B";
+char block1371[] = "[HB-10 EHS ID []<>\nUIB ^LRD GSI L30\x1B";
+char block1372[] = "[HC-30 INI CR <><>\nWDO ^LRD L50 2TH\x1B";
+char block1373[] = "[HA-03 DBF ES ][[]\nFAN ^MDD L30 DFD\x1B";
+char block1374[] = "[HAd04 DLM RS []][\nMDD ^EDP NAV ERO\x1B";
+char block1375[] = "[HC-24 REI CR ><[]\nDDS ^TDC DFD EDP\x1B";
+char block1376[] = "[HAd30 HBP IN [][]\nEDP ESH CCB ^MDD\x1B";
+char block1377[] = "[HCd23 WCO EF ][][\nHFA PKG EFB ^ISS\x1B";
+char block1378[] = "[HB-26 EPW FR []><\nXEF NRF ACC ^SGS\x1B";
+char block1379[] = "[HCd31 GCB CR ][][\nCTO ^ISS CFB CTL\x1B";
+char block1380[] = "[HBu19 EPW IN ><[]\nIST 2LS RTB ^TDC\x1B";
+char block1381[] = "[HC-04 DCS RL <>[]\nGDS EQS CCB ^DOS\x1B";
+char block1382[] = "[HBd30 HBP RL ][><\n^DOL HCH ACH CCB\x1B";
+char block1383[] = "[HCd30 WCO ST <>][\n^GSM CCB LWO IST\x1B";
+char block1384[] = "[HB-28 EQO ST <>[]\n1LS ^WDC EFK BRK\x1B";
+char block1385[] = "[HAu09 NOR NR []><\n^DHB ROT 2SE EFB\x1B";
+char block1386[] = "[HBd22 EPR EF <><>\nGSM 2TH ^TDC HTS\x1B";
+char block1387[] = "[HCd14 DCS EF ][<>\n^GCB CCT GSM DFC\x1B";
+char block1388[] = "[HCd25 WCO EW ><<>\nESK UIB ^DOB ISS\x1B";
+char block1389[] = "[HAu27 INI ST ><<>\n^ISS NRF DCL CTC\x1B";
+char block1390[] = "[HCu19 INI EW <>[]\nRRB CTL ^WDO L50\x1B";
+char block1391[] = "[HAd03 CHC ES <>[]\nFAN TDC 1EF ^DOL\x1B";
+char block1392[] = "[HCd01 DTO IN ><][\n^EDP IST LWO 2LV\x1B";
+char block1393[] = "[HA-16 DCP IN [][]\nSGS TDC ISP ^SGS\x1B";
+char block1394[] = "[HA-04 CHC ST <>><\nESH ^ISS DES DRD\x1B";
+char block1395[] = "[HB-26 DCS ST <>><\nISP ^DHB DRD ACH\x1B";
+char block1396[] = "[HB-19 ESB ID ][<>\n^WDO RTB ACC L30\x1B";
+char block1397[] = "[HAd03 EPR EF ][][\nTDC AEF LNS ^DOB\x1B";
+char block1398[] = "[HCu16 DBF RL ><[]\nHTS ^DOS ROT HCO\x1B";
+char block1399[] = "[HBu19 ANS SR ][[]\nROT 1EF ^TDC SGS\x1B";
+char block1400[] = "[HA-11 ISC ES <>><\nEQ2 ^LRD EFB 1LV\x1B";
+char block1401[] = "[HAu19 EQR RS ><<>\n^DCL 2LS FAN EQR\x1B";
+char block1402[] = "[HCu31 NOR EW <><>\n^MDD WDC LNS MDD\x1B";
+char block1403[] = "[HAd03 DCS ST <>[]\nERO CTO GCO ^TDO\x1B";
+char block1404[] = "[HC-14 HAD ES <><>\n1TH 1EF ETS ^TDC\x1B";
+char block1405[] = "[HAu00 EPC IN []][\nGSI DIB ^TDC SDB\x1B";
+char block1406[] = "[HBu11 CTL ID []][\nCTL ^WDC DFC DCB\x1B";
+char block1407[] = "[HCu21 WCS SR []<>\nL30 ADB ADB ^TDO\x1B";
+char block1408[] = "[HA-26 ACP SR ][<>\nMDD 1LS LWO ^LRD\x1B";
+char block1409[] = "[HBd28 GCB ID ><><\nESK ^SDB L30 2LV\x1B";
+char block1410[] = "[HAu17 OLD NR ><[]\nPKG LWX ACC ^DOB\x1B";
+char block1411[] = "[HAd12 NOR CR [][]\nNRF ^WDO ASL HFA\x1B";
+char block1412[] = "[HCu13 PKS EF ][[]\nPDD MDD ^TDO EQS\x1B";
+char block1413[] = "[HB-17 DCP EW []][\nRTB ISS ASL ^DHB\x1B";
+char block1414[] = "[HB-12 DCP EW <><>\nPDD ^GSM COH CTC\x1B";
+char block1415[] = "[HCd21 LNS FR []><\n^ISS ESK CHC EDP\x1B";
+char block1416[] = "[HA-17 ANS ST []][\nCHC EQS ^TDO ACC\x1B";
+char block1417[] = "[HBu21 COR FR ][[]\n^DOL RRB TCB FAN\x1B";
+char block1418[] = "[HCu11 CTL EW ][<>\nTDC 1LV ^DCB SGS\x1B";
+char block1419[] = "[HBu04 WCO SR ][<>\nGSM EFO ^DOS EQ1\x1B";
+char block1420[] = "[HBu29 EPW EW []><\n^WDC EQR COC LRD\x1B";
+char block1421[] = "[HC-11 CBP IN ][[]\n^SDB DDS DFC TDO\x1B";
+char block1422[] = "[HCd05 NOR EF []][\nSGS TDC ^DOL DCB\x1B";
+char block1423[] = "[HAu08 EFS ST []><\nUIB ^GCB ETS CTC\x1B";
+char block1424[] = "[HAu00 ATT NR []<>\nHFA ^DCL EDP FAN\x1B";
+char block1425[] = "[HCu22 DTO RL []][\nEQW COH ^SGS ADB\x1B";
+char block1426[] = "[HBu26 WCO EF ][<>\nDRD FAN UIB ^DOS\x1B";
+char block1427[] = "[HC-00 EMT ES ][<>\nACH ^DHB 1LS COC\x1B";
+char block1428[] = "[HCd30 WCO ID ][[]\nPDD HTS 2LV ^DCB\x1B";
+char block1429[] = "[HCu28 MIT RL []][\nDHB LWX ^DCB PDD\x1B";
+char block1430[] = "[HBu30 MIT EW <><>\n^WDC L30 DFC CFS\x1B";
+char block1431[] = "[HAd21 INS CR ][<>\n2LV ^GSM EQW PDD\x1B";
+char block1432[] = "[HA-00 EQR EF ><<>\nNAV CTO ^DOL 2SE\x1B";
+char block1433[] = "[HCd19 DCP IN ][][\nDCL 2LS DCB ^DCL\x1B";
+char block1434[] = "[HAd31 GCB FR <>><\nLRD GDS CCB ^DCL\x1B";
+char block1435[] = "[HBd05 DLM ES <>][\nEFO BRK ISP ^DCB\x1B";
+char block1436[] = "[HCd01 ARD NR <>][\nTCB EQ1 ^DOB GSM\x1B";
+char block1437[] = "[HC-05 ATT NR ><[]\nTCI DIB DIB ^SDB\x1B";
+char block1438[] = "[HBu10 DCP CR []><\n^GSM ERO CCB L50\x1B";
+char block1439[] = "[HBd06 COR ID ][><\n^TDO ASL HTS NUD\x1B";
+char block1440[] = "[HCd16 EPW CR <><>\nASL EQW ^WDC EFK\x1B";
+char block1441[] = "[HAu23 DLM EW ][[]\n1TH CTC ^FAN TCB\x1B";
+char block1442[] = "[HBd27 EQO ID <>><\nWDO COH ^SGS CFS\x1B";
+char block1443[] = "[HA-02 WCO ID ][[]\nHTS GDS ^WDO CFB\x1B";
+char block1444[] = "[HBd17 INI ES ><<>\nTDC ^SDB LWO AEF\x1B";
+char block1445[] = "[HCd30 ATT ES <>[]\nASL DCB ^DOL L50\x1B";
+char block1446[] = "[HAu30 ACP EW []<>\nEFK DES ^DOS XEF\x1B";
+char block1447[] = "[HBd29 WCS EW ><][\nASL ^SGS SGS GDS\x1B";
+char block1448[] = "[HBd02 LNS ES []][\nNRF CTC TDO ^GCB\x1B";
+char block1449[] = "[HB-03 WCS SR []<>\nLRD ^DCL ASL EDB\x1B";
+char block1450[] = "[HBd23 DCP NR ][][\n2TH L50 EQS ^GCB\x1B";
+char block1451[] = "[HCu05 REI IN ][<>\n^DOB EQS ISP EFK\x1B";
+char block1452[] = "[HBu04 NAV SR [][]\nPKS GDS ROT ^TDO\x1B";
+char block1453[] = "[HAu26 EFS RL ][<>\n^MDD RTB EQ2 2LS\x1B";
+char block1454[] = "[HB-03 DTC EW [][]\nDFC ^TDO CTC EQ1\x1B";
+char block1455[] = "[HAd23 CHC ES []<>\n^MDD HFA CRC LNS\x1B";
+char block1456[] = "[HAu23 EPC RL []][\nCTC ESK ^DOB CFS\x1B";
+char block1457[] = "[HBd28 NAV IN <>][\nISS NUD ^FAN CTL\x1B";
+char block1458[] = "[HAu16 ESB RL ><<>\nCTO L50 ^TDO COC\x1B";
+char block1459[] = "[HA-11 NAV ES <>][\n2EF ^TDC ACH NAV\x1B";
+char block1460[] = "[HCd15 DTC RS <>[]\nCCT RTB ^GCB HAD\x1B";
+char block1461[] = "[HCu06 CBP FR ><][\n^DHB ERO DES CRC\x1B";
+char block1462[] = "[HB-10 COR RL <><>\nTCI CCB ^DOS MDD\x1B";
+char block1463[] = "[HCu20 DTC ID ><[]\nERO HFA ^SGS ADB\x1B";
+char block1464[] = "[HAd06 INS IN [][]\n^DHB L30 GCO CTO\x1B";
+char block1465[] = "[HAd22 ANS ID ][[]\n1TH NOR GCB ^TDO\x1B";
+char block1466[] = "[HCu05 ATT NR <>[]\nIST 2SE NOR ^TDC\x1B";
+char block1467[] = "[HB-31 EPR EF ><><\nHCH BRK ^DOS EQS\x1B";
+char block1468[] = "[HCu31 DBF NR ><><\n^DCB 2SE CFB HCO\x1B";
+char block1469[] = "[HC-27 EPR CR ><<>\nERO ^WDC BRK DDS\x1B";
+char block1470[] = "[HCd30 DBF IN ][[]\n1EF ^WDC GDS 1TH\x1B";
+char block1471[] = "[HA-27 PKS ID ][<>\n1EF ^ISS DRD 1TH\x1B";
+char block1472[] = "[HCu20 WCO SR <><>\n^ISS DCL DCB HAD\x1B";
+char block1473[] = "[HBd03 DTO CR ][><\nCTO ^DCB DFC BRK\x1B";
+char block1474[] = "[HAd05 INS NR ][<>\n2EF ETS GSI ^TDC\x1B";
+char block1475[] = "[HC-28 EQR CR ][<>\nPDD ^TDO PKG COH\x1B";
+char block1476[] = "[HC-20 ATT ST []><\nLWO ^FAN TDO 1LV\x1B";
+char block1477[] = "[HC-15 ANS NR ><][\n^GCB ESK ASL RTB\x1B";
+char block1478[] = "[HBd11 EPR NR []][\n^TDO ASL NUG SGS\x1B";
+char block1479[] = "[HC-06 CHC CR []][\nCCT ^GSM PKS DIB\x1B";
+char block1480[] = "[HC-10 DHB ES [][]\nDCL ADB EFK ^EDP\x1B";
+char block1481[] = "[HA-18 HAD ST []][\nESK ^DCB ISS EQS\x1B";
+char block1482[] = "[HCu06 ESB IN ][><\n^WDC DRD GDS EFB\x1B";
+char block1483[] = "[HCd09 ATT FR ][[]\n^WDO 2SE ASL 2SE\x1B";
+char block1484[] = "[HBd31 OLD ES []][\n^MDD COC UIB LWO\x1B";
+char block1485[] = "[HB-10 EQO EW []<>\nDFD EDB ^SGS COC\x1B";
+char block1486[] = "[HCu18 GCB ES ><<>\n^DOL GSI 2EF ACC\x1B";
+char block1487[] = "[HBu11 EPR EW <>[]\nEFO NUD ^EDP PDD\x1B";
+char block1488[] = "[HAu04 DTC EW <>[]\n^GSM 2EF DHB HCO\x1B";
+char block1489[] = "[HBd25 EFO NR ><<>\n^DOS 1EF GDS GDS\x1B";
+char block1490[] = "[HAu24 NAV ES ][><\n2TH L50 ^DOS MDD\x1B";
+char block1491[] = "[HB-09 EFO ST <>><\n^LRD PKG 2LS CFB\x1B";
+char block1492[] = "[HCd03 INI ST ><[]\n^TDO HCH ACC CTC\x1B";
+char block1493[] = "[HAd02 IDL NR [][]\nDCL SGS CTO ^FAN\x1B";
+char block1494[] = "[HCu28 IDL RS []><\nEQW LWO ^FAN NUD\x1B";
+char block1495[] = "[HAu22 OLD SR ><<>\nDDS ESK DHB ^SGS\x1B";
+char block1496[] = "[HCu00 DHB ST <><>\nDCB 2TH DHB ^MDD\x1B";
+char block1497[] = "[HAd08 PRK ES ][][\n2EF CRC PDD ^DCL\x1B";
+char block1498[] = "[HBu04 DHB EW ][<>\n^DCL CTC SGS NUD\x1B";
+char block1499[] = "[HAd12 NAV EW ><][\nMDD ^SDB DRD 2LS\x1B";
+char block1500[] = "[HCu19 PRK ST ><<>\nBRK UIB ESH ^DCL\x1B";
 
-// Pointer table to all blocks
+// Pointer table to all 1500 blocks
 char *blocks[] = {
-    block1, block2, block3, block4, block5, block6, block7, block8, 
-    block9, block10, block11, block12, block13, block14, block15, block16, 
-    block17, block18, block19, block20, block21, block22, block23, block24, 
-    block25, block26, block27, block28, block29, block30, block31, block32, 
-    block33, block34, block35, block36, block37, block38, block39, block40, 
-    block41, block42, block43, block44, block45, block46, block47, block48, 
-    block49, block50, block51, block52, block53, block54, block55, block56, 
-    block57, block58, block59, block60, block61, block62, block63, block64, 
-    block65, block66, block67, block68, block69, block70, block71, block72, 
-    block73, block74, block75, block76, block77, block78, block79, block80, 
-    block81, block82, block83, block84, block85, block86, block87, block88, 
-    block89, block90, block91, block92, block93, block94, block95, block96, 
-    block97, block98, block99, block100, block101, block102, block103, block104, 
-    block105, block106, block107, block108, block109, block110, block111, block112, 
-    block113, block114, block115, block116, block117, block118, block119, block120, 
-    block121, block122, block123, block124, block125, block126, block127, block128, 
-    block129, block130, block131, block132, block133, block134, block135, block136, 
-    block137, block138, block139, block140, block141, block142, block143, block144, 
-    block145, block146, block147, block148, block149, block150
+    block1, block2, block3, block4, block5, block6, block7, block8, block9, block10, 
+    block11, block12, block13, block14, block15, block16, block17, block18, block19, block20, 
+    block21, block22, block23, block24, block25, block26, block27, block28, block29, block30, 
+    block31, block32, block33, block34, block35, block36, block37, block38, block39, block40, 
+    block41, block42, block43, block44, block45, block46, block47, block48, block49, block50, 
+    block51, block52, block53, block54, block55, block56, block57, block58, block59, block60, 
+    block61, block62, block63, block64, block65, block66, block67, block68, block69, block70, 
+    block71, block72, block73, block74, block75, block76, block77, block78, block79, block80, 
+    block81, block82, block83, block84, block85, block86, block87, block88, block89, block90, 
+    block91, block92, block93, block94, block95, block96, block97, block98, block99, block100, 
+    block101, block102, block103, block104, block105, block106, block107, block108, block109, block110, 
+    block111, block112, block113, block114, block115, block116, block117, block118, block119, block120, 
+    block121, block122, block123, block124, block125, block126, block127, block128, block129, block130, 
+    block131, block132, block133, block134, block135, block136, block137, block138, block139, block140, 
+    block141, block142, block143, block144, block145, block146, block147, block148, block149, block150, 
+    block151, block152, block153, block154, block155, block156, block157, block158, block159, block160, 
+    block161, block162, block163, block164, block165, block166, block167, block168, block169, block170, 
+    block171, block172, block173, block174, block175, block176, block177, block178, block179, block180, 
+    block181, block182, block183, block184, block185, block186, block187, block188, block189, block190, 
+    block191, block192, block193, block194, block195, block196, block197, block198, block199, block200, 
+    block201, block202, block203, block204, block205, block206, block207, block208, block209, block210, 
+    block211, block212, block213, block214, block215, block216, block217, block218, block219, block220, 
+    block221, block222, block223, block224, block225, block226, block227, block228, block229, block230, 
+    block231, block232, block233, block234, block235, block236, block237, block238, block239, block240, 
+    block241, block242, block243, block244, block245, block246, block247, block248, block249, block250, 
+    block251, block252, block253, block254, block255, block256, block257, block258, block259, block260, 
+    block261, block262, block263, block264, block265, block266, block267, block268, block269, block270, 
+    block271, block272, block273, block274, block275, block276, block277, block278, block279, block280, 
+    block281, block282, block283, block284, block285, block286, block287, block288, block289, block290, 
+    block291, block292, block293, block294, block295, block296, block297, block298, block299, block300, 
+    block301, block302, block303, block304, block305, block306, block307, block308, block309, block310, 
+    block311, block312, block313, block314, block315, block316, block317, block318, block319, block320, 
+    block321, block322, block323, block324, block325, block326, block327, block328, block329, block330, 
+    block331, block332, block333, block334, block335, block336, block337, block338, block339, block340, 
+    block341, block342, block343, block344, block345, block346, block347, block348, block349, block350, 
+    block351, block352, block353, block354, block355, block356, block357, block358, block359, block360, 
+    block361, block362, block363, block364, block365, block366, block367, block368, block369, block370, 
+    block371, block372, block373, block374, block375, block376, block377, block378, block379, block380, 
+    block381, block382, block383, block384, block385, block386, block387, block388, block389, block390, 
+    block391, block392, block393, block394, block395, block396, block397, block398, block399, block400, 
+    block401, block402, block403, block404, block405, block406, block407, block408, block409, block410, 
+    block411, block412, block413, block414, block415, block416, block417, block418, block419, block420, 
+    block421, block422, block423, block424, block425, block426, block427, block428, block429, block430, 
+    block431, block432, block433, block434, block435, block436, block437, block438, block439, block440, 
+    block441, block442, block443, block444, block445, block446, block447, block448, block449, block450, 
+    block451, block452, block453, block454, block455, block456, block457, block458, block459, block460, 
+    block461, block462, block463, block464, block465, block466, block467, block468, block469, block470, 
+    block471, block472, block473, block474, block475, block476, block477, block478, block479, block480, 
+    block481, block482, block483, block484, block485, block486, block487, block488, block489, block490, 
+    block491, block492, block493, block494, block495, block496, block497, block498, block499, block500, 
+    block501, block502, block503, block504, block505, block506, block507, block508, block509, block510, 
+    block511, block512, block513, block514, block515, block516, block517, block518, block519, block520, 
+    block521, block522, block523, block524, block525, block526, block527, block528, block529, block530, 
+    block531, block532, block533, block534, block535, block536, block537, block538, block539, block540, 
+    block541, block542, block543, block544, block545, block546, block547, block548, block549, block550, 
+    block551, block552, block553, block554, block555, block556, block557, block558, block559, block560, 
+    block561, block562, block563, block564, block565, block566, block567, block568, block569, block570, 
+    block571, block572, block573, block574, block575, block576, block577, block578, block579, block580, 
+    block581, block582, block583, block584, block585, block586, block587, block588, block589, block590, 
+    block591, block592, block593, block594, block595, block596, block597, block598, block599, block600, 
+    block601, block602, block603, block604, block605, block606, block607, block608, block609, block610, 
+    block611, block612, block613, block614, block615, block616, block617, block618, block619, block620, 
+    block621, block622, block623, block624, block625, block626, block627, block628, block629, block630, 
+    block631, block632, block633, block634, block635, block636, block637, block638, block639, block640, 
+    block641, block642, block643, block644, block645, block646, block647, block648, block649, block650, 
+    block651, block652, block653, block654, block655, block656, block657, block658, block659, block660, 
+    block661, block662, block663, block664, block665, block666, block667, block668, block669, block670, 
+    block671, block672, block673, block674, block675, block676, block677, block678, block679, block680, 
+    block681, block682, block683, block684, block685, block686, block687, block688, block689, block690, 
+    block691, block692, block693, block694, block695, block696, block697, block698, block699, block700, 
+    block701, block702, block703, block704, block705, block706, block707, block708, block709, block710, 
+    block711, block712, block713, block714, block715, block716, block717, block718, block719, block720, 
+    block721, block722, block723, block724, block725, block726, block727, block728, block729, block730, 
+    block731, block732, block733, block734, block735, block736, block737, block738, block739, block740, 
+    block741, block742, block743, block744, block745, block746, block747, block748, block749, block750, 
+    block751, block752, block753, block754, block755, block756, block757, block758, block759, block760, 
+    block761, block762, block763, block764, block765, block766, block767, block768, block769, block770, 
+    block771, block772, block773, block774, block775, block776, block777, block778, block779, block780, 
+    block781, block782, block783, block784, block785, block786, block787, block788, block789, block790, 
+    block791, block792, block793, block794, block795, block796, block797, block798, block799, block800, 
+    block801, block802, block803, block804, block805, block806, block807, block808, block809, block810, 
+    block811, block812, block813, block814, block815, block816, block817, block818, block819, block820, 
+    block821, block822, block823, block824, block825, block826, block827, block828, block829, block830, 
+    block831, block832, block833, block834, block835, block836, block837, block838, block839, block840, 
+    block841, block842, block843, block844, block845, block846, block847, block848, block849, block850, 
+    block851, block852, block853, block854, block855, block856, block857, block858, block859, block860, 
+    block861, block862, block863, block864, block865, block866, block867, block868, block869, block870, 
+    block871, block872, block873, block874, block875, block876, block877, block878, block879, block880, 
+    block881, block882, block883, block884, block885, block886, block887, block888, block889, block890, 
+    block891, block892, block893, block894, block895, block896, block897, block898, block899, block900, 
+    block901, block902, block903, block904, block905, block906, block907, block908, block909, block910, 
+    block911, block912, block913, block914, block915, block916, block917, block918, block919, block920, 
+    block921, block922, block923, block924, block925, block926, block927, block928, block929, block930, 
+    block931, block932, block933, block934, block935, block936, block937, block938, block939, block940, 
+    block941, block942, block943, block944, block945, block946, block947, block948, block949, block950, 
+    block951, block952, block953, block954, block955, block956, block957, block958, block959, block960, 
+    block961, block962, block963, block964, block965, block966, block967, block968, block969, block970, 
+    block971, block972, block973, block974, block975, block976, block977, block978, block979, block980, 
+    block981, block982, block983, block984, block985, block986, block987, block988, block989, block990, 
+    block991, block992, block993, block994, block995, block996, block997, block998, block999, block1000, 
+    block1001, block1002, block1003, block1004, block1005, block1006, block1007, block1008, block1009, block1010, 
+    block1011, block1012, block1013, block1014, block1015, block1016, block1017, block1018, block1019, block1020, 
+    block1021, block1022, block1023, block1024, block1025, block1026, block1027, block1028, block1029, block1030, 
+    block1031, block1032, block1033, block1034, block1035, block1036, block1037, block1038, block1039, block1040, 
+    block1041, block1042, block1043, block1044, block1045, block1046, block1047, block1048, block1049, block1050, 
+    block1051, block1052, block1053, block1054, block1055, block1056, block1057, block1058, block1059, block1060, 
+    block1061, block1062, block1063, block1064, block1065, block1066, block1067, block1068, block1069, block1070, 
+    block1071, block1072, block1073, block1074, block1075, block1076, block1077, block1078, block1079, block1080, 
+    block1081, block1082, block1083, block1084, block1085, block1086, block1087, block1088, block1089, block1090, 
+    block1091, block1092, block1093, block1094, block1095, block1096, block1097, block1098, block1099, block1100, 
+    block1101, block1102, block1103, block1104, block1105, block1106, block1107, block1108, block1109, block1110, 
+    block1111, block1112, block1113, block1114, block1115, block1116, block1117, block1118, block1119, block1120, 
+    block1121, block1122, block1123, block1124, block1125, block1126, block1127, block1128, block1129, block1130, 
+    block1131, block1132, block1133, block1134, block1135, block1136, block1137, block1138, block1139, block1140, 
+    block1141, block1142, block1143, block1144, block1145, block1146, block1147, block1148, block1149, block1150, 
+    block1151, block1152, block1153, block1154, block1155, block1156, block1157, block1158, block1159, block1160, 
+    block1161, block1162, block1163, block1164, block1165, block1166, block1167, block1168, block1169, block1170, 
+    block1171, block1172, block1173, block1174, block1175, block1176, block1177, block1178, block1179, block1180, 
+    block1181, block1182, block1183, block1184, block1185, block1186, block1187, block1188, block1189, block1190, 
+    block1191, block1192, block1193, block1194, block1195, block1196, block1197, block1198, block1199, block1200, 
+    block1201, block1202, block1203, block1204, block1205, block1206, block1207, block1208, block1209, block1210, 
+    block1211, block1212, block1213, block1214, block1215, block1216, block1217, block1218, block1219, block1220, 
+    block1221, block1222, block1223, block1224, block1225, block1226, block1227, block1228, block1229, block1230, 
+    block1231, block1232, block1233, block1234, block1235, block1236, block1237, block1238, block1239, block1240, 
+    block1241, block1242, block1243, block1244, block1245, block1246, block1247, block1248, block1249, block1250, 
+    block1251, block1252, block1253, block1254, block1255, block1256, block1257, block1258, block1259, block1260, 
+    block1261, block1262, block1263, block1264, block1265, block1266, block1267, block1268, block1269, block1270, 
+    block1271, block1272, block1273, block1274, block1275, block1276, block1277, block1278, block1279, block1280, 
+    block1281, block1282, block1283, block1284, block1285, block1286, block1287, block1288, block1289, block1290, 
+    block1291, block1292, block1293, block1294, block1295, block1296, block1297, block1298, block1299, block1300, 
+    block1301, block1302, block1303, block1304, block1305, block1306, block1307, block1308, block1309, block1310, 
+    block1311, block1312, block1313, block1314, block1315, block1316, block1317, block1318, block1319, block1320, 
+    block1321, block1322, block1323, block1324, block1325, block1326, block1327, block1328, block1329, block1330, 
+    block1331, block1332, block1333, block1334, block1335, block1336, block1337, block1338, block1339, block1340, 
+    block1341, block1342, block1343, block1344, block1345, block1346, block1347, block1348, block1349, block1350, 
+    block1351, block1352, block1353, block1354, block1355, block1356, block1357, block1358, block1359, block1360, 
+    block1361, block1362, block1363, block1364, block1365, block1366, block1367, block1368, block1369, block1370, 
+    block1371, block1372, block1373, block1374, block1375, block1376, block1377, block1378, block1379, block1380, 
+    block1381, block1382, block1383, block1384, block1385, block1386, block1387, block1388, block1389, block1390, 
+    block1391, block1392, block1393, block1394, block1395, block1396, block1397, block1398, block1399, block1400, 
+    block1401, block1402, block1403, block1404, block1405, block1406, block1407, block1408, block1409, block1410, 
+    block1411, block1412, block1413, block1414, block1415, block1416, block1417, block1418, block1419, block1420, 
+    block1421, block1422, block1423, block1424, block1425, block1426, block1427, block1428, block1429, block1430, 
+    block1431, block1432, block1433, block1434, block1435, block1436, block1437, block1438, block1439, block1440, 
+    block1441, block1442, block1443, block1444, block1445, block1446, block1447, block1448, block1449, block1450, 
+    block1451, block1452, block1453, block1454, block1455, block1456, block1457, block1458, block1459, block1460, 
+    block1461, block1462, block1463, block1464, block1465, block1466, block1467, block1468, block1469, block1470, 
+    block1471, block1472, block1473, block1474, block1475, block1476, block1477, block1478, block1479, block1480, 
+    block1481, block1482, block1483, block1484, block1485, block1486, block1487, block1488, block1489, block1490, 
+    block1491, block1492, block1493, block1494, block1495, block1496, block1497, block1498, block1499, block1500
+
 };
 
-#define BLOCKS_COUNT 150
+#define BLOCKS_COUNT 1500
 #define FRAME_SIZE 36
 
 #endif // ELEVATOR_BLOCKS_H

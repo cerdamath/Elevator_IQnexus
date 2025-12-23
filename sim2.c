@@ -230,7 +230,7 @@ int main(int argc, char *argv[])
             printf("ERROR WRITING");
         }
         tcdrain(fd);
-        usleep(1000*5000);
+        usleep(1000*100);
     }
 
     close(fd);
